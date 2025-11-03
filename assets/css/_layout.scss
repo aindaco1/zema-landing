@@ -1,0 +1,125 @@
+// Layout: scroll-driven video scrubbing (no scroll-snap)
+
+.story {
+  position: relative;
+  width: 100%;
+}
+
+.frame {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg, #000);
+  overflow: hidden;
+}
+
+// Video frames: sticky video + tall scroll zone
+.frame--video {
+  position: relative;
+  height: var(--scroll-height, 100vh);
+  
+  .media {
+    position: sticky;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100%;
+    z-index: 5;
+    background: #000;
+    
+    .poster,
+    video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+    }
+    
+    .poster {
+      z-index: 2;
+      transition: opacity 0.3s ease;
+      
+      &.hidden {
+        opacity: 0;
+      }
+    }
+    
+    video {
+      z-index: 3;
+    }
+  }
+  
+  .content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    pointer-events: none;
+    
+    * {
+      pointer-events: auto;
+    }
+  }
+}
+
+// Pager navigation
+.pager {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 100;
+  display: flex;
+  gap: 0.5rem;
+
+  button {
+    padding: 0.75rem 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    backdrop-filter: blur(10px);
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    &:focus-visible {
+      outline: 2px solid #fff;
+      outline-offset: 2px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .pager {
+    bottom: 1rem;
+    right: 1rem;
+
+    button {
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
+    }
+  }
+}
+
+// Reduced motion fallback
+@media (prefers-reduced-motion: reduce) {
+  .pager button {
+    transition: none;
+  }
+}

@@ -1,0 +1,231 @@
+// Frame variants: video, dossier, form
+
+.frame {
+  .media {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+  }
+
+  .content {
+    position: relative;
+    z-index: 10;
+    max-width: 50rem;
+    padding: 2rem;
+    text-align: center;
+    
+    // Radial scrim for legibility
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -4rem;
+      background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.7) 0%, transparent 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+  }
+
+  .title {
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  }
+
+  .copy {
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    line-height: 1.4;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+  }
+
+  .cta {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #fff;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.25);
+      border-color: rgba(255, 255, 255, 0.6);
+      transform: translateY(-2px);
+    }
+
+    &:focus-visible {
+      outline: 2px solid #fff;
+      outline-offset: 4px;
+    }
+  }
+}
+
+// Dossier variant
+.frame--dossier {
+  .content {
+    max-width: 60rem;
+  }
+
+  .faq {
+    margin-top: 3rem;
+    text-align: left;
+
+    details {
+      margin-bottom: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      padding-bottom: 1rem;
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+
+    summary {
+      font-size: 1.125rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0.5rem 0;
+      list-style: none;
+      transition: color 0.2s ease;
+
+      &::-webkit-details-marker {
+        display: none;
+      }
+
+      &::before {
+        content: '▸ ';
+        display: inline-block;
+        margin-right: 0.5rem;
+        transition: transform 0.2s ease;
+      }
+
+      &:hover {
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      &:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: 2px;
+      }
+    }
+
+    details[open] summary::before {
+      transform: rotate(90deg);
+    }
+
+    p {
+      margin-top: 0.75rem;
+      padding-left: 1.5rem;
+      opacity: 0.85;
+      line-height: 1.6;
+    }
+  }
+}
+
+// Form variant
+.frame--form {
+  .content {
+    max-width: 40rem;
+  }
+
+  .contact {
+    margin-top: 2rem;
+    text-align: left;
+
+    label {
+      display: block;
+      margin-bottom: 1.5rem;
+
+      span {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        opacity: 0.9;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: #fff;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+
+        &::placeholder {
+          color: rgba(255, 255, 255, 0.5);
+        }
+
+        &:focus {
+          outline: none;
+          background: rgba(255, 255, 255, 0.15);
+          border-color: rgba(255, 255, 255, 0.5);
+        }
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 8rem;
+      }
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 1rem 2rem;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: #fff;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.3);
+        border-color: rgba(255, 255, 255, 0.6);
+      }
+
+      &:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: 2px;
+      }
+    }
+  }
+
+  .privacy {
+    margin-top: 1.5rem;
+    font-size: 0.75rem;
+    opacity: 0.6;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .frame .content {
+    padding: 1.5rem;
+  }
+
+  .frame .title {
+    margin-bottom: 0.75rem;
+  }
+
+  .frame .copy {
+    margin-bottom: 1.5rem;
+  }
+}

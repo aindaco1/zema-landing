@@ -1,0 +1,122 @@
+// 1970s aesthetic: grain, scanlines, chromatic aberration, vignette
+
+:root {
+  --color-warm-bg: #0d0d0d;
+  --color-warm-text: #f5f1e8;
+  --color-accent: #d4a574;
+  --grain-opacity: 0.03;
+  --scanline-opacity: 0.02;
+}
+
+// Film grain overlay (applied to all frames)
+.frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><filter id="n"><feTurbulence baseFrequency="0.9" numOctaves="4"/></filter><rect width="200" height="200" filter="url(%23n)" opacity="0.5"/></svg>');
+  background-repeat: repeat;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: overlay;
+}
+
+// Scanlines (dossier only for stronger effect)
+.frame--dossier::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  opacity: var(--scanline-opacity);
+}
+
+// Chromatic aberration on headings
+.title {
+  position: relative;
+  
+  &::before,
+  &::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    opacity: 0.6;
+    mix-blend-mode: screen;
+  }
+
+  &::before {
+    color: #ff0000;
+    transform: translate(-1px, -1px);
+  }
+
+  &::after {
+    color: #00ffff;
+    transform: translate(1px, 1px);
+  }
+}
+
+// Subtle vignette on all frames
+.frame .media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.4) 100%);
+  pointer-events: none;
+}
+
+// Warm palette adjustments
+body {
+  color: var(--color-warm-text);
+}
+
+.frame {
+  filter: saturate(0.85) sepia(0.1);
+}
+
+// Disable effects for reduced motion
+@media (prefers-reduced-motion: reduce) {
+  .frame::after {
+    display: none;
+  }
+
+  .frame--dossier::before {
+    display: none;
+  }
+
+  .title::before,
+  .title::after {
+    display: none;
+  }
+
+  .frame {
+    filter: none;
+  }
+}
+
+// Typewriter effect for dossier (optional, disabled by default)
+@keyframes typeIn {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes blink {
+  50% {
+    border-color: transparent;
+  }
+}
+
+// Apply only when JS adds data-active
+.frame--dossier[data-active] .title {
+  animation: none; // Enable manually if desired
+}

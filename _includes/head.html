@@ -1,0 +1,30 @@
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
+  <meta name="description" content="{{ site.description }}">
+  
+  <!-- Open Graph / Social -->
+  <meta property="og:title" content="{{ site.title }}">
+  <meta property="og:description" content="{{ site.description }}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ site.url }}{{ site.baseurl }}">
+  <meta property="og:image" content="{{ site.url }}{{ site.baseurl }}/assets/media/dossier.webp">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ site.title }}">
+  <meta name="twitter:description" content="{{ site.description }}">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/main.css">
+  
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "{{ site.title }}",
+    "url": "{{ site.url }}{{ site.baseurl }}"
+  }
+  </script>
+</head>

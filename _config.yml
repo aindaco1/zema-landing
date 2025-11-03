@@ -1,0 +1,19 @@
+# Zema Vinyl Lounge - Jekyll Configuration
+title: "Zema Vinyl Lounge"
+description: "A lightweight, film-inspired scroll story for the 70s short."
+url: "https://aindaco1.github.io"
+baseurl: "/zema-landing"
+
+# Build settings
+markdown: kramdown
+sass:
+  style: compressed
+  sass_dir: assets/css
+
+# Exclude from processing
+exclude:
+  - README.md
+  - LICENSE
+  - agents.md
+  - .git
+  - .gitignore

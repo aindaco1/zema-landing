@@ -1,0 +1,17 @@
+<section class="frame frame--dossier" data-frame data-kind="dossier" style="--bg:#0b0b0b" aria-labelledby="faq-title">
+  <div class="media" aria-hidden="true">
+    <img src="{{ site.baseurl }}/{{ include.f.image }}" alt="" loading="lazy">
+  </div>
+  <div class="content">
+    <h2 id="faq-title" class="title">{{ include.f.title }}</h2>
+    <p class="copy">{{ include.f.copy }}</p>
+    <div class="faq">
+      {% for item in include.f.faqs %}
+      <details>
+        <summary>{{ item.q }}</summary>
+        <p>{{ item.a }}</p>
+      </details>
+      {% endfor %}
+    </div>
+  </div>
+</section>

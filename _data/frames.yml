@@ -1,0 +1,46 @@
+site_title: "Zema Vinyl Lounge"
+cta_target: "#contact"
+frames:
+  - id: intro
+    kind: video
+    title: "We make stories move."
+    copy: "A lightweight, film‑inspired scroller for the 70s short."
+    poster: "assets/media/intro-poster.webp"
+    video_webm: "assets/media/intro.webm"
+    video_mp4: "assets/media/intro.mp4"
+    bg: "#0d0d0d"
+
+  - id: value
+    kind: video
+    title: "Built for speed."
+    copy: "Minimal JS. Heavy on feel."
+    poster: "assets/media/value-poster.webp"
+    video_webm: "assets/media/value.webm"
+    video_mp4: "assets/media/value.mp4"
+
+  - id: dossier
+    kind: dossier
+    title: "Inside the dossier"
+    copy: "Answers to the usual questions."
+    image: "assets/media/dossier.webp"
+    faqs:
+      - q: "What is the Zema Vinyl Lounge?"
+        a: "A scroll‑story landing page for a 70s‑set short/business teaser."
+      - q: "How heavy is it?"
+        a: "Under ~60KB CSS+JS gzipped; media lazy‑loaded."
+      - q: "Accessibility?"
+        a: "Keyboard, SR, reduced‑motion, high‑contrast text over scrims."
+
+  - id: proof
+    kind: video
+    title: "Production‑ready."
+    copy: "Frames from the short, encoded for the web."
+    poster: "assets/media/proof-poster.webp"
+    video_webm: "assets/media/proof.webm"
+    video_mp4: "assets/media/proof.mp4"
+
+  - id: contact
+    kind: form
+    title: "Let's talk"
+    copy: "Tell us about your project."
+    form_action: "https://formspree.io/f/XXXXXXXX"

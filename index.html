@@ -1,0 +1,20 @@
+---
+layout: default
+---
+<main class="story" role="main">
+  {% for f in site.data.frames.frames %}
+    {% case f.kind %}
+      {% when 'video' %}
+        {% include frame-video.html f=f %}
+      {% when 'dossier' %}
+        {% include frame-dossier.html f=f %}
+      {% when 'form' %}
+        {% include frame-form.html f=f %}
+    {% endcase %}
+  {% endfor %}
+</main>
+
+<nav class="pager" aria-label="Frame navigation">
+  <button data-prev aria-label="Previous frame">Prev</button>
+  <button data-next aria-label="Next frame">Next</button>
+</nav>

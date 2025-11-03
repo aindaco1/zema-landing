@@ -1,0 +1,13 @@
+<section class="frame frame--video" data-frame data-kind="video" style="--bg:{{ include.f.bg | default: '#000' }};">
+  <div class="media">
+    <img class="poster" src="{{ site.baseurl }}/{{ include.f.poster }}" alt="" loading="eager">
+    <video class="v" preload="auto" muted playsinline data-lazy data-webm="{{ site.baseurl }}/{{ include.f.video_webm }}" data-mp4="{{ site.baseurl }}/{{ include.f.video_mp4 }}">
+      <!-- sources injected by JS -->
+    </video>
+  </div>
+  <div class="content">
+    <h1 class="title">{{ include.f.title }}</h1>
+    <p class="copy">{{ include.f.copy }}</p>
+    <a class="cta" href="{{ site.data.frames.cta_target }}">Get in touch</a>
+  </div>
+</section>
