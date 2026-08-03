@@ -20,6 +20,7 @@ exclude:
   - agents.md
   - Gemfile
   - Gemfile.lock
+  - vendor
   - node_modules
   - tests
   - test-results
