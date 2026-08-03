@@ -1,219 +1,164 @@
-# Zema Vinyl Lounge
+# ZEMA Vinyl Lounge
 
-A lightweight, scroll‑story Jekyll site with 1970s aesthetic and frame‑by‑frame video scrubbing. Inspired by Bloomscroll's narrative interaction model.
+A cinematic, scroll-led landing page for ZEMA Vinyl Lounge at Hotel Zazz in Albuquerque. It is intentionally a small static site: Jekyll, HTML, SCSS, and framework-free JavaScript, deployable on GitHub Pages.
 
-## Features
+## What the site does
 
-- **Scroll-driven video scrubbing**: Mouse wheel/touch controls video playback frame-by-frame (24fps, stops at frame 360)
-- **Minimal footprint**: ~60KB CSS+JS gzipped; lazy-loaded media
-- **1970s aesthetic**: Film grain, scanlines, chromatic aberration, warm desaturated palette
-- **Fully accessible**: Keyboard nav, screen reader support, `prefers-reduced-motion` and Save-Data detection
-- **GitHub Pages ready**: Native Jekyll compilation, no build step
+- Scrubs a 14.6-second, all-intra sequence that moves directly from the clean overhead-vinyl shot into the drink-preparation montage and continues to the last frame before the photograph flash.
+- Turns the middle gallery into three sequential scroll-controlled film movements: arrival, cocktails, and dance.
+- Falls back to a poster for reduced-motion and Save-Data visitors.
+- Presents the full-width ZEMA file with hours, policies, and FAQs in normal document flow.
+- Scrubs from the agent awakening through the final tilt to the record as the full inquiry-section background, with the readable form and copy layered above it.
+- Uses the official ZEMA marks and a film-still gallery informed by the Research & Planning brand board.
+- Collects venue and event inquiries through Formspree, with native POST as a no-JavaScript fallback.
+- Presents the complete 3:36 film through a local poster/play facade that creates the privacy-enhanced YouTube player only after play intent.
+- Uses a spinning ZEMA vinyl pointer on fine-pointer devices, with native form cursors and a reduced-motion fallback.
+- Keeps the compact header transparent and makes every in-page anchor jump immediately.
+- Uses no framework, animation dependency, analytics, or externally hosted font; the napkin-inspired film-title face is a 7 KB self-hosted WOFF2 subset.
 
----
+## Run locally
 
-## Setup Instructions
+Requirements: Ruby, Bundler, and the GitHub Pages gem bundle.
 
-### Prerequisites
-
-**macOS:**
-- Ruby 2.7+ (check: `ruby -v`)
-- Bundler (install: `gem install bundler`)
-
-**Windows 10/11:**
-- [RubyInstaller for Windows](https://rubyinstaller.org/) (with DevKit)
-- Run `ridk install` after installation to set up MSYS2
-- Bundler (install: `gem install bundler`)
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/aindaco1/zema-landing.git
-   cd zema-landing
-   ```
-
-2. **Install dependencies**
-   ```bash
-   bundle install
-   ```
-
-3. **Start local development server**
-   ```bash
-   bundle exec jekyll serve
-   ```
-
-4. **Open in browser**
-   - macOS/Windows: `http://localhost:4000/zema-landing/`
-
-### File Structure
-
-```
-zema-landing/
-├── _config.yml              # Jekyll config (baseurl, build settings)
-├── _data/
-│   └── frames.yml          # Content model (all frames, copy, media paths)
-├── _includes/
-│   ├── head.html           # Meta tags, CSS links, JSON-LD
-│   ├── frame-video.html    # Video frame template
-│   ├── frame-dossier.html  # FAQ interstitial template
-│   └── frame-form.html     # Contact form template
-├── _layouts/
-│   └── default.html        # Root HTML wrapper
-├── assets/
-│   ├── css/
-│   │   ├── main.scss       # Main stylesheet (imports partials)
-│   │   ├── _reset.scss     # CSS reset
-│   │   ├── _layout.scss    # Viewport, sticky positioning
-│   │   ├── _frame.scss     # Frame variants (video/dossier/form)
-│   │   ├── _theme70s.scss  # Grain, scanlines, aberration
-│   │   └── _loading.scss   # Loading spinner
-│   ├── js/
-│   │   └── main.js         # Virtual scroll + video scrubbing
-│   └── media/
-│       ├── intro-poster.webp
-│       ├── intro.webm / intro.mp4
-│       ├── value-poster.webp
-│       ├── value.webm / value.mp4
-│       ├── proof-poster.webp
-│       ├── proof.webm / proof.mp4
-│       └── dossier.webp
-├── index.html              # Main page (loops frames.yml)
-└── agents.md               # Technical spec & roadmap
+```sh
+bundle install
+bundle exec jekyll serve
 ```
 
----
+Open `http://127.0.0.1:4000/zema-landing/`.
 
-## Content Management
+Build the production output with:
 
-Edit `_data/frames.yml` to update copy, add/remove frames, or change media paths. Jekyll rebuilds automatically in dev mode.
-
-### Adding a New Video Frame
-
-```yaml
-- id: new-frame
-  kind: video
-  title: "Your headline"
-  copy: "Supporting copy (1-2 lines)"
-  poster: "assets/media/new-frame-poster.webp"
-  video_webm: "assets/media/new-frame.webm"
-  video_mp4: "assets/media/new-frame.mp4"
-  bg: "#0d0d0d"
+```sh
+bundle exec jekyll build
 ```
 
-Place media files in `assets/media/` and run the FFmpeg pipeline (see below).
+## Regression tests
 
----
+The Playwright suite builds and serves the Jekyll site on an isolated local port, then exercises the production interaction in Chromium:
 
-## Media Pipeline (FFmpeg)
+- repeated hero forward and reverse scrubbing, including its intended scroll pacing;
+- repeated first and third gallery clip forward and reverse scrubbing;
+- full-width, media-free dossier layout and inquiry montage scrubbing;
+- reduced-motion static fallbacks and deferred video hydration;
+- axe-backed WCAG 2.2 AA, keyboard, focus, target-size, and form-error behavior;
+- footer/logo structure, cache-version consistency, and desktop/mobile overflow;
+- responsive reflow across phone portrait/landscape, tablet, laptop, desktop, and wide desktop viewports;
+- byte-range delivery for the native media-loading fallback.
+- canonical/social metadata, LocalBusiness JSON-LD, crawl files, and share-image delivery.
 
-Use these commands to prepare video assets:
+Install and run it locally with:
 
-### Generate WebP Poster (from frame at 0.25s)
-```bash
-ffmpeg -ss 0.25 -i input.mov -frames:v 1 -vf "scale=1280:-1:flags=lanczos" -q:v 60 poster.webp
+```sh
+npm install
+npx playwright install chromium
+npm test
 ```
 
-### Encode WebM (VP9, Chrome/Android)
-```bash
-ffmpeg -i input.mov -c:v libvpx-vp9 -b:v 1800k -crf 32 -pix_fmt yuv420p -row-mt 1 -an -vf "scale=1280:-2" output.webm
+Focused accessibility and SEO gates are also available:
+
+```sh
+npm run test:accessibility
+npm run test:seo
 ```
 
-### Encode MP4 (H.264, Safari/iOS)
-```bash
-ffmpeg -i input.mov -c:v libx264 -profile:v high -pix_fmt yuv420p -b:v 2000k -crf 21 -movflags +faststart -an -vf "scale=1280:-2" output.mp4
+Failures retain a screenshot, video, and Playwright trace in `test-results/`. The same suite runs automatically for pull requests and pushes to `main` via `.github/workflows/regression.yml`.
+
+## Project map
+
+```text
+_config.yml                  Site URL, metadata, and Jekyll settings
+_data/frames.yml             All public content, URLs, hours, FAQs, and media paths
+_includes/head.html          Metadata and LocalBusiness structured data
+_includes/frame-video.html   Sticky scroll-story hero
+_includes/frame-dossier.html Lounge information and FAQ dossier
+_includes/frame-form.html    Venue inquiry form
+_includes/frame-film.html    Complete-film player
+_layouts/default.html        Header, main landmark, footer, and script
+assets/css/                  SCSS reset, theme, layout, and sections
+assets/fonts/                Self-hosted film-title subset and its OFL license
+assets/js/main.js            Scroll sync, lazy media, header, and form enhancement
+assets/media/                Optimized production media
+index.html                   Page composition
+tests/e2e/                   Playwright browser regression coverage
+playwright.config.js         Isolated Jekyll test server and browser settings
+robots.txt / sitemap.*       Generated crawl directives and public URL inventory
+docs/ACCESSIBILITY_SEO.md    Audit baseline and manual release checks
+docs/BRAND_GUIDE.md          Brand, voice, color, type, image, and layout system
+scripts/                     Deterministic production-mode test server
+.github/workflows/           Regression suite for pull requests and main
+agents.md                    Current product and engineering guardrails
 ```
 
-**Performance Budgets:**
-- Posters: ≤120KB each
-- Videos: 1.5–2.5 Mbps desktop, 1.0–1.5 Mbps mobile
-- Grain tile: ≤12KB
-- CSS: ≤20KB gz
-- JS: ≤8KB gz
+## Content and settings
 
----
+Edit [`_data/frames.yml`](_data/frames.yml) for public-facing copy, hours, contact details, external links, form endpoint, and media paths. The current hours and policies were taken from the Hotel Zazz ZEMA Vinyl Lounge page; verify them with the venue before launch and whenever operating hours change. Creative direction, official logo art, film chapter names, and credits were cross-checked against the Notion Research & Planning board and the original 18-page proposal.
 
-## Key Technical Details
+`asset_version` in `_config.yml` is appended to the compiled CSS, JavaScript, and every scrub-video URL. Bump it whenever those files change so browsers cannot combine a new page with a stale interaction script or failed media response.
 
-### Scroll-Scrub Interaction
-- **First video only** scrubs on landing (other videos are placeholder for future)
-- Scroll wheel/touch input accumulates into `virtualScroll` counter
-- Maps 0–3000px virtual scroll → 0–15s video time (frame 0–360 @ 24fps)
-- Uses easing interpolation (30%) + frame snapping for smooth playback
-- Allows scrolling **up** to reverse video back to poster
-- Unlocks normal page scroll after frame 360
+The inquiry form posts to Formspree form `xdaqrwyo` in the `Zema Vinyl Lounge Website` project. The client-side handler gives an inline result, while a normal browser POST still works if JavaScript is unavailable. The endpoint is public by design; no Formspree API key is stored in this repository. The complete-film credits are transcribed from the film's final credit card at `3:32–3:35`.
 
-### Video Loading Strategy
-- First video: immediate source injection with `preload="auto"`
-- Wait for `canplaythrough` before enabling interaction (prevents jitter)
-- MP4 prioritized (H.264 baseline) with WebM VP9 fallback
-- Poster shows during load; loading spinner until video ready
+## Media
 
-### Browser Support
-- Modern evergreen browsers (Chrome, Firefox, Edge, Safari)
-- iOS Safari 15+, Android Chrome 110+
-- Graceful degradation: reduced-motion shows posters only
+Current production assets are:
 
----
+| Asset | Purpose | Approx. size |
+| --- | --- | ---: |
+| `zema-scroll.mp4` | 14.6-second vinyl-to-drink-prep hero scrub, 1440×810 H.264, every frame independently seekable | 7.8 MB |
+| `zema-gallery-arrival.mp4` | 20.75-second agent/arrival scrub, 720p all-intra H.264 | 9.7 MB |
+| `zema-gallery-cocktails.mp4` | 10.6-second cocktails scrub, 720p all-intra H.264 | 4.5 MB |
+| `zema-gallery-dance.mp4` | 15.75-second dance scrub, 720p all-intra H.264 | 8.8 MB |
+| `zema-inquiry-scrub.mp4` | 25.5-second agent-awakening-to-record scrub, 720p all-intra H.264 | 13 MB |
+| `zema-hero-poster.webp` | 1920×1080 initial/LCP poster | 143 KB |
+| `zema-inquiry-poster.webp` | 1920×1080 inquiry scrub fallback | 51 KB |
+| `zema-vinyl-cursor.webp` | 256×256 transparent custom-pointer asset | 7 KB |
+| `zema-vinyl-cursor.svg` | Editable source for the ZEMA-labeled pointer | 703 KB |
+| `zema-film-poster.webp` | 1920×1080 complete-film poster/social image | 100 KB |
+| `zema-*.webp` | Additional 1920×1080 gallery stills and 1200×1200 official logos | 74–225 KB each |
 
-## Deployment (GitHub Pages)
+Recreate the scrub derivative from the master with FFmpeg:
 
-1. **Push to GitHub**
-   ```bash
-   git add .
-   git commit -m "Update content"
-   git push origin main
-   ```
+```sh
+ffmpeg -i input.mp4 \
+  -filter_complex "[0:v]trim=start=15.223542:end=16.766750,setpts=PTS-STARTPTS[v0];[0:v]trim=start=40.832458:end=53.845458,setpts=PTS-STARTPTS[v1];[v0][v1]concat=n=2:v=1:a=0,scale=1440:810:flags=lanczos,fps=24000/1001,setpts=PTS-STARTPTS[outv]" \
+  -map "[outv]" \
+  -c:v libx264 -preset medium -crf 26 -profile:v high -level 4.1 \
+  -pix_fmt yuv420p -g 1 -keyint_min 1 -bf 0 -refs 1 \
+  -sc_threshold 0 -an -avoid_negative_ts make_zero \
+  -movflags +faststart zema-scroll.mp4
+```
 
-2. **Enable GitHub Pages**
-   - Repo Settings → Pages
-   - Source: Deploy from branch `main`
-   - Folder: `/ (root)`
+The two hero ranges preserve the overhead vinyl shot at `15.223542–16.766750` and the drink-preparation sequence at `40.832458–53.845458`, removing the intervening lounge material. The join lands on native scene boundaries.
 
-3. **Access site**
-   - `https://aindaco1.github.io/zema-landing/`
+The gallery sources use the same all-intra settings at 1280×720. Their master-film ranges are `58.75–79.5`, `84.2–94.8`, and `160.0–175.75` seconds. The arrival panel opens on the agent reading the file and now uses the same edge-to-edge `cover` presentation as the cocktails and dance panels, keeping all three movements visually consistent. The inquiry scrub covers `186.52–212.02`, beginning on the first agent frame after the disco-ball cut and ending on the last clean record frame before the credits. These are high-quality delivery encodes, not lossless encodes. Lossless video would be dramatically larger without improving the source. Every frame in each scrub derivative is an I-frame, so the browser can seek to any frame without decoding a preceding group of pictures.
 
-Jekyll compiles SCSS automatically; no separate build step required.
+## Interaction model
 
----
+The hero is a tall section with a `position: sticky` viewport. A passive scroll listener maps the section's native scroll progress to the all-intra H.264 video's `currentTime`. Before a scrub becomes interactive, its derivative is buffered into a local Blob so rapid seeking cannot cancel an in-flight range read and leave the decoder in an intermittent error state. Posters remain visible during that short load. The gallery divides its longer scroll progress into thirds and hydrates one movement at a time, with the next clip staged near the end of the current movement to reduce memory and decoder contention. The inquiry montage fills that section behind a dark contrast treatment and maps the section's ordinary viewport passage to video time. Coalesced seeks always resolve to the latest scroll position, including rapid direction changes. None of these interactions captures wheel or touch events, locks the page, or requires autoplay.
 
-## Development Commands
+The custom vinyl pointer follows fine mouse/trackpad input and spins with CSS; it never captures clicks. Touch/coarse-pointer devices do not render it, reduced-motion visitors receive a static record, and text/form inputs retain their native cursor. In-page links use the browser's immediate fragment jump with compact-header clearance.
 
-| Command | Purpose |
-|---------|---------|
-| `bundle exec jekyll serve` | Start local dev server (with live reload) |
-| `bundle exec jekyll serve --livereload` | Enable auto-refresh on file changes |
-| `bundle exec jekyll build` | Build static site to `_site/` |
-| `bundle exec jekyll clean` | Clear `_site/` and `.jekyll-cache/` |
+The complete film uses `youtube-nocookie.com` video ID `Qb-E5il1lZ0`. Following the Pool campaign-page pattern, the initial page contains only a local poster and native play button; JavaScript creates the remote iframe after that button is activated and starts playback from that explicit user action. The repository does not ship a second local copy of the complete film.
 
----
+The fixed soundtrack control uses the film mix from the first needle drop at `13.90` seconds through the final audio tail at `215.78`. Its sources are a 64 kbps VBR Opus WebM (primary) and an 80 kbps AAC M4A (compatibility fallback); the browser selects and downloads only one. Source URLs live in `_data/frames.yml` and render through a single include. They remain unset until an idle task runs after page load, are skipped automatically for Save-Data visitors, and hydrate immediately when someone explicitly enables sound. Playback loops muted by default, so sound always requires a user action.
 
-## Troubleshooting
+## Accessibility and performance rules
 
-**Video won't load:**
-- Check paths in `_data/frames.yml` (should be `assets/media/filename.ext`)
-- Verify files exist in `assets/media/`
-- Check browser console for MIME type errors
+- Keep one page-level `h1`, logical landmarks, real labels, and native `details`/`summary` controls.
+- Keep every essential lounge fact as selectable HTML text in the full-width dossier.
+- Preserve visible focus states and a skip link.
+- Keep inactive scrub beats `inert` whenever they are hidden from assistive technology.
+- Keep visible controls at least 24 × 24 CSS pixels and test the page at 320 px.
+- Do not remove the reduced-motion or Save-Data poster fallbacks.
+- Keep the hero poster eagerly loaded; keep the gallery, inquiry, soundtrack, and YouTube media lazy.
+- Test keyboard navigation, VoiceOver, 200%/400% zoom, iOS Safari, Android Chrome, YouTube captions, and the live Formspree endpoint before launch.
 
-**Scrubbing is jittery:**
-- Ensure video is fully buffered (`canplaythrough` event)
-- Videos should be ≤2 Mbps, H.264 High profile
-- Test with `--livereload` disabled (reduces CPU contention)
+The current accessibility and SEO implementation, audit findings, and remaining manual checks are documented in [`docs/ACCESSIBILITY_SEO.md`](docs/ACCESSIBILITY_SEO.md). Metadata intentionally uses conservative `WebSite`, `WebPage`, and `BarOrPub` structured data; do not add fake FAQ, review, rating, offer, or event schema.
 
-**Poster stretched:**
-- Verify poster and video use same aspect ratio
-- CSS uses `object-fit: contain` to preserve proportions
+## Deploy to GitHub Pages
 
-**Spinner doesn't hide:**
-- Check that `_layouts/default.html` includes `<div id="loading">`
-- Verify `_loading.scss` is imported in `main.scss`
+Pushes to `main` build and deploy through the pinned Actions workflow in `.github/workflows/pages.yml`. The workflow packages Jekyll's `_site` output as the Pages artifact and publishes it to the `github-pages` environment.
 
----
+The configured project URL is `https://aindaco1.github.io/zema-landing/`.
 
-## Contributing
-
-See [agents.md](agents.md) for full technical spec, roadmap, and sprint breakdown.
-
-**Owner:** @aindaco1  
-**License:** MIT  
-**Repo:** https://github.com/aindaco1/zema-landing
+If a custom domain is added, update `url` and `baseurl` in `_config.yml`, then restrict the Formspree form to the production domain.

@@ -1,25 +1,59 @@
-<section class="frame frame--form" data-frame data-kind="form" aria-labelledby="form-title">
-  <div class="content">
-    <h2 id="form-title" class="title">{{ include.f.title }}</h2>
-    <p class="copy">{{ include.f.copy }}</p>
-    
-    <form action="{{ include.f.form_action }}" method="POST" class="contact" id="contact">
-      <label>
-        <span>Name</span>
-        <input name="name" type="text" required>
-      </label>
-      <label>
-        <span>Email</span>
-        <input name="email" type="email" required>
-      </label>
-      <label>
-        <span>Project</span>
-        <textarea name="message" rows="5" required></textarea>
-      </label>
-      <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
-      <button type="submit">Send</button>
-    </form>
-    
-    <p class="privacy">Submissions are processed by Formspree. No tracking pixels. Anonymized analytics only.</p>
+<section class="inquiry" id="inquire" data-inquiry-scrub aria-labelledby="inquiry-title">
+  <div class="inquiry__scrub" aria-hidden="true">
+    <img src="{{ include.inquiry.poster | relative_url }}?v={{ site.asset_version }}" alt="" width="1920" height="1080" loading="lazy">
+    <video muted playsinline preload="none" tabindex="-1" data-inquiry-video data-src="{{ include.inquiry.video_mp4 | relative_url }}?v={{ site.asset_version }}"></video>
+    <span>{{ include.inquiry.scrub_label }}</span>
+    <i><b data-inquiry-progress></b></i>
   </div>
+
+  <div class="inquiry__intro">
+    <p class="eyebrow">{{ include.inquiry.eyebrow }}</p>
+    <h2 id="inquiry-title">{{ include.inquiry.title }}</h2>
+    <p>{{ include.inquiry.copy }}</p>
+  </div>
+
+  <form action="{{ include.inquiry.form_action }}" method="post" class="inquiry-form" data-inquiry-form data-phone-display="{{ include.phone }}" aria-describedby="form-instructions">
+    <input type="hidden" name="_subject" value="New ZEMA Vinyl Lounge venue inquiry">
+    <p class="form-instructions" id="form-instructions"><span aria-hidden="true">*</span> Required fields</p>
+    <div class="form-grid">
+      <label>
+        <span>Name <small>(required)</small></span>
+        <input name="name" type="text" autocomplete="name" required>
+      </label>
+      <label>
+        <span>Email <small>(required)</small></span>
+        <input name="email" type="email" autocomplete="email" required>
+      </label>
+      <label>
+        <span>Event type <small>(required)</small></span>
+        <select name="event_type" required>
+          <option value="">Choose one</option>
+          <option>Private party</option>
+          <option>Corporate gathering</option>
+          <option>Performance or creative event</option>
+          <option>Group reservation</option>
+          <option>Something else</option>
+        </select>
+      </label>
+      <label>
+        <span>Preferred date <small>(optional)</small></span>
+        <input name="preferred_date" type="date">
+      </label>
+      <label>
+        <span>Estimated guests <small>(optional)</small></span>
+        <input name="guest_count" type="number" min="1" inputmode="numeric">
+      </label>
+      <label class="form-grid__wide">
+        <span>Tell us about the evening <small>(required)</small></span>
+        <textarea name="message" rows="6" required></textarea>
+      </label>
+    </div>
+    <div class="honeypot" aria-hidden="true">
+      <label>Leave this field empty <input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label>
+    </div>
+    <div class="inquiry-form__finish">
+      <button class="button button--dark" type="submit">Send inquiry <span aria-hidden="true">↗</span></button>
+    </div>
+    <p class="form-status" data-form-status role="status" aria-live="polite" aria-atomic="true"></p>
+  </form>
 </section>

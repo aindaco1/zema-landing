@@ -1,11 +1,61 @@
-<!DOCTYPE html>
-<html lang="en">
-{% include head.html %}
-<body>
-  <div class="loading-screen" id="loading">
-    <div class="spinner"></div>
-  </div>
-  {{ content }}
-  <script src="{{ site.baseurl }}/assets/js/main.js" defer></script>
-</body>
+<!doctype html>
+<html lang="{{ site.lang | default: 'en-US' }}">
+  {% include head.html %}
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="site-header">
+      <a class="wordmark" href="#top" aria-label="ZEMA Vinyl Lounge, back to top">
+        <img src="{{ site.data.frames.logo_white | relative_url }}" alt="" width="1200" height="1200">
+      </a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="#visit">Visit</a>
+        <a href="#inquire">Inquire</a>
+        <a href="{{ site.data.frames.events_url }}" target="_blank" rel="external noopener">Events</a>
+      </nav>
+    </header>
+    <main id="main-content" tabindex="-1">
+      {{ content }}
+    </main>
+    {% capture maps_query %}ZEMA Vinyl Lounge, {{ site.data.frames.address_street }}, {{ site.data.frames.address_locality }}, {{ site.data.frames.address_region }} {{ site.data.frames.address_postal_code }}{% endcapture %}
+    <footer class="site-footer">
+      <a class="site-footer__brand" href="#top" aria-label="ZEMA Vinyl Lounge, back to top">
+        <span class="site-footer__label">Tap the banana three times</span>
+        <img src="{{ site.data.frames.logo_white | relative_url }}" alt="" width="1200" height="1200" loading="lazy">
+      </a>
+      <div class="site-footer__column site-footer__contact">
+        <p class="site-footer__label">Visit</p>
+        <address>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query={{ maps_query | strip | uri_escape }}" rel="external">
+            {{ site.data.frames.address_street }},<br>
+            {{ site.data.frames.address_locality }}, {{ site.data.frames.address_region }} {{ site.data.frames.address_postal_code }}
+          </a>
+        </address>
+        <p class="site-footer__phone"><a href="tel:{{ site.data.frames.phone_href }}">{{ site.data.frames.phone_display }}</a></p>
+      </div>
+      <nav class="site-footer__column site-footer__links" aria-label="Footer navigation">
+        <p class="site-footer__label">Going on now</p>
+        <div class="site-footer__icon-links">
+          <a class="site-footer__icon-link" href="{{ site.data.frames.instagram }}" rel="external" aria-label="ZEMA on Instagram">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+              <circle cx="12" cy="12" r="4.25"></circle>
+              <circle cx="17.4" cy="6.6" r="1"></circle>
+            </svg>
+          </a>
+          <a class="site-footer__icon-link" href="{{ site.data.frames.events_url }}" target="_blank" rel="external noopener" aria-label="ZEMA events calendar">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+              <path d="M8 3v4M16 3v4M3 10h18"></path>
+            </svg>
+          </a>
+        </div>
+      </nav>
+      <p class="site-footer__credit">Inside Hotel Zazz · Albuquerque, New Mexico</p>
+    </footer>
+    {% include site-audio.html soundtrack=site.data.frames.soundtrack %}
+    <div class="vinyl-cursor" data-vinyl-cursor aria-hidden="true">
+      <img src="{{ '/assets/media/zema-vinyl-cursor.webp' | relative_url }}?v={{ site.asset_version }}" alt="" width="256" height="256">
+    </div>
+    <script src="{{ '/assets/js/main.js' | relative_url }}?v={{ site.asset_version }}" defer></script>
+  </body>
 </html>

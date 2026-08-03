@@ -1,19 +1,35 @@
-# Zema Vinyl Lounge - Jekyll Configuration
-title: "Zema Vinyl Lounge"
-description: "A lightweight, film-inspired scroll story for the 70s short."
+title: "ZEMA Vinyl Lounge"
+seo_title: "ZEMA Vinyl Lounge | HiFi Cocktails in Albuquerque"
+description: "Albuquerque's first HiFi vinyl speakeasy—cocktails, records, and private events in the heart of Nob Hill."
 url: "https://aindaco1.github.io"
 baseurl: "/zema-landing"
+lang: "en-US"
+locale: "en_US"
+social_image: "assets/media/zema-social.jpg"
+social_image_alt: "A record spinning under magenta and blue light at ZEMA Vinyl Lounge"
+asset_version: "20260802t"
 
-# Build settings
 markdown: kramdown
 sass:
   style: compressed
   sass_dir: assets/css
 
-# Exclude from processing
 exclude:
   - README.md
   - LICENSE
   - agents.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - node_modules
+  - tests
+  - test-results
+  - playwright-report
+  - playwright.config.js
+  - package.json
+  - package-lock.json
+  - docs
+  - scripts
+  - .jekyll-test-site
   - .git
   - .gitignore

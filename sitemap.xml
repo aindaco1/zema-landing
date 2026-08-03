@@ -1,0 +1,14 @@
+---
+layout: null
+permalink: /sitemap.xml
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>{{ '/' | absolute_url }}</loc>
+    <image:image>
+      <image:loc>{{ site.social_image | absolute_url }}</image:loc>
+      <image:caption>{{ site.social_image_alt | xml_escape }}</image:caption>
+    </image:image>
+  </url>
+</urlset>
