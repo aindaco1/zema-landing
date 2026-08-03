@@ -1,0 +1,14 @@
+<aside class="site-audio" data-site-audio aria-label="ZEMA soundtrack" hidden>
+  <audio id="zema-soundtrack" data-site-audio-media muted autoplay loop preload="none" aria-hidden="true">
+    {% for source in include.soundtrack.sources %}
+      <source data-src="{{ source.src | relative_url }}?v={{ site.asset_version }}" type="{{ source.type }}">
+    {% endfor %}
+  </audio>
+  <button class="site-audio__toggle" type="button" data-site-audio-toggle aria-controls="zema-soundtrack" aria-pressed="false" aria-label="Turn on ZEMA soundtrack">
+    <img src="{{ '/assets/media/zema-vinyl-cursor.webp' | relative_url }}?v={{ site.asset_version }}" alt="" width="256" height="256">
+    <span class="site-audio__copy">
+      <span class="site-audio__title">{{ include.soundtrack.title }}</span>
+      <strong data-site-audio-state>Sound off</strong>
+    </span>
+  </button>
+</aside>

@@ -1,13 +1,26 @@
-<section class="frame frame--video" data-frame data-kind="video" style="--bg:{{ include.f.bg | default: '#000' }};">
-  <div class="media">
-    <img class="poster" src="{{ site.baseurl }}/{{ include.f.poster }}" alt="" loading="eager">
-    <video class="v" preload="auto" muted playsinline data-lazy data-webm="{{ site.baseurl }}/{{ include.f.video_webm }}" data-mp4="{{ site.baseurl }}/{{ include.f.video_mp4 }}">
-      <!-- sources injected by JS -->
-    </video>
-  </div>
-  <div class="content">
-    <h1 class="title">{{ include.f.title }}</h1>
-    <p class="copy">{{ include.f.copy }}</p>
-    <a class="cta" href="{{ site.data.frames.cta_target }}">Get in touch</a>
+<section class="scrub-story" id="top" data-scrub-story aria-label="An introduction to ZEMA Vinyl Lounge">
+  <div class="scrub-story__sticky">
+    <div class="scrub-story__media" aria-hidden="true">
+      <img src="{{ include.hero.poster | relative_url }}" alt="" width="1920" height="1080" fetchpriority="high">
+      <video muted playsinline preload="none" tabindex="-1" data-scrub-video data-src="{{ include.hero.video_mp4 | relative_url }}?v={{ site.asset_version }}"></video>
+    </div>
+    <div class="scrub-story__shade" aria-hidden="true"></div>
+    <div class="scrub-story__beats">
+      {% for beat in include.hero.beats %}
+        <div class="scrub-beat{% if forloop.first %} is-active{% endif %}" data-scrub-beat aria-hidden="{% unless forloop.first %}true{% else %}false{% endunless %}"{% unless forloop.first %} inert{% endunless %}>
+          <p class="eyebrow">{{ beat.eyebrow }}</p>
+          {% if forloop.first %}<h1>{{ beat.title }}</h1>{% else %}<h2>{{ beat.title }}</h2>{% endif %}
+          <p>{{ beat.copy }}</p>
+          {% if forloop.last %}
+            <a class="button button--light" href="#inquire">Plan an evening</a>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+    <div class="scroll-cue" aria-hidden="true">
+      <span>Scroll to enter</span>
+      <i></i>
+    </div>
+    <div class="scrub-progress" aria-hidden="true"><span data-scrub-progress></span></div>
   </div>
 </section>

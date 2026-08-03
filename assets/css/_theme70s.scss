@@ -1,122 +1,153 @@
-// 1970s aesthetic: grain, scanlines, chromatic aberration, vignette
+@font-face {
+  font-family: "ZEMA Script";
+  src: url("../fonts/italianno-zema.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
 
 :root {
-  --color-warm-bg: #0d0d0d;
-  --color-warm-text: #f5f1e8;
-  --color-accent: #d4a574;
-  --grain-opacity: 0.03;
-  --scanline-opacity: 0.02;
+  --ink: #181018;
+  --cream: #f2ead5;
+  --paper: #d8caa6;
+  --paper-dark: #b3a178;
+  --plum: #3c163b;
+  --plum-deep: #120b16;
+  --magenta: #b72c78;
+  --coral: #e26177;
+  --electric-blue: #4cc9ff;
+  --line-light: rgba(242, 234, 213, 0.28);
+  --line-dark: rgba(24, 16, 24, 0.3);
+  --page-pad: clamp(1.25rem, 4vw, 4.5rem);
+  --page-gutter-left: max(var(--page-pad), env(safe-area-inset-left, 0px));
+  --page-gutter-right: max(var(--page-pad), env(safe-area-inset-right, 0px));
+  --font-display: Georgia, "Times New Roman", serif;
+  --font-body: Arial, Helvetica, sans-serif;
+  --font-typewriter: "Courier New", Courier, monospace;
+  --font-script: "ZEMA Script", cursive;
+  --type-display-xl: clamp(3.25rem, 8vw, 8.75rem);
+  --type-display-lg: clamp(3rem, 7vw, 7.25rem);
+  --type-display-md: clamp(2.75rem, 4.6vw, 4.75rem);
+  --type-display-number: clamp(1.75rem, 3vw, 3.25rem);
+  --type-lead: clamp(1.05rem, 1.6vw, 1.35rem);
+  --type-body: 1rem;
+  --type-small: 0.875rem;
+  --type-label: 0.72rem;
+  --leading-display-xl: 0.84;
+  --leading-display: 0.86;
+  --leading-display-compact: 0.9;
+  --leading-lead: 1.45;
+  --leading-body: 1.55;
+  --leading-small: 1.45;
+  --leading-label: 1.3;
+  --tracking-display-xl: -0.06em;
+  --tracking-display: -0.055em;
+  --tracking-display-compact: -0.045em;
+  --tracking-label: 0.16em;
 }
 
-// Film grain overlay (applied to all frames)
-.frame::after {
-  content: '';
+%page-gutters {
+  padding-left: var(--page-gutter-left);
+  padding-right: var(--page-gutter-right);
+}
+
+%utility-label {
+  font-family: var(--font-body);
+  font-size: var(--type-label);
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  line-height: var(--leading-label);
+  text-transform: uppercase;
+}
+
+%cover-media {
   position: absolute;
   inset: 0;
-  z-index: 5;
-  pointer-events: none;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><filter id="n"><feTurbulence baseFrequency="0.9" numOctaves="4"/></filter><rect width="200" height="200" filter="url(%23n)" opacity="0.5"/></svg>');
-  background-repeat: repeat;
-  opacity: var(--grain-opacity);
-  mix-blend-mode: overlay;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-// Scanlines (dossier only for stronger effect)
-.frame--dossier::before {
-  content: '';
+.eyebrow {
+  @extend %utility-label;
+  margin-bottom: 1rem;
+}
+
+.button {
+  @extend %utility-label;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 3.25rem;
+  padding: 0.85rem 1.3rem;
+  border: 1px solid currentColor;
+  text-decoration: none;
+  transition: color 180ms ease, background 180ms ease, transform 180ms ease;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+}
+
+.button--light {
+  background: rgba(18, 11, 22, 0.22);
+  color: var(--cream);
+}
+
+.button--light:hover {
+  background: var(--cream);
+  color: var(--ink);
+}
+
+.button--dark {
+  background: var(--ink);
+  color: var(--cream);
+}
+
+.button--dark:hover {
+  background: var(--coral);
+  color: var(--ink);
+}
+
+.text-link {
+  @extend %utility-label;
+  display: inline-flex;
+  gap: 0.55rem;
+  align-items: baseline;
+  min-height: 2.75rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid currentColor;
+  text-decoration: none;
+}
+
+.text-link:focus-visible,
+.button:focus-visible {
+  outline-offset: 4px;
+}
+
+.scrub-story__sticky::after,
+.film__player::after {
+  content: "";
   position: absolute;
   inset: 0;
-  z-index: 6;
+  z-index: 3;
   pointer-events: none;
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 0.15),
-    rgba(0, 0, 0, 0.15) 1px,
-    transparent 1px,
-    transparent 2px
-  );
-  opacity: var(--scanline-opacity);
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
+  mix-blend-mode: soft-light;
 }
 
-// Chromatic aberration on headings
-.title {
-  position: relative;
-  
-  &::before,
-  &::after {
-    content: attr(data-text);
-    position: absolute;
-    inset: 0;
-    opacity: 0.6;
-    mix-blend-mode: screen;
-  }
-
-  &::before {
-    color: #ff0000;
-    transform: translate(-1px, -1px);
-  }
-
-  &::after {
-    color: #00ffff;
-    transform: translate(1px, 1px);
-  }
+.dossier__paper {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    radial-gradient(circle at 17% 12%, rgba(255, 255, 255, 0.3), transparent 30%),
+    radial-gradient(circle at 78% 77%, rgba(53, 34, 30, 0.17), transparent 28%);
+  background-size: 100% 1.5rem, auto, auto;
 }
 
-// Subtle vignette on all frames
-.frame .media::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.4) 100%);
-  pointer-events: none;
-}
-
-// Warm palette adjustments
-body {
-  color: var(--color-warm-text);
-}
-
-.frame {
-  filter: saturate(0.85) sepia(0.1);
-}
-
-// Disable effects for reduced motion
-@media (prefers-reduced-motion: reduce) {
-  .frame::after {
-    display: none;
+@media (forced-colors: active) {
+  .scrub-story__shade {
+    background: rgba(0, 0, 0, 0.72);
   }
-
-  .frame--dossier::before {
-    display: none;
-  }
-
-  .title::before,
-  .title::after {
-    display: none;
-  }
-
-  .frame {
-    filter: none;
-  }
-}
-
-// Typewriter effect for dossier (optional, disabled by default)
-@keyframes typeIn {
-  from {
-    width: 0;
-  }
-  to {
-    width: 100%;
-  }
-}
-
-@keyframes blink {
-  50% {
-    border-color: transparent;
-  }
-}
-
-// Apply only when JS adds data-active
-.frame--dossier[data-active] .title {
-  animation: none; // Enable manually if desired
 }

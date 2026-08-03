@@ -1,10 +1,6 @@
 ---
 ---
-// Zema Vinyl Lounge - Main stylesheet
-// Target: ≤ 20KB gzipped
-
-@import 'reset';
-@import 'layout';
-@import 'frame';
-@import 'theme70s';
-@import 'loading';
+@import "reset";
+@import "theme70s";
+@import "layout";
+@import "frame";

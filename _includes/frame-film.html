@@ -1,0 +1,41 @@
+<section class="film" id="film" aria-labelledby="film-title">
+  <header class="film__header">
+    <p class="eyebrow">A {% for studio in include.film.production %}{% unless forloop.first %}/{% endunless %}<a href="{{ studio.url }}" rel="external">{{ studio.name }}</a>{% endfor %} production</p>
+    <h2 id="film-title">{{ include.film.title }}</h2>
+    <div class="film__meta">
+      <ul>
+        {% for credit in include.film.credits %}<li>{{ credit }}</li>{% endfor %}
+      </ul>
+    </div>
+  </header>
+  <div
+    class="film__player{% if include.film.youtube_id != empty %} film__player--facade{% endif %}"
+    {% if include.film.youtube_id != empty %}
+      data-youtube-embed
+      data-youtube-src="https://www.youtube-nocookie.com/embed/{{ include.film.youtube_id }}?autoplay=1&amp;rel=0"
+      data-youtube-title="{{ include.film.title }} — complete film"
+    {% endif %}>
+    {% if include.film.youtube_id != empty %}
+      <img class="film__poster" src="{{ include.film.poster | relative_url }}" alt="" width="1920" height="1080" loading="lazy" decoding="async">
+      <button class="film__play" type="button" data-youtube-play aria-label="Play {{ include.film.title }} — complete film">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5v14l11-7z"></path></svg>
+        <span aria-hidden="true">Play film</span>
+      </button>
+      <noscript>
+        <iframe
+          data-external-player
+          src="https://www.youtube-nocookie.com/embed/{{ include.film.youtube_id }}?rel=0"
+          title="{{ include.film.title }} — complete film"
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen></iframe>
+      </noscript>
+    {% else %}
+      <div class="film__pending">
+        <img src="{{ include.film.poster | relative_url }}" alt="" width="1920" height="1080" loading="lazy">
+        <p>Add the public YouTube video ID in <code>_data/frames.yml</code> to publish the complete film here.</p>
+      </div>
+    {% endif %}
+  </div>
+</section>

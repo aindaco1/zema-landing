@@ -1,20 +1,45 @@
 ---
 layout: default
 ---
-<main class="story" role="main">
-  {% for f in site.data.frames.frames %}
-    {% case f.kind %}
-      {% when 'video' %}
-        {% include frame-video.html f=f %}
-      {% when 'dossier' %}
-        {% include frame-dossier.html f=f %}
-      {% when 'form' %}
-        {% include frame-form.html f=f %}
-    {% endcase %}
-  {% endfor %}
-</main>
+{% assign content = site.data.frames %}
 
-<nav class="pager" aria-label="Frame navigation">
-  <button data-prev aria-label="Previous frame">Prev</button>
-  <button data-next aria-label="Next frame">Next</button>
-</nav>
+{% include frame-video.html hero=content.hero %}
+
+<section class="intro" id="visit" aria-labelledby="intro-title">
+  <div class="intro__lead">
+    <p class="eyebrow">{{ content.tagline }}</p>
+    <h2 id="intro-title">A listening room with something to say.</h2>
+  </div>
+  <div class="intro__body">
+    <p>ZEMA is a mood shapeshifter: a neighborhood gathering place where sound is felt, drinks are sipped with intention, and a night can turn into a memory.</p>
+    <p>Drop in, discover a record, meet Albuquerque’s artistic community, or make the lounge the setting for your next occasion.</p>
+    <div class="intro__actions">
+      <a class="text-link" href="#inquire">Ask about an event <span aria-hidden="true">↘</span></a>
+      <a class="text-link" href="{{ content.events_url }}" target="_blank" rel="external noopener">Upcoming events <span aria-hidden="true">↗</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="venue-gallery" data-gallery-scrub aria-labelledby="gallery-title">
+  <div class="venue-gallery__sticky">
+    <h2 class="venue-gallery__heading eyebrow" id="gallery-title">One night · Three movements</h2>
+    <div class="venue-gallery__grid">
+      {% for item in content.gallery %}
+        <figure{% if forloop.first %} class="is-active"{% endif %} data-gallery-panel data-media-fit="{{ item.media_fit | default: 'cover' }}">
+          <img src="{{ item.image | relative_url }}" alt="{{ item.alt }}" width="1920" height="1080" loading="lazy">
+          <video muted playsinline preload="none" tabindex="-1" aria-hidden="true" data-gallery-video="{{ forloop.index0 }}" data-src="{{ item.video_mp4 | relative_url }}?v={{ site.asset_version }}"></video>
+          <span class="venue-gallery__number" aria-hidden="true">0{{ forloop.index }}</span>
+          <figcaption>{{ item.caption }}</figcaption>
+        </figure>
+      {% endfor %}
+    </div>
+    <div class="venue-gallery__progress" aria-hidden="true">
+      <span data-gallery-progress></span>
+      {% for item in content.gallery %}<i></i>{% endfor %}
+    </div>
+  </div>
+</section>
+
+{% include frame-dossier.html dossier=content.dossier content=content %}
+{% include frame-form.html inquiry=content.inquiry phone=content.phone_display %}
+{% include frame-film.html film=content.film %}

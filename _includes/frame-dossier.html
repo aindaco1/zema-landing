@@ -1,16 +1,35 @@
-<section class="frame frame--dossier" data-frame data-kind="dossier" style="--bg:#0b0b0b" aria-labelledby="faq-title">
-  <div class="media" aria-hidden="true">
-    <img src="{{ site.baseurl }}/{{ include.f.image }}" alt="" loading="lazy">
-  </div>
-  <div class="content">
-    <h2 id="faq-title" class="title">{{ include.f.title }}</h2>
-    <p class="copy">{{ include.f.copy }}</p>
-    <div class="faq">
-      {% for item in include.f.faqs %}
-      <details>
-        <summary>{{ item.q }}</summary>
-        <p>{{ item.a }}</p>
-      </details>
+<section class="dossier" id="zema-file" aria-labelledby="dossier-title">
+  <div class="dossier__paper">
+    <div class="dossier__meta" aria-hidden="true">
+      <p><span>File no.</span><strong>ZVL-3711</strong></p>
+      <p><span>Status</span><strong>Declassified</strong></p>
+      <p><span>Field office</span><strong>Albuquerque, NM</strong></p>
+    </div>
+    <header>
+      <p class="eyebrow">{{ include.dossier.eyebrow }}</p>
+      <h2 id="dossier-title">{{ include.dossier.title }}</h2>
+      <p>{{ include.dossier.intro }}</p>
+    </header>
+
+    <div class="hours" aria-labelledby="hours-title">
+      <h3 id="hours-title">Listening hours</h3>
+      <dl>
+        {% for row in include.dossier.hours %}
+          <div><dt>{{ row.days }}</dt><dd>{{ row.time }}</dd></div>
+        {% endfor %}
+      </dl>
+      <ul>
+        {% for note in include.dossier.notes %}<li>{{ note }}</li>{% endfor %}
+      </ul>
+    </div>
+
+    <div class="faq" aria-labelledby="faq-title">
+      <h3 id="faq-title">Before you arrive</h3>
+      {% for item in include.dossier.faqs %}
+        <details>
+          <summary>{{ item.q }}</summary>
+          <p>{{ item.a }}</p>
+        </details>
       {% endfor %}
     </div>
   </div>

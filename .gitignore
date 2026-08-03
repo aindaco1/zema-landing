@@ -1,5 +1,6 @@
 # Jekyll
 _site/
+.jekyll-test-site/
 .jekyll-cache/
 .jekyll-metadata
 .sass-cache/
@@ -7,7 +8,11 @@ _site/
 # Ruby/Bundler
 vendor/
 .bundle/
-Gemfile.lock
+
+# Node/Playwright
+node_modules/
+playwright-report/
+test-results/
 
 # macOS
 .DS_Store

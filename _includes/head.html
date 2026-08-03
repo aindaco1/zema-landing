@@ -1,30 +1,110 @@
+{% assign canonical_url = page.url | default: '/' | absolute_url %}
+{% assign meta_title = page.seo_title | default: site.seo_title %}
+{% assign meta_description = page.description | default: site.description %}
+{% assign social_image_url = site.social_image | absolute_url %}
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
-  <meta name="description" content="{{ site.description }}">
-  
-  <!-- Open Graph / Social -->
-  <meta property="og:title" content="{{ site.title }}">
-  <meta property="og:description" content="{{ site.description }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#130b17">
+  <meta name="color-scheme" content="dark">
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+  <meta name="application-name" content="{{ site.title | escape }}">
+  <meta name="apple-mobile-web-app-title" content="{{ site.title | escape }}">
+
+  <title>{{ meta_title | escape }}</title>
+  <meta name="description" content="{{ meta_description | escape }}">
+  <link rel="canonical" href="{{ canonical_url }}">
+  <link rel="icon" href="{{ '/assets/media/zema-icon.png' | relative_url }}" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="{{ '/assets/media/zema-icon.png' | relative_url }}">
+
+  <meta property="og:title" content="{{ meta_title | escape }}">
+  <meta property="og:description" content="{{ meta_description | escape }}">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="{{ site.url }}{{ site.baseurl }}">
-  <meta property="og:image" content="{{ site.url }}{{ site.baseurl }}/assets/media/dossier.webp">
-  
+  <meta property="og:site_name" content="{{ site.title | escape }}">
+  <meta property="og:locale" content="{{ site.locale }}">
+  <meta property="og:url" content="{{ canonical_url }}">
+  <meta property="og:image" content="{{ social_image_url }}">
+  <meta property="og:image:secure_url" content="{{ social_image_url }}">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="{{ site.social_image_alt | escape }}">
+
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="{{ site.title }}">
-  <meta name="twitter:description" content="{{ site.description }}">
-  
-  <!-- Styles -->
-  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/main.css">
-  
-  <!-- JSON-LD -->
+  <meta name="twitter:title" content="{{ meta_title | escape }}">
+  <meta name="twitter:description" content="{{ meta_description | escape }}">
+  <meta name="twitter:image" content="{{ social_image_url }}">
+  <meta name="twitter:image:alt" content="{{ site.social_image_alt | escape }}">
+
+  <link rel="preload" as="image" href="{{ site.data.frames.hero.poster | relative_url }}" fetchpriority="high">
+  <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}?v={{ site.asset_version }}">
+
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "{{ site.title }}",
-    "url": "{{ site.url }}{{ site.baseurl }}"
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "{{ canonical_url }}#website",
+        "url": "{{ canonical_url }}",
+        "name": {{ site.title | jsonify }},
+        "description": {{ meta_description | jsonify }},
+        "inLanguage": {{ site.lang | jsonify }},
+        "publisher": {"@id": "{{ canonical_url }}#business"}
+      },
+      {
+        "@type": "WebPage",
+        "@id": "{{ canonical_url }}#webpage",
+        "url": "{{ canonical_url }}",
+        "name": {{ meta_title | jsonify }},
+        "description": {{ meta_description | jsonify }},
+        "inLanguage": {{ site.lang | jsonify }},
+        "isPartOf": {"@id": "{{ canonical_url }}#website"},
+        "mainEntity": {"@id": "{{ canonical_url }}#business"},
+        "primaryImageOfPage": {
+          "@type": "ImageObject",
+          "url": "{{ social_image_url }}",
+          "width": 1200,
+          "height": 630,
+          "caption": {{ site.social_image_alt | jsonify }}
+        }
+      },
+      {
+        "@type": "BarOrPub",
+        "@id": "{{ canonical_url }}#business",
+        "name": {{ site.title | jsonify }},
+        "description": {{ meta_description | jsonify }},
+        "url": "{{ canonical_url }}",
+        "telephone": {{ site.data.frames.phone_href | jsonify }},
+        "image": [
+          "{{ social_image_url }}",
+          "{{ '/assets/media/zema-film-poster.webp' | absolute_url }}"
+        ],
+        "logo": "{{ site.data.frames.logo_black | absolute_url }}",
+        "sameAs": [{{ site.data.frames.instagram | jsonify }}],
+        "containedInPlace": {
+          "@type": "Hotel",
+          "name": "Hotel Zazz",
+          "url": "https://www.hotelzazz.com/"
+        },
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": {{ site.data.frames.address_street | jsonify }},
+          "addressLocality": {{ site.data.frames.address_locality | jsonify }},
+          "addressRegion": {{ site.data.frames.address_region | jsonify }},
+          "postalCode": {{ site.data.frames.address_postal_code | jsonify }},
+          "addressCountry": {{ site.data.frames.address_country | jsonify }}
+        },
+        "openingHoursSpecification": [
+          {% for row in site.data.frames.dossier.hours %}{
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": {{ row.schema_days | jsonify }},
+            "opens": {{ row.opens | jsonify }},
+            "closes": {{ row.closes | jsonify }}
+          }{% unless forloop.last %},{% endunless %}{% endfor %}
+        ]
+      }
+    ]
   }
   </script>
 </head>
