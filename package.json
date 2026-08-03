@@ -2,7 +2,8 @@
   "name": "zema-landing",
   "private": true,
   "scripts": {
-    "test": "npm run test:regression",
+    "test": "npm run test:docs && npm run test:regression",
+    "test:docs": "node scripts/check-docs.js",
     "test:regression": "playwright test",
     "test:accessibility": "playwright test tests/e2e/accessibility-seo.spec.js --grep \"WCAG|enhanced scroll|landmarks|form validation\"",
     "test:seo": "playwright test tests/e2e/accessibility-seo.spec.js --grep \"metadata\"",

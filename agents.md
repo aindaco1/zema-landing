@@ -2,6 +2,8 @@
 
 This is the living brief for the ZEMA Vinyl Lounge landing page. Older prototypes remain available in Git history; do not rewrite history to reset the implementation.
 
+The detailed project handbook begins at `docs/README.md`. Agents must also read `docs/AGENT_PLAYBOOK.md` and the specialist guide for the requested area before changing the project. When a change alters architecture, experience behavior, design tokens, media policy, services, testing, or operations, update the canonical guide in the same change.
+
 ## Product goal
 
 Use the look and rhythm of *From Zema with Love* to introduce the actual ZEMA Vinyl Lounge, answer practical visitor questions, collect venue/event inquiries, and make the complete film available with sound.
@@ -66,6 +68,7 @@ Hours and operational policies can change. Confirm them with the venue immediate
 - Preserve the axe-backed WCAG 2.2 AA, keyboard, focus, target-size, required-field, and form-error assertions. Automated checks do not replace the manual VoiceOver, zoom, forced-colors, and YouTube-caption release checks in `docs/ACCESSIBILITY_SEO.md`.
 - Keep canonical, Open Graph, Twitter, JSON-LD, `robots.txt`, and sitemap facts aligned with visible content and `_data/frames.yml`. Do not add FAQ, review, rating, offer, or event schema without complete authoritative visible data.
 - Treat `docs/BRAND_GUIDE.md` and the tokens in `assets/css/_theme70s.scss` as the typography source of truth. Georgia is display-only; Arial/Helvetica handles body and utility text. Browser-default Times or isolated component type scales are regressions.
+- Treat documentation as versioned project infrastructure. Keep `docs/README.md` routing, documented commands, decision records, and implementation links current; do not duplicate canonical facts across guides.
 
 ## Current media policy
 
@@ -80,7 +83,7 @@ The scrub encodes are intentionally lossy, high-quality web derivatives; do not 
 
 ## Deployment
 
-The repository is configured for `https://aindaco1.github.io/zema-landing/`. GitHub Pages still needs to be enabled in repository settings if the URL returns 404. After a custom domain is known:
+The repository is deployed through GitHub Actions to `https://aindaco1.github.io/zema-landing/`. Pull requests run the regression gate; pushes to `main` run regression and Pages deployment. Use `docs/OPERATIONS.md` for release, rollback, and troubleshooting procedures. After a custom domain is known:
 
 1. Update `_config.yml`.
 2. Add the Pages custom-domain configuration.

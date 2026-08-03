@@ -1,5 +1,11 @@
 # Accessibility and SEO baseline
 
+**Audience:** designers, content owners, developers, SEO reviewers, release owners, and software agents
+
+**Purpose:** document the enforced accessibility/crawl posture and the manual work automation cannot replace
+
+**Last verified:** August 2, 2026
+
 This project targets WCAG 2.2 Level AA and a conservative, single-page local-business SEO model. Metadata and structured data must describe visible public content; the site does not publish FAQ, review, rating, event, or offer schema unless those features later gain complete, visible, authoritative data.
 
 ## Accessibility posture
@@ -73,3 +79,5 @@ After deployment, validate the public URL with Google Search Console URL Inspect
 ## Content verification note
 
 On August 1, 2026, the official ZEMA lounge page listed happy hour Monday–Thursday, while the separate Hotel Zazz FAQ described happy hour as daily. This site follows the dedicated lounge page and its structured data only publishes regular opening hours, not happy-hour promotional data. Confirm the discrepancy with the venue before launch.
+
+Use [Quality assurance](QUALITY_ASSURANCE.md) for the complete automated/manual release matrix and [Operations](OPERATIONS.md) for post-deploy validation and domain migration.

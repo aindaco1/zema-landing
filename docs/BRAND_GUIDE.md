@@ -1,5 +1,11 @@
 # ZEMA Vinyl Lounge Brand Guide
 
+**Audience:** brand owners, designers, content designers, frontend developers, and software agents
+
+**Purpose:** define the reusable visual and verbal system for the ZEMA web experience
+
+**Last verified:** August 2, 2026
+
 This is the working brand system for the ZEMA Vinyl Lounge website. It translates the official marks, the *From Zema with Love* film, the original proposal, the Research & Planning direction, and the venue’s practical needs into repeatable rules.
 
 ## Brand idea
@@ -135,3 +141,5 @@ Use cream/deep-plum and ink/paper as the primary readable pairs. Coral identifie
 - Official production assets: `assets/media/`
 
 When the system changes, update this guide, the CSS tokens, and regression coverage together.
+
+Related guidance: [Experience design](EXPERIENCE_DESIGN.md), [Accessibility and SEO baseline](ACCESSIBILITY_SEO.md), and [Quality assurance](QUALITY_ASSURANCE.md).
