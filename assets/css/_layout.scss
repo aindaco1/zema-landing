@@ -10,29 +10,9 @@
   min-height: 3.25rem;
   padding-top: max(0.25rem, env(safe-area-inset-top, 0px));
   padding-bottom: 0.25rem;
-  background: transparent;
+  background: var(--black);
   color: var(--cream);
-  text-shadow: 0 1px 8px rgba(10, 5, 13, 0.9);
   @extend %page-gutters;
-}
-
-.site-header.is-on-light {
-  color: var(--ink);
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.28);
-}
-
-.site-header.is-on-light .wordmark {
-  filter: none;
-}
-
-.site-header.is-on-light .wordmark img {
-  filter: brightness(0);
-}
-
-.site-header.is-on-light .site-nav a:hover {
-  color: var(--plum);
-  text-decoration: underline;
-  text-underline-offset: 0.25em;
 }
 
 .wordmark {
@@ -72,11 +52,12 @@
 
 .site-audio {
   position: fixed;
-  right: max(1rem, env(safe-area-inset-right));
+  left: 50%;
   bottom: max(1rem, env(safe-area-inset-bottom));
   z-index: 90;
   max-width: calc(100vw - 2rem);
   color: var(--cream);
+  transform: translateX(-50%);
 }
 
 .site-audio__toggle {
@@ -199,6 +180,8 @@
 }
 
 .intro {
+  position: relative;
+  z-index: 0;
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(18rem, 0.85fr);
   gap: clamp(3rem, 10vw, 10rem);
@@ -206,6 +189,33 @@
   padding-bottom: clamp(6rem, 13vw, 12rem);
   background: var(--plum-deep);
   @extend %page-gutters;
+}
+
+.intro::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  background:
+    linear-gradient(90deg, rgba(9, 6, 18, 0.74), rgba(9, 6, 18, 0.38) 50%, rgba(9, 6, 18, 0.7)),
+    linear-gradient(0deg, rgba(9, 6, 18, 0.74), transparent 58%, rgba(9, 6, 18, 0.46));
+  pointer-events: none;
+}
+
+.intro__background {
+  @extend %cover-media;
+  z-index: 0;
+  height: 100%;
+  opacity: 0.72;
+}
+
+.intro__lead,
+.intro__body {
+  position: relative;
+  z-index: 2;
 }
 
 .intro h2 {
@@ -248,7 +258,6 @@
   row-gap: 0;
   padding-top: clamp(5rem, 9vw, 8rem);
   padding-bottom: max(2rem, env(safe-area-inset-bottom, 0px));
-  border-top: 0.3rem solid var(--electric-blue);
   background:
     linear-gradient(120deg, rgba(183, 44, 120, 0.14), transparent 48%),
     var(--plum-deep);
@@ -484,7 +493,6 @@
   }
 
   .site-audio {
-    right: max(0.75rem, env(safe-area-inset-right));
     bottom: max(0.75rem, env(safe-area-inset-bottom));
     max-width: calc(100vw - 1.5rem);
   }

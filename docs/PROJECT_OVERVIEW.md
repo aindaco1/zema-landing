@@ -37,7 +37,7 @@ The experience must never require familiarity with the film to understand the ve
 
 ## Experience sequence
 
-1. **Cinematic invitation:** a scroll-controlled opening moves from vinyl into cocktail preparation while four short statements establish the lounge.
+1. **Cinematic invitation:** a scroll-controlled opening holds on centered vinyl before pulling back from ZEMA's eye and reversing until she sets the finished drink on the bar, while four short statements establish the lounge.
 2. **Plain-language orientation:** visitors learn what ZEMA is and can immediately choose an inquiry or the live Hotel Zazz events calendar.
 3. **Three movements:** arrival, cocktails, and dance clips communicate the arc of a night at the lounge.
 4. **The ZEMA file:** a compact dossier presents hours, operational notes, and native expandable FAQs.

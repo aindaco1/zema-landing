@@ -168,6 +168,20 @@ These are lightweight architecture decision records. A decision is “accepted�
 - Large obsolete assets may be removed from the current tree while remaining in history.
 - Force-push and destructive reset are not normal project operations.
 
+## D-012 — Persistent black header
+
+**Status:** Accepted
+
+**Decision:** Keep the fixed site header opaque black with cream navigation and the white ZEMA mark across every section and scroll position.
+
+**Why:** The header crosses rapidly changing video frames, a saturated room photo, and the light dossier. A stable black surface gives the navigation consistent contrast and a clearer visual boundary.
+
+**Consequences:**
+
+- Header appearance no longer depends on dossier geometry or JavaScript.
+- The header remains visually present over the cinematic sections.
+- Responsive and accessibility tests assert the black surface and cream foreground at representative scroll positions.
+
 ## Adding a decision
 
 Use this shape:

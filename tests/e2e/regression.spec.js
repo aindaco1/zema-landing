@@ -29,9 +29,9 @@ test("hero repeatedly resolves to the latest forward and reverse scrub position"
   await disableSmoothScroll(page);
   await waitForMedia(page, "[data-scrub-video]");
   await expect.poll(() => page.locator("[data-scrub-video]").evaluate((video) => video.duration))
-    .toBeGreaterThan(14.5);
+    .toBeGreaterThan(11.9);
   expect(await page.locator("[data-scrub-video]").evaluate((video) => video.duration))
-    .toBeLessThan(14.7);
+    .toBeLessThan(12.1);
 
   const story = page.locator("[data-scrub-story]");
   await expect(story).toHaveClass(/is-enhanced/);
@@ -239,7 +239,7 @@ test("the complete film defers YouTube until play and preserves usable cursor be
   await expect(page.locator("[data-vinyl-cursor]")).not.toHaveClass(/is-visible/);
 });
 
-test("the compact header stays transparent, anchors jump, and the vinyl cursor spins", async ({ page }) => {
+test("the compact header stays black, anchors jump, and the vinyl cursor spins", async ({ page }) => {
   await page.goto("./");
 
   const initial = await page.evaluate(() => {
@@ -255,8 +255,9 @@ test("the compact header stays transparent, anchors jump, and the vinyl cursor s
 
   expect(initial.scrollBehavior).toBe("auto");
   expect(initial.headerHeight).toBeLessThanOrEqual(56);
-  expect(initial.background).toBe("rgba(0, 0, 0, 0)");
+  expect(initial.background).toBe("rgb(0, 0, 0)");
   expect(initial.backdrop).toBe("none");
+  await expect(page.locator(".scrub-progress")).toHaveCount(0);
 
   await page.mouse.move(420, 260);
   await expect(page.locator("html")).toHaveClass(/has-vinyl-cursor/);
@@ -282,7 +283,7 @@ test("the compact header stays transparent, anchors jump, and the vinyl cursor s
   }));
   expect(afterJump.targetTop).toBeGreaterThanOrEqual(50);
   expect(afterJump.targetTop).toBeLessThanOrEqual(60);
-  expect(afterJump.background).toBe("rgba(0, 0, 0, 0)");
+  expect(afterJump.background).toBe("rgb(0, 0, 0)");
   expect(afterJump.backdrop).toBe("none");
 });
 
@@ -327,6 +328,13 @@ test("the complete layout reflows without clipping across responsive viewports",
       const logo = rect(".wordmark");
       const nav = rect(".site-nav");
       const audio = rect(".site-audio");
+      const intro = document.querySelector(".intro");
+      const introRect = intro.getBoundingClientRect();
+      const introBackground = intro.querySelector(":scope > .intro__background");
+      const introBackgroundRect = introBackground.getBoundingClientRect();
+      const gallery = document.querySelector(".venue-gallery");
+      const galleryRect = gallery.getBoundingClientRect();
+      const footer = document.querySelector(".site-footer");
       const footerAddress = document.querySelector(".site-footer address a");
       const footerPhone = document.querySelector(".site-footer__phone a");
       const footerCredit = document.querySelector(".site-footer__credit");
@@ -364,6 +372,7 @@ test("the complete layout reflows without clipping across responsive viewports",
         ],
         footerCreditFits: footerCredit.scrollWidth <= footerCredit.clientWidth + 1
           && getComputedStyle(footerCredit).whiteSpace === "nowrap",
+        footerBorderTopWidth: Number.parseFloat(getComputedStyle(footer).borderTopWidth),
         heroBeats,
         audio: {
           left: audio.left,
@@ -371,6 +380,19 @@ test("the complete layout reflows without clipping across responsive viewports",
           top: audio.top,
           bottom: audio.bottom,
           width: audio.width
+        },
+        intro: {
+          backgroundSrc: introBackground.getAttribute("src"),
+          backgroundAlt: introBackground.getAttribute("alt"),
+          backgroundFit: getComputedStyle(introBackground).objectFit,
+          backgroundOpacity: Number.parseFloat(getComputedStyle(introBackground).opacity),
+          backgroundWidth: introBackgroundRect.width,
+          backgroundHeight: introBackgroundRect.height,
+          backgroundBottom: introBackgroundRect.bottom,
+          width: introRect.width,
+          height: introRect.height,
+          galleryTop: galleryRect.top,
+          galleryBackground: getComputedStyle(gallery).backgroundColor
         },
         galleryColumns: getComputedStyle(document.querySelector(".venue-gallery__grid"))
           .gridTemplateColumns.split(" ").length,
@@ -406,9 +428,20 @@ test("the complete layout reflows without clipping across responsive viewports",
     expect(layout.audio.width).toBeLessThanOrEqual(
       viewport.width <= 480 || viewport.height <= 500 ? 160 : 205
     );
+    expect(Math.abs(((layout.audio.left + layout.audio.right) / 2) - (layout.viewportWidth / 2)))
+      .toBeLessThanOrEqual(1);
+    expect(layout.intro.backgroundSrc).toMatch(/zema-listening-room\.webp\?v=/);
+    expect(layout.intro.backgroundAlt).toBe("");
+    expect(layout.intro.backgroundFit).toBe("cover");
+    expect(Math.abs(layout.intro.backgroundWidth - layout.intro.width)).toBeLessThanOrEqual(1);
+    expect(layout.intro.backgroundOpacity).toBeCloseTo(0.72, 2);
+    expect(Math.abs(layout.intro.backgroundHeight - layout.intro.height)).toBeLessThanOrEqual(1);
+    expect(Math.abs(layout.intro.backgroundBottom - layout.intro.galleryTop)).toBeLessThanOrEqual(1);
+    expect(layout.intro.galleryBackground).toBe("rgb(18, 11, 22)");
     expect(layout.galleryColumns).toBe(viewport.width <= 900 ? 1 : 3);
     expect(layout.filmColumns).toBe(viewport.width <= 1100 ? 1 : 2);
     expect(layout.footerColumns).toBe(3);
+    expect(layout.footerBorderTopWidth).toBe(0);
   }
 
   await page.setViewportSize({ width: 390, height: 844 });
@@ -416,11 +449,13 @@ test("the complete layout reflows without clipping across responsive viewports",
   await page.evaluate(() => document.fonts.ready);
   const dossierTop = await page.locator("#zema-file").evaluate((section) => section.offsetTop + 8);
   await scrollTo(page, dossierTop);
-  await expect(page.locator(".site-header")).toHaveClass(/is-on-light/);
-  await expect(page.locator(".site-header")).toHaveCSS("color", "rgb(24, 16, 24)");
+  await expect(page.locator(".site-header")).not.toHaveClass(/is-on-light/);
+  await expect(page.locator(".site-header")).toHaveCSS("background-color", "rgb(0, 0, 0)");
+  await expect(page.locator(".site-header")).toHaveCSS("color", "rgb(242, 234, 213)");
   const filmTop = await page.locator("#film").evaluate((section) => section.offsetTop + 8);
   await scrollTo(page, filmTop);
   await expect(page.locator(".site-header")).not.toHaveClass(/is-on-light/);
+  await expect(page.locator(".site-header")).toHaveCSS("background-color", "rgb(0, 0, 0)");
 });
 
 test("typography follows the documented brand family roles", async ({ page }) => {
@@ -456,6 +491,7 @@ test("typography follows the documented brand family roles", async ({ page }) =>
       ".faq summary"
     ];
     const scriptSelectors = [".film h2"];
+    const kindredSelectors = [".scrub-beat__mark"];
 
     return {
       body: getComputedStyle(document.body).fontFamily,
@@ -463,7 +499,9 @@ test("typography follows the documented brand family roles", async ({ page }) =>
       supporting: bodySelectors.map(font),
       dossier: dossierSelectors.map(font),
       script: scriptSelectors.map(font),
+      kindred: kindredSelectors.map(font),
       displayToken: getComputedStyle(document.documentElement).getPropertyValue("--font-display").trim(),
+      kindredToken: getComputedStyle(document.documentElement).getPropertyValue("--font-kindred").trim(),
       bodyToken: getComputedStyle(document.documentElement).getPropertyValue("--font-body").trim(),
       typewriterToken: getComputedStyle(document.documentElement).getPropertyValue("--font-typewriter").trim(),
       scriptToken: getComputedStyle(document.documentElement).getPropertyValue("--font-script").trim(),
@@ -482,10 +520,14 @@ test("typography follows the documented brand family roles", async ({ page }) =>
   expect(new Set(typography.supporting)).toEqual(new Set([typography.bodyToken]));
   expect(new Set(typography.dossier)).toEqual(new Set([typography.typewriterToken]));
   expect(new Set(typography.script)).toEqual(new Set([typography.scriptToken]));
-  expect([...typography.display, ...typography.supporting, ...typography.dossier, ...typography.script]).not.toContain("Times");
-  expect(typography.fontAssets).toHaveLength(1);
-  expect(new URL(typography.fontAssets[0]).origin).toBe(new URL(page.url()).origin);
-  expect(typography.fontAssets[0]).toContain("/assets/fonts/italianno-zema.woff2");
+  expect(new Set(typography.kindred)).toEqual(new Set([typography.kindredToken]));
+  expect([...typography.display, ...typography.supporting, ...typography.dossier, ...typography.script, ...typography.kindred]).not.toContain("Times");
+  expect(typography.fontAssets).toHaveLength(2);
+  for (const asset of typography.fontAssets) {
+    expect(new URL(asset).origin).toBe(new URL(page.url()).origin);
+  }
+  expect(typography.fontAssets.some((asset) => asset.includes("/assets/fonts/italianno-zema.woff2"))).toBe(true);
+  expect(typography.fontAssets.some((asset) => asset.includes("/assets/fonts/tan-kindred-zema.woff2"))).toBe(true);
   expect(typography.electricBlueToken).toBe("#4cc9ff");
   expect(typography.retiredAcidToken).toBe("");
 });
@@ -571,6 +613,7 @@ test("static fallbacks, cache versions, footer, and media ranges stay intact", a
       Array.from(document.styleSheets).map((sheet) => sheet.href).find((href) => href && href.includes("main.css")),
       Array.from(document.scripts).map((script) => script.src).find((src) => src.includes("main.js")),
       document.querySelector("[data-vinyl-cursor] img").src,
+      document.querySelector(".intro__background").src,
       document.querySelector(".inquiry__scrub img").src,
       ...Array.from(document.querySelectorAll("[data-site-audio-media] source"))
         .map((source) => source.dataset.src),

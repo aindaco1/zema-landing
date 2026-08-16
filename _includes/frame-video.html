@@ -9,7 +9,7 @@
       {% for beat in include.hero.beats %}
         <div class="scrub-beat{% if forloop.first %} is-active{% endif %}" data-scrub-beat aria-hidden="{% unless forloop.first %}true{% else %}false{% endunless %}"{% unless forloop.first %} inert{% endunless %}>
           <p class="eyebrow">{{ beat.eyebrow }}</p>
-          {% if forloop.first %}<h1>{{ beat.title }}</h1>{% else %}<h2>{{ beat.title }}</h2>{% endif %}
+          {% if forloop.first %}<h1>{% if beat.title_mark %}<span class="scrub-beat__mark">{{ beat.title_mark }}</span> {% endif %}{{ beat.title }}</h1>{% else %}<h2>{{ beat.title }}</h2>{% endif %}
           <p>{{ beat.copy }}</p>
           {% if forloop.last %}
             <a class="button button--light" href="#inquire">Plan an evening</a>
@@ -21,6 +21,5 @@
       <span>Scroll to enter</span>
       <i></i>
     </div>
-    <div class="scrub-progress" aria-hidden="true"><span data-scrub-progress></span></div>
   </div>
 </section>

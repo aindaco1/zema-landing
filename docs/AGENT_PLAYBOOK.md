@@ -39,7 +39,7 @@ Do not infer that a new visual request authorizes a new framework, backend, anal
 - YouTube iframe is created only after play intent.
 - Inquiry form retains native POST and provides enhanced inline state.
 - In-page anchors jump immediately; no smooth-scroll restoration.
-- Header remains transparent; only foreground treatment changes over the dossier.
+- Header remains opaque black with cream foreground content across every section.
 - Three equal footer tracks, including mobile; 320 px minimum with no horizontal overflow.
 - Fonts, colors, and layout roles follow `docs/BRAND_GUIDE.md`.
 - No analytics, tracking pixel, secret, custom backend, or runtime framework by default.
@@ -126,7 +126,7 @@ Use `rg`/`rg --files` for repository searches. Edit source files with patch-base
 - Long-GOP or oversized scrub encodes can appear correct but seek intermittently.
 - Assigning `video.currentTime` for every raw scroll event can lose the latest reverse seek.
 - Hydrating all gallery videos at once increases decoder/network contention.
-- An opaque header after scroll distracts from the film and was intentionally removed.
+- A transparent header can lose contrast across changing film and photo frames; preserve the persistent black surface.
 - Smooth anchor scrolling conflicts with the desired immediate navigation.
 - Hidden hero CTAs can remain focusable unless inactive beats are `inert`.
 - A custom pointer can disappear or block input over an iframe unless player handoff is explicit.

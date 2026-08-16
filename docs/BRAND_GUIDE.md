@@ -4,7 +4,7 @@
 
 **Purpose:** define the reusable visual and verbal system for the ZEMA web experience
 
-**Last verified:** August 2, 2026
+**Last verified:** August 15, 2026
 
 This is the working brand system for the ZEMA Vinyl Lounge website. It translates the official marks, the *From Zema with Love* film, the original proposal, the Research & Planning direction, and the venue’s practical needs into repeatable rules.
 
@@ -52,6 +52,7 @@ Typography uses two primary families plus two tightly controlled narrative textu
 | Role | Stack | Character |
 | --- | --- | --- |
 | Display | `Georgia, "Times New Roman", serif` | Warm, editorial, cinematic, and appropriate to the lounge’s vintage polish |
+| Hero ZEMA mark | `"TAN Kindred ZEMA", Georgia, "Times New Roman", serif` | Owner-supplied TAN Kindred used only for the venue name in the opening title |
 | Body and utility | `Arial, Helvetica, sans-serif` | Clear, modern, neutral, and dependable across GitHub Pages devices |
 | ZEMA file | `"Courier New", Courier, monospace` | Archival, procedural, and restricted to the dossier experience |
 | Film title | `"ZEMA Script", cursive` | A self-hosted subset of Italianno that echoes the thin, connected handwriting on the film’s napkin |
@@ -72,6 +73,7 @@ Typography uses two primary families plus two tightly controlled narrative textu
 ### Usage rules
 
 - Georgia is reserved for the hero, major non-dossier `h2` headings other than the film title, and decorative gallery numerals.
+- The 1 KB self-hosted TAN Kindred WOFF2 subset contains only the letters needed for `ZEMA` and is restricted to that word in the opening hero title. Keep the rest of “Vinyl Lounge” in Georgia.
 - Arial/Helvetica handles general paragraphs, navigation, buttons, links, forms, addresses, credits, captions, and section labels.
 - Courier New/Courier is reserved for the ZEMA file title, metadata, hours, notes, and FAQ content. Do not use it elsewhere.
 - ZEMA Script is reserved for the “From Zema with Love” film title. It is a 7 KB, self-hosted WOFF2 subset of the SIL Open Font License–licensed Italianno face and uses `font-display: swap`; never use it for body copy or controls.
@@ -85,6 +87,7 @@ Typography uses two primary families plus two tightly controlled narrative textu
 
 | Token | Value | Role |
 | --- | --- | --- |
+| Black | `#000000` | Persistent header surface |
 | Deep plum | `#120b16` | Primary dark canvas |
 | Ink | `#181018` | Text on paper and deep control surfaces |
 | Cream | `#f2ead5` | Primary text on dark backgrounds |

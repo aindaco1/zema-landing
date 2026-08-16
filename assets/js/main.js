@@ -6,7 +6,6 @@
   const story = document.querySelector("[data-scrub-story]");
   const scrubVideo = document.querySelector("[data-scrub-video]");
   const beats = Array.from(document.querySelectorAll("[data-scrub-beat]"));
-  const progressBar = document.querySelector("[data-scrub-progress]");
   const gallery = document.querySelector("[data-gallery-scrub]");
   const galleryPanels = Array.from(document.querySelectorAll("[data-gallery-panel]"));
   const galleryVideos = Array.from(document.querySelectorAll("[data-gallery-video]"));
@@ -18,8 +17,6 @@
   const siteAudioMedia = document.querySelector("[data-site-audio-media]");
   const siteAudioToggle = document.querySelector("[data-site-audio-toggle]");
   const siteAudioState = document.querySelector("[data-site-audio-state]");
-  const siteHeader = document.querySelector(".site-header");
-  const dossier = document.querySelector(".dossier");
   const allowMotionMedia = !reducedMotion && !saveData;
   const scrubVideos = [scrubVideo].concat(galleryVideos, [inquiryVideo]).filter(Boolean);
   let ticking = false;
@@ -155,7 +152,6 @@
 
     setActiveBeat(index);
     story.classList.toggle("has-progress", progress > 0.015);
-    if (progressBar) progressBar.style.transform = "scaleX(" + progress + ")";
 
     if (storyController) storyController.setProgress(progress);
   }
@@ -198,16 +194,6 @@
     if (inquiryProgress) inquiryProgress.style.transform = "scaleX(" + progress + ")";
   }
 
-  function updateHeaderTheme() {
-    if (!siteHeader || !dossier) return;
-    const dossierRect = dossier.getBoundingClientRect();
-    const headerHeight = siteHeader.getBoundingClientRect().height;
-    siteHeader.classList.toggle(
-      "is-on-light",
-      dossierRect.top < headerHeight && dossierRect.bottom > 0
-    );
-  }
-
   function requestUpdate() {
     if (ticking) return;
     ticking = true;
@@ -215,7 +201,6 @@
       updateStory();
       updateGallery();
       updateInquiry();
-      updateHeaderTheme();
       ticking = false;
     });
   }

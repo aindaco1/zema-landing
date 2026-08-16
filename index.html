@@ -6,6 +6,7 @@ layout: default
 {% include frame-video.html hero=content.hero %}
 
 <section class="intro" id="visit" aria-labelledby="intro-title">
+  <img class="intro__background" src="{{ content.intro_background | relative_url }}?v={{ site.asset_version }}" alt="" width="1500" height="1215" loading="lazy" decoding="async">
   <div class="intro__lead">
     <p class="eyebrow">{{ content.tagline }}</p>
     <h2 id="intro-title">A listening room with something to say.</h2>

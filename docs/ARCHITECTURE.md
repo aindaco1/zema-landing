@@ -8,7 +8,7 @@
 
 ## Architecture summary
 
-ZEMA is a statically generated, single-page Jekyll site. Liquid templates render structured YAML content into semantic HTML; Jekyll compiles SCSS; one framework-free JavaScript file progressively enhances scroll media, audio, the YouTube facade, the custom pointer, header contrast, and form feedback. GitHub Actions builds the site and GitHub Pages serves the output over HTTPS.
+ZEMA is a statically generated, single-page Jekyll site. Liquid templates render structured YAML content into semantic HTML; Jekyll compiles SCSS; one framework-free JavaScript file progressively enhances scroll media, audio, the YouTube facade, the custom pointer, and form feedback. GitHub Actions builds the site and GitHub Pages serves the output over HTTPS.
 
 There is no application server, database, client-side router, package runtime, analytics SDK, or repository secret.
 
@@ -82,7 +82,6 @@ The page has no client-side route. Jekyll's `baseurl` support and Liquid's `rela
 | Gallery scrub | `data-gallery-*`, `IntersectionObserver` | Divide progress into thirds; hydrate current/next video only |
 | Inquiry scrub | `data-inquiry-*`, `IntersectionObserver` | Map ordinary section passage to a full-section background clip |
 | Media hydration | `fetch`, Blob URLs, native `video.src` fallback | Buffer each scrub before rapid seeks; preserve poster until ready |
-| Header contrast | `.dossier` geometry | Switch header foreground while it overlaps the light dossier; never add an opaque scrolled header |
 | Soundtrack | `data-site-audio-*`, idle callback | Remain muted by default; skip automatic hydration under Save-Data |
 | Vinyl pointer | `data-vinyl-cursor`, pointer media query | Fine pointers only; never capture clicks; preserve native form/player cursors |
 | Complete film | `data-youtube-*` | Create the privacy-enhanced iframe once, after explicit play intent |

@@ -13,6 +13,7 @@ instagram: "https://www.instagram.com/hotelzazz/"
 events_url: "https://www.hotelzazz.com/events-calendar#:~:text=Zazzy%20Events"
 logo_white: "assets/media/zema-logo-white.webp"
 logo_black: "assets/media/zema-logo-black.webp"
+intro_background: "assets/media/zema-listening-room.webp"
 
 soundtrack:
   title: "From Zema with Love"
@@ -27,10 +28,11 @@ hero:
   video_mp4: "assets/media/zema-scroll.mp4"
   beats:
     - eyebrow: "The spin"
-      title: "Hear Albuquerque differently."
+      title_mark: "ZEMA"
+      title: "Vinyl Lounge"
       copy: "A neighborhood lounge devoted to vinyl, exciting cocktails, and the art of listening well."
     - eyebrow: "The muse"
-      title: "High fidelity. Low pressure."
+      title: "High fidelity, groovy vibes."
       copy: "Come for one side. Stay for the whole record."
     - eyebrow: "The encounter"
       title: "Cocktails find their rhythm."

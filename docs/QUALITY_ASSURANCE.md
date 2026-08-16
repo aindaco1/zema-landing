@@ -75,7 +75,7 @@ This is useful when another local Jekyll process is running.
 - repeated inquiry montage scrubbing;
 - Save-Data soundtrack deferral and explicit sound intent;
 - YouTube deferral until play and pointer handoff;
-- transparent compact header, immediate anchor jumps, and vinyl pointer behavior;
+- opaque black compact header, immediate anchor jumps, and vinyl pointer behavior;
 - typography family roles and self-hosted font loading;
 - reduced-motion fallbacks and zero hydrated scrub videos;
 - one cache version across versioned runtime assets;

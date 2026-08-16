@@ -28,7 +28,7 @@ Current automated coverage verifies:
 - keyboard activation and request deferral for the complete-film YouTube facade;
 - zero horizontal overflow, contained fixed controls, and unclipped hero content across a viewport matrix from 320 × 568 through 1920 × 1080, including short phone landscape;
 - single-panel tablet gallery behavior, readable tablet film credits, a compact three-track mobile footer, and content-driven form breakpoints;
-- automatic dark header treatment while the transparent navigation crosses the light dossier.
+- consistent cream navigation contrast on the persistent black header across every section.
 
 Run the focused gate with:
 

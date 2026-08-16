@@ -6,7 +6,16 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "TAN Kindred ZEMA";
+  src: url("../fonts/tan-kindred-zema.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
 :root {
+  --black: #000;
   --ink: #181018;
   --cream: #f2ead5;
   --paper: #d8caa6;
@@ -22,6 +31,7 @@
   --page-gutter-left: max(var(--page-pad), env(safe-area-inset-left, 0px));
   --page-gutter-right: max(var(--page-pad), env(safe-area-inset-right, 0px));
   --font-display: Georgia, "Times New Roman", serif;
+  --font-kindred: "TAN Kindred ZEMA", Georgia, "Times New Roman", serif;
   --font-body: Arial, Helvetica, sans-serif;
   --font-typewriter: "Courier New", Courier, monospace;
   --font-script: "ZEMA Script", cursive;

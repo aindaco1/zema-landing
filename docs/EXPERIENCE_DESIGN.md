@@ -4,7 +4,7 @@
 
 **Purpose:** preserve the user journey and interaction contracts behind the visual implementation
 
-**Last verified:** August 2, 2026
+**Last verified:** August 16, 2026
 
 ## Design thesis
 
@@ -68,29 +68,33 @@ The complete film begins as a local poster and named native button. The YouTube 
 
 ### Header
 
-- Compact, transparent, and aligned to the safe-area-aware page gutters.
+- Compact, opaque black, and aligned to the safe-area-aware page gutters.
 - Contains Visit, Inquire, and Events at every supported width, including 320 px.
-- Does not become a solid bar after scrolling.
-- Switches foreground/mark treatment only while crossing the light dossier, preserving contrast without creating a new surface.
+- Retains the same black surface, cream foreground, and white mark across every section and scroll position.
 - Events opens the live calendar in a new tab and targets the calendar area through the text fragment in `_data/frames.yml`.
 
 ### Hero
 
 - The sticky viewport always contains the current beat between the header and bottom edge, including short landscape phones.
 - The first beat contains the only page `h1`; remaining beats use `h2`.
+- The opening `h1` reads “ZEMA Vinyl Lounge”; only `ZEMA` uses the TAN Kindred subset, while “Vinyl Lounge” retains the shared Georgia display treatment.
 - The poster is eager, preloaded, decorative, and sized to prevent layout shift.
+- The first three copy beats share the spinning record, shifted right so its spindle sits near center. The final beat begins tightly on ZEMA's eye at the spindle position, pulls back to her portrait, and reverses until her hand releases the finished drink on the bar; no drink-preparation footage appears in the hero.
 - The final beat contains the inquiry CTA.
 - Scroll progress and video progress remain synchronized in both directions.
+- No visible progress rule separates the hero from the venue introduction.
 
 ### Venue introduction
 
 - This is the first literal explanation of the lounge.
+- A venue-supplied listening-room photo is a static decorative layer contained entirely within this section. It uses a responsive `cover` crop and reduced opacity beneath layered shading so the HTML heading, copy, and actions remain readable.
 - The event-inquiry and upcoming-events paths are visually equal actions with different destinations.
 - Copy remains short enough to scan after the immersive hero.
 
 ### Three-movement gallery
 
 - Desktop presents three equal columns; at 900 px and below it presents one active full-width panel.
+- The gallery starts on an opaque deep-plum canvas immediately after the listening-room photo ends.
 - Each clip uses the same edge-to-edge `cover` treatment.
 - The gallery hydrates the first movement near the section, the active movement on demand, and the next movement late in the current third.
 - Static posters and captions remain complete under Reduced Motion and Save-Data.
@@ -123,7 +127,7 @@ The complete film begins as a local poster and named native button. The YouTube 
 
 ### Soundtrack
 
-- Fixed to a viewport corner with safe-area clearance and enough room above the footer credit.
+- Fixed to the horizontal center of the viewport with safe-area clearance and enough room above the footer credit.
 - Visible state and accessible name agree: “Sound off/on” and “Turn on/off ZEMA soundtrack.”
 - Muted by default. Sound begins only after a click or keyboard activation.
 - Save-Data prevents idle hydration but explicit activation still works.
@@ -143,6 +147,7 @@ The complete film begins as a local poster and named native button. The YouTube 
 - Address and phone share family and size; address links to Google Maps and phone uses `tel:`.
 - Instagram and calendar links are unboxed icons with 44 × 44 CSS-pixel targets.
 - “Inside Hotel Zazz · Albuquerque, New Mexico” remains one line at all supported widths.
+- No accent rule separates the footer from the section above it.
 
 ## Responsive strategy
 
