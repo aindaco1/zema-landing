@@ -70,7 +70,7 @@ These boundaries keep hosting simple, deployment inexpensive, privacy strong, an
 - Public repository and site: `aindaco1/zema-landing` on GitHub Pages.
 - Approval URL: [https://aindaco1.github.io/zema-landing/](https://aindaco1.github.io/zema-landing/).
 - Inquiry delivery: Formspree form `xdaqrwyo`, project `Zema Vinyl Lounge Website`.
-- Complete film: privacy-enhanced YouTube embed for video `Qb-E5il1lZ0`.
+- Complete film: privacy-enhanced YouTube embed for video `He3yv-EXuRk`.
 - Regression coverage: 15 Playwright tests, including axe-backed WCAG checks, responsive layout, scroll scrubbing, lazy loading, SEO, form states, and media range delivery.
 
 ## Success criteria

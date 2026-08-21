@@ -78,7 +78,7 @@
         "telephone": {{ site.data.frames.phone_href | jsonify }},
         "image": [
           "{{ social_image_url }}",
-          "{{ '/assets/media/zema-film-poster.webp' | absolute_url }}"
+          "{{ site.data.frames.film.poster | absolute_url }}"
         ],
         "logo": "{{ site.data.frames.logo_black | absolute_url }}",
         "sameAs": [{{ site.data.frames.instagram | jsonify }}],

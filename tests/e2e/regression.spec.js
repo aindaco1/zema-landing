@@ -214,7 +214,7 @@ test("the complete film defers YouTube until play and preserves usable cursor be
   await page.waitForTimeout(300);
 
   await expect(facade.locator("iframe")).toHaveCount(0);
-  await expect(facade.locator(".film__poster")).toHaveAttribute("src", /zema-film-poster\.webp$/);
+  await expect(facade.locator(".film__poster")).toHaveAttribute("src", /zema-film-youtube-thumbnail\.webp$/);
   expect(youtubeRequests).toEqual([]);
 
   const playBox = await playButton.boundingBox();
@@ -555,7 +555,7 @@ test("static fallbacks, cache versions, footer, and media ranges stay intact", a
     "1st AC: Aaron Cassini Beltran",
     "Gaffer: Samuel Shorty",
     "Makeup / Hair: Rhiannon Barela",
-    "Special Thanks: Lucy Church · Brenda Ramos · Camille Griego · Grace · Anthony Ortiz · Alan de Lira Richards · Jax Maloney"
+    "Special Thanks: Lucy Church · Brenda Ramos · Camille Griego · Grace Walker · Anthony Ortiz · Alan de Lira Richards · Jax Maloney"
   ]);
   const castLines = await page.locator(".film__meta li").evaluateAll((credits) => (
     credits.slice(0, 2).map((credit) => Math.round(credit.getBoundingClientRect().top))
