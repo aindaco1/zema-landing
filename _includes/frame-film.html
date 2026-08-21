@@ -16,7 +16,7 @@
       data-youtube-title="{{ include.film.title }} — complete film"
     {% endif %}>
     {% if include.film.youtube_id != empty %}
-      <img class="film__poster" src="{{ include.film.poster | relative_url }}" alt="" width="1920" height="1080" loading="lazy" decoding="async">
+      <img class="film__poster" src="{{ include.film.poster | relative_url }}" alt="" width="1280" height="720" loading="lazy" decoding="async">
       <button class="film__play" type="button" data-youtube-play aria-label="Play {{ include.film.title }} — complete film">
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5v14l11-7z"></path></svg>
         <span aria-hidden="true">Play film</span>
@@ -33,7 +33,7 @@
       </noscript>
     {% else %}
       <div class="film__pending">
-        <img src="{{ include.film.poster | relative_url }}" alt="" width="1920" height="1080" loading="lazy">
+        <img src="{{ include.film.poster | relative_url }}" alt="" width="1280" height="720" loading="lazy">
         <p>Add the public YouTube video ID in <code>_data/frames.yml</code> to publish the complete film here.</p>
       </div>
     {% endif %}

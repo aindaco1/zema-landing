@@ -217,7 +217,7 @@ test("public metadata, structured data, and crawl files stay coherent", async ({
   expect(business.telephone).toBe("+15053532455");
   expect(business.address.addressLocality).toBe("Albuquerque");
   expect(business.openingHoursSpecification).toHaveLength(3);
-  expect(business.sameAs).toContain("https://www.instagram.com/hotelzazz/");
+  expect(business.sameAs).toContain("https://www.instagram.com/baratzazz/");
 
   const [robotsResponse, sitemapResponse, socialImageResponse] = await Promise.all([
     request.get("/zema-landing/robots.txt"),

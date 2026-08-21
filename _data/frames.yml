@@ -7,7 +7,7 @@ address_postal_code: "87108"
 address_country: "US"
 phone_display: "(505) 353-2455"
 phone_href: "+15053532455"
-instagram: "https://www.instagram.com/hotelzazz/"
+instagram: "https://www.instagram.com/baratzazz/"
 # Hotel Zazz exposes no ID on its calendar embed. This text fragment targets the
 # adjacent heading and positions the embedded calendar inside the viewport.
 events_url: "https://www.hotelzazz.com/events-calendar#:~:text=Zazzy%20Events"
@@ -120,6 +120,6 @@ film:
     - "1st AC: Aaron Cassini Beltran"
     - "Gaffer: Samuel Shorty"
     - "Makeup / Hair: Rhiannon Barela"
-    - "Special Thanks: Lucy Church · Brenda Ramos · Camille Griego · Grace · Anthony Ortiz · Alan de Lira Richards · Jax Maloney"
-  poster: "assets/media/zema-film-poster.webp"
-  youtube_id: "Qb-E5il1lZ0"
+    - "Special Thanks: Lucy Church · Brenda Ramos · Camille Griego · Grace Walker · Anthony Ortiz · Alan de Lira Richards · Jax Maloney"
+  poster: "assets/media/zema-film-youtube-thumbnail.webp"
+  youtube_id: "He3yv-EXuRk"

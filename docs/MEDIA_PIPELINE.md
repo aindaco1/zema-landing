@@ -4,11 +4,13 @@
 
 **Purpose:** preserve the source ranges, delivery formats, performance rules, and validation procedure for production media
 
-**Last verified:** August 16, 2026
+**Last verified:** August 21, 2026
 
 ## Media policy
 
 The film master is owner-supplied and intentionally kept out of the repository. The site contains only web delivery derivatives, posters, official marks, the small soundtrack cut, and the decorative pointer. The complete film is hosted once on YouTube.
+
+The current scrub derivatives were generated from the owner-supplied `From Zema With Love FINAL.mp4`: 4096×2048 H.264 at `24000/1001` fps, 216.257708 seconds, SHA-256 `5c89e01021005886c49d15f3cece6270343dbc467d6ca0b16f4ee63e34a69dbd`. The source remains outside the repository.
 
 Scroll reliability comes from all-intra H.264 derivatives, controlled hydration, and coalesced seeks. The files are high-quality lossy web encodes—not lossless masters. Replacing them with lossless video would increase transfer and decode cost without improving the source experience.
 
@@ -16,16 +18,16 @@ Scroll reliability comes from all-intra H.264 derivatives, controlled hydration,
 
 | Asset | Master range | Delivery | Approx. size | Purpose |
 | --- | --- | --- | ---: | --- |
-| `zema-scroll.mp4` | `15.223542–16.766750`; `51.289250→46.989250` | 1440×810 H.264, all-intra | 8.0 MB | Hero: centered vinyl, eye pullback, reverse to glass set-down |
-| `zema-gallery-arrival.mp4` | `58.75–79.5` | 1280×720 H.264, all-intra | 9.7 MB | Agent dossier, Hotel Zazz reveal, banana tap, lounge entry |
-| `zema-gallery-cocktails.mp4` | `84.2–94.8` | 1280×720 H.264, all-intra | 4.5 MB | Cocktail movement |
-| `zema-gallery-dance.mp4` | `160.0–175.75` | 1280×720 H.264, all-intra | 8.8 MB | Dance movement ending before the dancer leaves center frame |
-| `zema-inquiry-scrub.mp4` | `186.52–212.02` | 1280×720 H.264, all-intra | 13.5 MB | Agent awakening through the final clean record tilt |
-| `zema-soundtrack.webm` | `13.90–215.78` | 64 kbps VBR Opus | 1.5 MB | Primary soundtrack source |
-| `zema-soundtrack.m4a` | `13.90–215.78` | 80 kbps AAC | 2.0 MB | Compatibility soundtrack source |
+| `zema-scroll.mp4` | `15.223542–16.766750`; `51.289250→46.989250` | 1440×810 H.264, all-intra | 10.4 MB | Hero: centered vinyl, eye pullback, reverse to glass set-down |
+| `zema-gallery-arrival.mp4` | `58.75–79.5` | 1280×720 H.264, all-intra | 10.0 MB | Agent dossier, Hotel Zazz reveal, banana tap, lounge entry |
+| `zema-gallery-cocktails.mp4` | `84.2–94.8` | 1280×720 H.264, all-intra | 6.3 MB | Cocktail movement |
+| `zema-gallery-dance.mp4` | `160.0–175.75` | 1280×720 H.264, all-intra | 10.3 MB | Dance movement ending before the dancer leaves center frame |
+| `zema-inquiry-scrub.mp4` | `186.52–212.003` | 1280×720 H.264, all-intra | 14.3 MB | Agent awakening through the final clean record tilt |
+| `zema-soundtrack.webm` | Complete 201.817642-second WAV | 64 kbps VBR Opus | 1.8 MB | Primary soundtrack source |
+| `zema-soundtrack.m4a` | Complete 201.817642-second WAV | 80 kbps AAC | 2.1 MB | Compatibility soundtrack source |
 | `zema-hero-poster.webp` | Film still | 1920×1080 WebP | 88 KB | Reframed hero LCP and static fallback |
 | `zema-inquiry-poster.webp` | Film still | 1920×1080 WebP | 51 KB | Inquiry fallback |
-| `zema-film-poster.webp` | Film still | 1920×1080 WebP | 100 KB | YouTube facade |
+| `zema-film-youtube-thumbnail.webp` | Local snapshot of the YouTube max-resolution thumbnail | 1280×720 WebP | 53 KB | Complete-film play facade |
 | `zema-listening-room.webp` | Venue-supplied photo | 1500×1215 WebP | 219 KB | Venue introduction background |
 | `zema-social.jpg` | Composed still | 1200×630 JPEG | 74 KB | Broadly compatible social preview |
 | `zema-exterior/evening/dance.webp` | Film stills | 1920×1080 WebP | 74–157 KB | Gallery fallbacks |
@@ -81,16 +83,20 @@ ffmpeg -i input.mp4 \
 
 Always review the first and last decoded frames. A technically exact timestamp can still be editorially wrong.
 
+The current inquiry derivative uses `-crf 26.5` with the same all-intra settings to keep the final-grade encode below the practical 15 MB target. Its range ends before `212.003458`, the first credited frame in the current master; the last included source frame is the clean record at `211.961750`.
+
 ## Soundtrack derivatives
 
-The soundtrack begins on the first needle drop and includes the final musical tail. Create one Opus source and one AAC compatibility source from the same master range:
+The current soundtrack source is the complete owner-supplied `From Zema With Love Final audio.wav`: stereo 32-bit float PCM at 44.1 kHz, 201.817642 seconds, SHA-256 `3ccf228c75bce05096523d4dd6765d8e944c1e58c1b952eddee801e0fb43c8ab`. The measured source is `-16.6 LUFS` integrated with a `-2.9 dBFS` true peak. Preserve its full duration and level; do not trim or normalize it when creating the delivery formats.
+
+Create one Opus source and one AAC compatibility source:
 
 ```sh
-ffmpeg -ss 13.90 -to 215.78 -i input.mp4 \
-  -vn -c:a libopus -b:a 64k -vbr on zema-soundtrack.webm
+ffmpeg -i "From Zema With Love Final audio.wav" \
+  -map 0:a:0 -vn -c:a libopus -b:a 64k -vbr on zema-soundtrack.webm
 
-ffmpeg -ss 13.90 -to 215.78 -i input.mp4 \
-  -vn -c:a aac -b:a 80k -movflags +faststart zema-soundtrack.m4a
+ffmpeg -i "From Zema With Love Final audio.wav" \
+  -map 0:a:0 -vn -c:a aac -b:a 80k -movflags +faststart zema-soundtrack.m4a
 ```
 
 The HTML renders `data-src`, not `src`; JavaScript hydrates the browser-selectable sources later. Do not add two audio elements or force both files to download.
@@ -99,6 +105,7 @@ The HTML renders `data-src`, not `src`; JavaScript hydrates the browser-selectab
 
 - Use a visually intentional frame rather than an arbitrary midpoint.
 - Export photos/stills as WebP at the native display crop; use 1920×1080 for section media.
+- Preserve `zema-film-youtube-thumbnail.webp` at the YouTube source’s native 1280×720 resolution. It is a local snapshot of `https://i.ytimg.com/vi/He3yv-EXuRk/maxresdefault.jpg`, retrieved August 21, 2026; the source JPEG SHA-256 is `beb97299661421e2ebeebb4e380b3bf80bd94c69ff94ba071af4ef928658ecd4`.
 - Preserve the listening-room photo at its native 1500×1215 dimensions; the venue introduction contains it as a static responsive `cover` layer at reduced opacity beneath the text shade.
 - Preserve the 1200×630 JPEG social image because social crawlers remain more consistent with JPEG than WebP.
 - Use transparency only where necessary, such as the pointer.
@@ -145,7 +152,7 @@ No output means no decode error.
 - Hero: repeated overhead record → eye pullback → reverse to glass set-down; no film credit or drink-preparation passage.
 - Arrival: agent reading dossier → Hotel Zazz reveal → three banana taps → lounge entry.
 - Dance: stop while the dancer remains centered.
-- Inquiry: begin when the agent awakens; stop on the clean record tilt before credits.
+- Inquiry: begin when the agent awakens; stop on the clean record tilt at `211.961750`, before credits begin at `212.003458`.
 
 ### 5. Verify browser behavior
 
