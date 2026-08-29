@@ -85,7 +85,7 @@ The scrub encodes are intentionally lossy, high-quality web derivatives; do not 
 
 The repository is deployed through GitHub Actions to the canonical production origin `https://zemabar.com/`; `www.zemabar.com` redirects to the apex domain. Pull requests run the regression gate; pushes to `main` run regression and Pages deployment. `_config.yml` owns the HTTPS origin and empty root `baseurl`. Use `docs/OPERATIONS.md` for release, rollback, domain, and troubleshooting procedures.
 
-Before public acceptance, enable Pages HTTPS enforcement, restrict Formspree submissions to `zemabar.com`, and re-run the cross-origin form and media range-request checks.
+Pages HTTPS enforcement is enabled. Before public acceptance, retain GitHub's domain-verification TXT record, restrict Formspree submissions to `zemabar.com`, and re-run the cross-origin form checks; media range requests are part of the automated and post-deploy gates.
 
 ## Remaining owner decisions
 

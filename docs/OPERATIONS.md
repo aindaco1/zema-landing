@@ -152,12 +152,11 @@ Watch both workflows and repeat the smoke test. If the bad deployment involves a
 
 The canonical production origin is `https://zemabar.com/`, served from the root with an empty Jekyll `baseurl`. GoDaddy is authoritative for DNS; the apex publishes GitHub Pages A records and `www` is a CNAME to `aindaco1.github.io`. The repository uses a custom Actions workflow, so a source-tree `CNAME` file is ignored and not required.
 
-On August 29, 2026, the authoritative and public DNS answers matched GitHub Pages, the repository custom domain was `zemabar.com`, and GitHub's certificate was approved for both apex and `www`. Complete these owner-controlled release steps:
+On August 29, 2026, the authoritative and public DNS answers matched GitHub Pages, the repository custom domain was `zemabar.com`, GitHub's certificate was approved for both apex and `www`, and HTTPS enforcement was enabled. Complete these owner-controlled release steps:
 
-1. Enable **Enforce HTTPS** in the repository's Pages settings.
-2. Add and retain GitHub's account-level domain-verification TXT record.
-3. Restrict Formspree submissions to `zemabar.com` and test both enhanced and native POST delivery with non-guest test data.
-4. Submit `https://zemabar.com/sitemap.xml` and inspect the origin in Google Search Console.
+1. Add and retain GitHub's account-level domain-verification TXT record.
+2. Restrict Formspree submissions to `zemabar.com` and test both enhanced and native POST delivery with non-guest test data.
+3. Submit `https://zemabar.com/sitemap.xml` and inspect the origin in Google Search Console.
 
 For any future domain change:
 
