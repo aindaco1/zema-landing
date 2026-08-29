@@ -2,7 +2,7 @@ const { defineConfig } = require("@playwright/test");
 
 const channel = process.env.PW_CHANNEL;
 const testPort = process.env.PW_TEST_PORT || "4173";
-const testBaseUrl = `http://127.0.0.1:${testPort}/zema-landing/`;
+const testBaseUrl = `http://127.0.0.1:${testPort}/`;
 
 module.exports = defineConfig({
   testDir: "tests/e2e",

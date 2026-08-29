@@ -4,14 +4,15 @@
 
 **Purpose:** provide tested procedures for local development, content maintenance, deployment, rollback, and service changes
 
-**Last verified:** August 2, 2026
+**Last verified:** August 29, 2026
 
 ## Production endpoints
 
 | Resource | Value |
 | --- | --- |
 | Repository | `https://github.com/aindaco1/zema-landing` |
-| Approval site | [https://aindaco1.github.io/zema-landing/](https://aindaco1.github.io/zema-landing/) |
+| Production site | [https://zemabar.com/](https://zemabar.com/) |
+| Redirect alias | `https://www.zemabar.com/` |
 | Pages source | GitHub Actions workflow on `main` |
 | Formspree form | `xdaqrwyo` in `Zema Vinyl Lounge Website` |
 | Complete film | YouTube `He3yv-EXuRk` via `youtube-nocookie.com` |
@@ -35,7 +36,7 @@ Start the editable Jekyll server:
 bundle exec jekyll serve
 ```
 
-Open [http://127.0.0.1:4000/zema-landing/](http://127.0.0.1:4000/zema-landing/). The base path is intentional; testing only `/` can hide broken GitHub project-page asset URLs.
+Open [http://127.0.0.1:4000/](http://127.0.0.1:4000/). The root path matches the custom-domain production deployment.
 
 Create a one-off production build:
 
@@ -114,11 +115,11 @@ The regression workflow independently re-runs the 15 browser tests on `main`. Th
 
 ```sh
 curl --fail --location --output /dev/null --write-out '%{http_code}\n' \
-  https://aindaco1.github.io/zema-landing/
+  https://zemabar.com/
 
 curl --fail --location --range 0-1023 --output /dev/null \
   --write-out '%{http_code} %{size_download}\n' \
-  https://aindaco1.github.io/zema-landing/assets/media/zema-scroll.mp4
+  https://zemabar.com/assets/media/zema-scroll.mp4
 ```
 
 Expected responses are `200` and `206 1024`.
@@ -149,19 +150,26 @@ Watch both workflows and repeat the smoke test. If the bad deployment involves a
 
 ## Custom domain migration
 
-When the owner supplies the production domain:
+The canonical production origin is `https://zemabar.com/`, served from the root with an empty Jekyll `baseurl`. GoDaddy is authoritative for DNS; the apex publishes GitHub Pages A records and `www` is a CNAME to `aindaco1.github.io`. The repository uses a custom Actions workflow, so a source-tree `CNAME` file is ignored and not required.
 
-1. Set `url` to the HTTPS origin and set `baseurl` appropriately in `_config.yml`.
-2. Update or remove project-path assumptions in Playwright configuration and SEO assertions.
-3. Configure the domain in GitHub Pages and add the required DNS records.
-4. Enable HTTPS enforcement after DNS is valid.
-5. Restrict Formspree submissions to the production domain.
-6. Update `robots.txt`, sitemap assertions, canonical/social/JSON-LD checks, and any public approval links.
-7. Test cross-origin form submission, YouTube facade, audio/video requests, and byte ranges.
-8. Submit the new sitemap and inspect the URL in Google Search Console.
-9. Decide whether and how the GitHub Pages project URL should redirect; Pages does not provide an application-level redirect service automatically.
+On August 29, 2026, the authoritative and public DNS answers matched GitHub Pages, the repository custom domain was `zemabar.com`, and GitHub's certificate was approved for both apex and `www`. Complete these owner-controlled release steps:
 
-Do not add a `CNAME` until the domain and DNS plan are confirmed.
+1. Enable **Enforce HTTPS** in the repository's Pages settings.
+2. Add and retain GitHub's account-level domain-verification TXT record.
+3. Restrict Formspree submissions to `zemabar.com` and test both enhanced and native POST delivery with non-guest test data.
+4. Submit `https://zemabar.com/sitemap.xml` and inspect the origin in Google Search Console.
+
+For any future domain change:
+
+1. Set `url` to the new HTTPS origin and set `baseurl` appropriately in `_config.yml`.
+2. Update Playwright configuration, crawl/SEO assertions, and public documentation.
+3. Verify domain ownership, configure the domain in GitHub Pages, and then change DNS.
+4. Wait for certificate approval and enable HTTPS enforcement.
+5. Update Formspree's allowed domain.
+6. Test canonical/social/JSON-LD output, redirects, the YouTube facade, form submission, audio/video requests, and byte ranges.
+7. Submit the new sitemap and inspect the origin in Google Search Console.
+
+Do not point DNS at GitHub Pages before the domain is verified and assigned to the repository.
 
 ## External-service runbooks
 
@@ -189,7 +197,7 @@ Do not add a `CNAME` until the domain and DNS plan are confirmed.
 
 ### Local site returns missing assets
 
-Open `/zema-landing/`, not `/`. Check that templates use `relative_url` and that `_config.yml` still has the correct `baseurl`.
+Open `/`, not `/zema-landing/`. Check that templates use `relative_url`, `_config.yml` has an empty `baseurl`, and generated markup contains root-relative `/assets/` URLs.
 
 ### Playwright server cannot start
 

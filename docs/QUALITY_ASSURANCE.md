@@ -4,11 +4,11 @@
 
 **Purpose:** map project risks to repeatable automated and manual checks
 
-**Last verified:** August 2, 2026
+**Last verified:** August 29, 2026
 
 ## Quality model
 
-The suite treats the site as a browser experience, not a set of isolated functions. Jekyll builds the production markup first; a local byte-range-capable server serves the project under its real `/zema-landing/` base path; Playwright then exercises Chromium with real layout, media, focus, and network behavior.
+The suite treats the site as a browser experience, not a set of isolated functions. Jekyll builds the production markup first; a local byte-range-capable server serves the project from `/`, matching `https://zemabar.com/`; Playwright then exercises Chromium with real layout, media, focus, and network behavior.
 
 Automation protects known contracts. It does not replace editorial review, assistive-technology testing, cross-browser judgment, or venue fact confirmation.
 

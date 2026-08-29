@@ -195,12 +195,12 @@ test("public metadata, structured data, and crawl files stay coherent", async ({
   expect(metadata.description.length).toBeLessThanOrEqual(160);
   expect(metadata.robots).toContain("index");
   expect(metadata.robots).toContain("max-image-preview:large");
-  expect(metadata.canonical).toBe("https://aindaco1.github.io/zema-landing/");
+  expect(metadata.canonical).toBe("https://zemabar.com/");
   expect(metadata.ogTitle).toBe(metadata.title);
   expect(metadata.ogDescription).toBe(metadata.description);
   expect(metadata.ogSiteName).toBe("ZEMA Vinyl Lounge");
   expect(metadata.ogLocale).toBe("en_US");
-  expect(metadata.ogImage).toMatch(/\/zema-social\.jpg$/);
+  expect(metadata.ogImage).toBe("https://zemabar.com/assets/media/zema-social.jpg");
   expect(metadata.ogImageAlt).not.toBe("");
   expect(metadata.ogImageWidth).toBe("1200");
   expect(metadata.ogImageHeight).toBe("630");
@@ -212,7 +212,12 @@ test("public metadata, structured data, and crawl files stay coherent", async ({
 
   const graphTypes = metadata.jsonLd.flatMap((node) => node["@type"] || []);
   expect(graphTypes).toEqual(expect.arrayContaining(["WebSite", "WebPage", "BarOrPub"]));
+  const website = metadata.jsonLd.find((node) => node["@type"] === "WebSite");
+  const webpage = metadata.jsonLd.find((node) => node["@type"] === "WebPage");
   const business = metadata.jsonLd.find((node) => node["@type"] === "BarOrPub");
+  expect(website.url).toBe("https://zemabar.com/");
+  expect(webpage.url).toBe("https://zemabar.com/");
+  expect(business.url).toBe("https://zemabar.com/");
   expect(business.name).toBe("ZEMA Vinyl Lounge");
   expect(business.telephone).toBe("+15053532455");
   expect(business.address.addressLocality).toBe("Albuquerque");
@@ -220,15 +225,15 @@ test("public metadata, structured data, and crawl files stay coherent", async ({
   expect(business.sameAs).toContain("https://www.instagram.com/baratzazz/");
 
   const [robotsResponse, sitemapResponse, socialImageResponse] = await Promise.all([
-    request.get("/zema-landing/robots.txt"),
-    request.get("/zema-landing/sitemap.xml"),
-    request.get("/zema-landing/assets/media/zema-social.jpg")
+    request.get("/robots.txt"),
+    request.get("/sitemap.xml"),
+    request.get("/assets/media/zema-social.jpg")
   ]);
   expect(robotsResponse.status()).toBe(200);
-  expect(await robotsResponse.text()).toContain("Sitemap: https://aindaco1.github.io/zema-landing/sitemap.xml");
+  expect(await robotsResponse.text()).toContain("Sitemap: https://zemabar.com/sitemap.xml");
   expect(sitemapResponse.status()).toBe(200);
   const sitemap = await sitemapResponse.text();
-  expect(sitemap).toContain("<loc>https://aindaco1.github.io/zema-landing/</loc>");
+  expect(sitemap).toContain("<loc>https://zemabar.com/</loc>");
   expect(socialImageResponse.status()).toBe(200);
   expect(socialImageResponse.headers()["content-type"]).toContain("image/jpeg");
 });

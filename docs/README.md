@@ -4,11 +4,11 @@
 
 **Status:** living documentation for the production GitHub Pages site
 
-**Last verified:** August 2, 2026
+**Last verified:** August 29, 2026
 
 This handbook records what the ZEMA Vinyl Lounge site is, why it works the way it does, how to change it safely, and how to verify a release. The documents live beside the implementation so changes to the site and changes to its operating knowledge can be reviewed together.
 
-The live approval site is [https://aindaco1.github.io/zema-landing/](https://aindaco1.github.io/zema-landing/).
+The live production site is [https://zemabar.com/](https://zemabar.com/).
 
 ## Start here
 

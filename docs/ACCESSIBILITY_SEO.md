@@ -4,7 +4,7 @@
 
 **Purpose:** document the enforced accessibility/crawl posture and the manual work automation cannot replace
 
-**Last verified:** August 2, 2026
+**Last verified:** August 29, 2026
 
 This project targets WCAG 2.2 Level AA and a conservative, single-page local-business SEO model. Metadata and structured data must describe visible public content; the site does not publish FAQ, review, rating, event, or offer schema unless those features later gain complete, visible, authoritative data.
 
@@ -63,7 +63,7 @@ Run the focused gate with:
 npm run test:seo
 ```
 
-After deployment, validate the public URL with Google Search Console URL Inspection, Rich Results Test, and sitemap submission. When a custom domain is chosen, update `_config.yml` before deployment so canonical, social, JSON-LD, and sitemap URLs change together.
+After deployment, validate `https://zemabar.com/` with Google Search Console URL Inspection, Rich Results Test, and sitemap submission. Any future domain change must update `_config.yml` before deployment so canonical, social, JSON-LD, and sitemap URLs change together.
 
 ## Audit findings remediated
 

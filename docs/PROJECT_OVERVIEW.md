@@ -4,7 +4,7 @@
 
 **Purpose:** explain the product and experience without requiring code knowledge
 
-**Last verified:** August 2, 2026
+**Last verified:** August 29, 2026
 
 ## One-sentence brief
 
@@ -67,8 +67,8 @@ These boundaries keep hosting simple, deployment inexpensive, privacy strong, an
 
 ## Current production state
 
-- Public repository and site: `aindaco1/zema-landing` on GitHub Pages.
-- Approval URL: [https://aindaco1.github.io/zema-landing/](https://aindaco1.github.io/zema-landing/).
+- Public repository: `aindaco1/zema-landing` on GitHub.
+- Production site: [https://zemabar.com/](https://zemabar.com/), hosted by GitHub Pages.
 - Inquiry delivery: Formspree form `xdaqrwyo`, project `Zema Vinyl Lounge Website`.
 - Complete film: privacy-enhanced YouTube embed for video `He3yv-EXuRk`.
 - Regression coverage: 15 Playwright tests, including axe-backed WCAG checks, responsive layout, scroll scrubbing, lazy loading, SEO, form states, and media range delivery.
@@ -88,7 +88,6 @@ The project is healthy when:
 
 ## Owner decisions still open
 
-- Final production domain.
 - Whether ZEMA needs a separate reservation link in addition to the venue inquiry form.
 - Whether another verified address should receive Formspree event inquiries.
 - Final legal/credit line and confirmation that the published YouTube film has complete captions.

@@ -83,16 +83,12 @@ The scrub encodes are intentionally lossy, high-quality web derivatives; do not 
 
 ## Deployment
 
-The repository is deployed through GitHub Actions to `https://aindaco1.github.io/zema-landing/`. Pull requests run the regression gate; pushes to `main` run regression and Pages deployment. Use `docs/OPERATIONS.md` for release, rollback, and troubleshooting procedures. After a custom domain is known:
+The repository is deployed through GitHub Actions to the canonical production origin `https://zemabar.com/`; `www.zemabar.com` redirects to the apex domain. Pull requests run the regression gate; pushes to `main` run regression and Pages deployment. `_config.yml` owns the HTTPS origin and empty root `baseurl`. Use `docs/OPERATIONS.md` for release, rollback, domain, and troubleshooting procedures.
 
-1. Update `_config.yml`.
-2. Add the Pages custom-domain configuration.
-3. Restrict Formspree submissions to that production domain.
-4. Re-run cross-origin form and media range-request tests.
+Before public acceptance, enable Pages HTTPS enforcement, restrict Formspree submissions to `zemabar.com`, and re-run the cross-origin form and media range-request checks.
 
 ## Remaining owner decisions
 
-- Final production domain.
 - Whether the venue wants a separate reservation link in addition to the inquiry form.
 - Whether event inquiries should notify another verified Formspree address.
 - Final legal/credit line for the film and any captions supplied by the production.

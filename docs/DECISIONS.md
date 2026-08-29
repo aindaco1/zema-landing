@@ -4,7 +4,7 @@
 
 **Purpose:** preserve the reasons behind durable project boundaries so future work does not accidentally reopen settled tradeoffs
 
-**Last verified:** August 2, 2026
+**Last verified:** August 29, 2026
 
 These are lightweight architecture decision records. A decision is “accepted” until a later entry explicitly supersedes it. Record a new decision when a change affects hosting, runtime dependencies, data ownership, privacy, core interaction, media strategy, or release quality.
 
@@ -20,7 +20,7 @@ These are lightweight architecture decision records. A decision is “accepted�
 
 - No custom server, database, server-side form handling, or runtime framework.
 - Dynamic needs must use deliberate external services or remain out of scope.
-- Paths must work under the project `baseurl`.
+- Paths must honor the configured `baseurl`; the current production root uses an empty value.
 - A custom domain can be added without replacing the architecture.
 
 ## D-002 — Structured YAML is the public-content source
@@ -182,12 +182,27 @@ These are lightweight architecture decision records. A decision is “accepted�
 - The header remains visually present over the cinematic sections.
 - Responsive and accessibility tests assert the black surface and cream foreground at representative scroll positions.
 
+## D-013 — Canonical production origin at zemabar.com
+
+**Status:** Accepted
+
+**Decision:** Serve the GitHub Pages artifact from `https://zemabar.com/` with an empty Jekyll `baseurl`, and redirect `www.zemabar.com` to the apex domain.
+
+**Why:** The venue needs a durable, branded production origin rather than the repository-specific GitHub Pages project path.
+
+**Consequences:**
+
+- Canonical, social, JSON-LD, robots, and sitemap URLs use `https://zemabar.com/`.
+- Local and CI browser tests serve the built artifact from `/` so generated asset paths match production.
+- GoDaddy remains the authoritative DNS provider while GitHub Pages provides hosting and certificates.
+- Domain ownership verification, HTTPS enforcement, Formspree restrictions, and post-deploy checks remain release responsibilities.
+
 ## Adding a decision
 
 Use this shape:
 
 ```md
-## D-012 — Short decision title
+## D-0XX — Short decision title
 
 **Status:** Proposed | Accepted | Superseded by D-0XX
 

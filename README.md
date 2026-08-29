@@ -2,7 +2,7 @@
 
 A cinematic, accessible landing page for ZEMA Vinyl Lounge at Hotel Zazz in Albuquerque. The site translates *From Zema with Love* into a practical venue journey: discover the lounge, check visitor information, ask about an event, and watch the complete film.
 
-Live approval site: [https://aindaco1.github.io/zema-landing/](https://aindaco1.github.io/zema-landing/)
+Live production site: [https://zemabar.com/](https://zemabar.com/)
 
 ## Technical summary
 
@@ -26,7 +26,7 @@ npx playwright install chromium
 bundle exec jekyll serve
 ```
 
-Open [http://127.0.0.1:4000/zema-landing/](http://127.0.0.1:4000/zema-landing/).
+Open [http://127.0.0.1:4000/](http://127.0.0.1:4000/).
 
 ## Validate
 
@@ -38,7 +38,7 @@ npm run test:accessibility
 npm run test:seo
 ```
 
-The complete browser suite builds and serves the site under its real project base path and runs 15 production-oriented checks. See [Quality assurance](docs/QUALITY_ASSURANCE.md) for test coverage, the responsive matrix, manual release checks, and diagnosis.
+The complete browser suite builds and serves the site at its production root path and runs 15 production-oriented checks. See [Quality assurance](docs/QUALITY_ASSURANCE.md) for test coverage, the responsive matrix, manual release checks, and diagnosis.
 
 ## Documentation
 
@@ -77,4 +77,4 @@ Confirm changing hours and operational policies with the venue before public lau
 
 Pull requests run the regression workflow. Pushes to `main` run regression again and deploy the Jekyll artifact to GitHub Pages.
 
-If a custom domain is added, follow [the custom-domain migration runbook](docs/OPERATIONS.md#custom-domain-migration) so configuration, canonical URLs, crawl files, Formspree restrictions, tests, and DNS move together.
+The canonical production domain is `zemabar.com`. Follow [the custom-domain runbook](docs/OPERATIONS.md#custom-domain-migration) when validating or changing configuration, canonical URLs, crawl files, Formspree restrictions, tests, or DNS.

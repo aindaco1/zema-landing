@@ -4,7 +4,7 @@
 
 **Purpose:** provide a fast, safe path from request to verified change
 
-**Last verified:** August 2, 2026
+**Last verified:** August 29, 2026
 
 ## Required reading order
 
@@ -27,7 +27,7 @@ Do not infer that a new visual request authorizes a new framework, backend, anal
 - All enhanced behavior: `assets/js/main.js`.
 - Production media: `assets/media/`; master film remains outside the repository.
 - Browser contracts: `tests/e2e/`.
-- Current approval URL: `https://aindaco1.github.io/zema-landing/`.
+- Canonical production URL: `https://zemabar.com/`.
 
 ## Non-negotiable invariants
 

@@ -4,7 +4,7 @@
 
 **Purpose:** describe the production system, its boundaries, and the runtime data flow
 
-**Last verified:** August 2, 2026
+**Last verified:** August 29, 2026
 
 ## Architecture summary
 
@@ -70,7 +70,7 @@ See [the decision record](DECISIONS.md) for alternatives and tradeoffs.
 
 This avoids a common static-site failure mode: duplicating venue facts in visible HTML, metadata, and schema. Opening hours, address, phone, and Instagram should be changed in YAML and then verified in both rendered content and JSON-LD.
 
-The page has no client-side route. Jekyll's `baseurl` support and Liquid's `relative_url`/`absolute_url` filters keep project-page paths correct under `/zema-landing/`.
+The page has no client-side route. The production site is served from the root of `https://zemabar.com`, so `_config.yml` uses an empty `baseurl`. Liquid's `relative_url` and `absolute_url` filters keep root-relative assets and canonical metadata aligned with that origin.
 
 ## JavaScript subsystem boundaries
 
