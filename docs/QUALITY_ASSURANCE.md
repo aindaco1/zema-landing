@@ -35,7 +35,9 @@ npx playwright install chromium
 | Command | Use |
 | --- | --- |
 | `npm run test:docs` | Required handbook files, duplicate headings, trailing whitespace, and relative links |
-| `npm test` | Documentation check followed by the complete 15-test browser regression gate |
+| `npm run test:content` | Pages CMS, public-content, service-boundary, and nine-slot media-manifest contract |
+| `npm run test:uploader` | Worker types/dry-run bundle plus five Miniflare/R2 request tests |
+| `npm test` | Content, documentation, Worker, and complete 16-test browser release gate |
 | `npm run test:accessibility` | Focused WCAG, interaction-state, keyboard, and form checks |
 | `npm run test:seo` | Focused metadata, JSON-LD, sitemap, and social-image checks |
 | `npm run test:regression:headed` | Interactive browser diagnosis |
@@ -50,6 +52,18 @@ PW_TEST_PORT=44020 npm test
 This is useful when another local Jekyll process is running.
 
 ## Automated coverage
+
+### Content and editorial control plane
+
+`scripts/validate-content.js` verifies:
+
+- required text, public HTTPS links, phone format, YouTube ID, and machine-readable opening hours;
+- exactly four hero beats and three gallery movements;
+- valid focal-point percentages and existing canonical output files for all nine media slots;
+- Pages CMS ownership of `_data/frames.yml`, merge preservation, editorial-media containment, and exclusion of Formspree/brand assets;
+- immutable Formspree endpoint and one-to-one alignment between `_admin/media-slots.json` and `_data/frames.yml`.
+
+`_admin/uploader/test/uploader.spec.ts` verifies the Worker fails closed without Access configuration, returns authorized slot data, rejects invalid source types, creates/cancels R2 multipart uploads, and protects raw-source streaming with its independent bearer token. Type generation, strict TypeScript, and a real Wrangler dry-run bundle are part of the same command.
 
 ### Accessibility and SEO
 
@@ -110,6 +124,9 @@ At each size the test asserts zero document/section overflow, usable header gutt
 | CSS token, typography, header, footer, breakpoint | `npm test` | 320 px, short landscape, desktop, zoom, forced colors |
 | Scroll geometry or scrub controller | `npm test` | Repeated forward/reverse real-browser scrub |
 | Video/audio/poster replacement | Full decode, metadata/keyframe checks, `npm test` | Editorial first/last frames and production range request |
+| Pages CMS schema or editable boundary | `npm run test:content`, `npm test` | Pages CMS save/preview and generated commit scope |
+| Uploader, R2, Access, or GitHub App bridge | `npm run test:uploader`, `npm test` | Authenticated multipart upload, cancellation, release dispatch, and secret-free logs |
+| Raw-media processor/workflow | Temp-source transcode, `npm test` | GitHub run, report artifact, generated diff, live ranges, and rollback commit |
 | Form fields or Formspree behavior | `npm run test:accessibility`, `npm test` | Live success/failure delivery and no-JS POST |
 | Metadata/schema/canonical/domain | `npm run test:seo`, `npm test` | Search Console/Rich Results after deploy |
 | YouTube facade or soundtrack | `npm test` | Keyboard, captions, sound consent, Save-Data |
@@ -154,7 +171,7 @@ At each size the test asserts zero document/section overflow, usable header gutt
 
 ### Production
 
-- Pages and regression workflows both succeed on the same `main` commit.
+- The Pages workflow succeeds on the exact ordinary `main` commit, or the media-release workflow succeeds and deploys the exact generated commit.
 - Public URL returns `200` over HTTPS.
 - Representative media range request returns `206` with 1024 bytes.
 - Browser console has no unexplained error.
@@ -200,6 +217,8 @@ gzip -c _site/assets/js/main.js | wc -c
 
 ## CI contract
 
-The regression workflow runs on pull requests, pushes to `main`, and manual dispatch. It runs the documentation check before Playwright, uses Node 24, and pins Node-24-based actions. Pull requests should be green before merge because Pages deployment and regression both begin after a `main` push.
+The composite `.github/actions/verify-site` action owns one DRY release gate: Ruby/Node setup, dependency installation, Chromium, `npm test`, and the production Jekyll build. Pull requests invoke it through the regression workflow. Ordinary `main` pushes invoke it through the Pages workflow before any artifact upload. Media releases invoke it after generation and rebase but before push and deployment. CI uses Node 24 and pinned official Actions.
+
+The media workflow additionally installs `cwebp`, checks the required FFmpeg encoders, streams the private source, validates the generated diff, commits locally, and retains a release report for 30 days. A failure before the push leaves `main` and production unchanged; do not treat an uploaded R2 object as a release.
 
 Do not delete or weaken a regression because it complicates a visual change. If a documented contract is intentionally changing, update the experience/design decision, implementation, test, and relevant handbook page in the same pull request.

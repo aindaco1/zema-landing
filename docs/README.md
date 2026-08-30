@@ -34,12 +34,14 @@ Documentation explains the system; it does not replace executable sources. When 
 | Concern | Canonical source |
 | --- | --- |
 | Public copy, hours, contact details, credits, external URLs, form endpoint, and media paths | [`_data/frames.yml`](../_data/frames.yml) |
-| Public URL, SEO defaults, asset cache version, and Jekyll configuration | [`_config.yml`](../_config.yml) |
+| Public URL, asset cache version, and Jekyll configuration | [`_config.yml`](../_config.yml) |
+| Pages CMS editing schema and protected field/media boundary | [`.pages.yml`](../.pages.yml) |
+| Raw-media slots, limits, focal paths, and canonical outputs | [`_admin/media-slots.json`](../_admin/media-slots.json) |
 | Page order and semantic composition | [`index.html`](../index.html), [`_layouts/`](../_layouts), and [`_includes/`](../_includes) |
 | Design tokens and component styles | [`assets/css/_theme70s.scss`](../assets/css/_theme70s.scss) and the remaining SCSS partials |
 | Enhanced interaction behavior | [`assets/js/main.js`](../assets/js/main.js) |
 | Enforced browser contracts | [`tests/e2e/`](../tests/e2e) |
-| Deployment and CI behavior | [`.github/workflows/`](../.github/workflows) |
+| Deployment and CI behavior | [`.github/workflows/`](../.github/workflows) and [the shared verification action](../.github/actions/verify-site/action.yml) |
 | Product and engineering invariants | [`agents.md`](../agents.md) |
 
 For venue facts that may change, the final authority is the venue. Confirm hours, policies, reservation guidance, phone, address, and event links with Hotel Zazz before a public launch.

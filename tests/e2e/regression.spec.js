@@ -774,7 +774,7 @@ test("static fallbacks, cache versions, footer, and media ranges stay intact", a
   const documentResponse = await request.get("/");
   const documentMarkup = await documentResponse.text();
   expect(documentMarkup).toContain('preload="none"');
-  expect(documentMarkup).toContain("data-src=\"/assets/media/zema-soundtrack.webm");
+  expect(documentMarkup).toContain("data-src=\"/assets/media/editorial/zema-soundtrack.webm");
   expect(documentMarkup).not.toContain("/zema-landing/");
   expect(documentMarkup).not.toMatch(/<source\s+src="[^"]*zema-soundtrack/);
 
@@ -785,7 +785,7 @@ test("static fallbacks, cache versions, footer, and media ranges stay intact", a
     "zema-soundtrack.webm",
     "zema-soundtrack.m4a"
   ]) {
-    const response = await request.get(`/assets/media/${asset}`, {
+    const response = await request.get(`/assets/media/editorial/${asset}`, {
       headers: { Range: "bytes=0-1023" }
     });
     expect(response.status()).toBe(206);

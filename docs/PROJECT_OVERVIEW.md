@@ -63,7 +63,7 @@ The experience must never require familiarity with the film to understand the ve
 - A JavaScript framework or general-purpose animation runtime.
 - A fully dynamic event listing duplicated from Hotel Zazz.
 
-These boundaries keep hosting simple, deployment inexpensive, privacy strong, and ownership practical for a small venue team.
+The owner-only Pages CMS and protected raw-media uploader are editorial tooling, not public visitor features or runtime content databases. These boundaries keep public hosting simple, deployment inexpensive, privacy strong, and ownership practical for a small venue team.
 
 ## Current production state
 
@@ -71,7 +71,8 @@ These boundaries keep hosting simple, deployment inexpensive, privacy strong, an
 - Production site: [https://zemabar.com/](https://zemabar.com/), hosted by GitHub Pages.
 - Inquiry delivery: Formspree form `xdaqrwyo`, project `Zema Vinyl Lounge Website`.
 - Complete film: privacy-enhanced YouTube embed for video `He3yv-EXuRk`.
-- Regression coverage: 15 Playwright tests, including axe-backed WCAG checks, responsive layout, scroll scrubbing, lazy loading, SEO, form states, and media range delivery.
+- Editorial tooling: Pages CMS for repository-backed content and a Cloudflare Access/R2 uploader for automatic media releases.
+- Regression coverage: a content contract, five Worker tests, and 16 Playwright tests including axe-backed WCAG checks, responsive layout, scroll scrubbing, lazy loading, SEO, form states, and media range delivery.
 
 ## Success criteria
 
@@ -84,6 +85,7 @@ The project is healthy when:
 - reduced-motion and Save-Data visitors receive complete, readable content;
 - the complete film and soundtrack remain opt-in network/audio experiences;
 - automated accessibility, SEO, interaction, media, and responsive checks pass before merge;
+- owner content/media edits create reviewable Git commits and deploy only after the same release gate;
 - deployment remains a static GitHub Pages workflow with no secret required in the repository.
 
 ## Owner decisions still open

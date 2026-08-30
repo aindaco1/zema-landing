@@ -1,0 +1,145 @@
+{
+  "version": 1,
+  "upload": {
+    "r2Prefix": "incoming",
+    "partSizeBytes": 20971520,
+    "maxConcurrentParts": 3,
+    "retentionDays": 30
+  },
+  "slots": [
+    {
+      "id": "hero-video",
+      "label": "Opening turntable hero",
+      "description": "Exact editorial cut for the opening scroll sequence. The first frame becomes the poster.",
+      "kind": "video",
+      "maxBytes": 5368709120,
+      "maxDurationSeconds": 60,
+      "acceptedExtensions": ["mov", "mp4"],
+      "acceptedCodecs": ["h264", "hevc", "prores"],
+      "maxWidth": 3840,
+      "maxHeight": 2160,
+      "focalPaths": { "x": "hero.focal_x", "y": "hero.focal_y" },
+      "outputs": [
+        { "role": "video", "path": "assets/media/editorial/zema-scroll.mp4", "contentPath": "hero.video_mp4", "width": 1440, "height": 810, "crf": 23 },
+        { "role": "poster", "path": "assets/media/editorial/zema-hero-poster.webp", "contentPath": "hero.poster", "width": 1920, "height": 1080, "quality": 86 }
+      ]
+    },
+    {
+      "id": "gallery-arrival-video",
+      "label": "Gallery 1 · Arrival",
+      "description": "Exact editorial cut for the first gallery movement. The first frame becomes the poster.",
+      "kind": "video",
+      "maxBytes": 5368709120,
+      "maxDurationSeconds": 60,
+      "acceptedExtensions": ["mov", "mp4"],
+      "acceptedCodecs": ["h264", "hevc", "prores"],
+      "maxWidth": 3840,
+      "maxHeight": 2160,
+      "focalPaths": { "x": "gallery.0.focal_x", "y": "gallery.0.focal_y" },
+      "outputs": [
+        { "role": "video", "path": "assets/media/editorial/zema-gallery-arrival.mp4", "contentPath": "gallery.0.video_mp4", "width": 1280, "height": 720, "crf": 25 },
+        { "role": "poster", "path": "assets/media/editorial/zema-exterior.webp", "contentPath": "gallery.0.image", "width": 1920, "height": 1080, "quality": 86 }
+      ]
+    },
+    {
+      "id": "gallery-cocktails-video",
+      "label": "Gallery 2 · Cocktails",
+      "description": "Exact editorial cut for the second gallery movement. The first frame becomes the poster.",
+      "kind": "video",
+      "maxBytes": 5368709120,
+      "maxDurationSeconds": 60,
+      "acceptedExtensions": ["mov", "mp4"],
+      "acceptedCodecs": ["h264", "hevc", "prores"],
+      "maxWidth": 3840,
+      "maxHeight": 2160,
+      "focalPaths": { "x": "gallery.1.focal_x", "y": "gallery.1.focal_y" },
+      "outputs": [
+        { "role": "video", "path": "assets/media/editorial/zema-gallery-cocktails.mp4", "contentPath": "gallery.1.video_mp4", "width": 1280, "height": 720, "crf": 25 },
+        { "role": "poster", "path": "assets/media/editorial/zema-evening.webp", "contentPath": "gallery.1.image", "width": 1920, "height": 1080, "quality": 86 }
+      ]
+    },
+    {
+      "id": "gallery-dance-video",
+      "label": "Gallery 3 · Dance",
+      "description": "Exact editorial cut for the third gallery movement. The first frame becomes the poster.",
+      "kind": "video",
+      "maxBytes": 5368709120,
+      "maxDurationSeconds": 60,
+      "acceptedExtensions": ["mov", "mp4"],
+      "acceptedCodecs": ["h264", "hevc", "prores"],
+      "maxWidth": 3840,
+      "maxHeight": 2160,
+      "focalPaths": { "x": "gallery.2.focal_x", "y": "gallery.2.focal_y" },
+      "outputs": [
+        { "role": "video", "path": "assets/media/editorial/zema-gallery-dance.mp4", "contentPath": "gallery.2.video_mp4", "width": 1280, "height": 720, "crf": 25 },
+        { "role": "poster", "path": "assets/media/editorial/zema-dance.webp", "contentPath": "gallery.2.image", "width": 1920, "height": 1080, "quality": 86 }
+      ]
+    },
+    {
+      "id": "inquiry-video",
+      "label": "Closing inquiry montage",
+      "description": "Exact editorial cut behind the inquiry form. The first frame becomes the poster.",
+      "kind": "video",
+      "maxBytes": 5368709120,
+      "maxDurationSeconds": 60,
+      "acceptedExtensions": ["mov", "mp4"],
+      "acceptedCodecs": ["h264", "hevc", "prores"],
+      "maxWidth": 3840,
+      "maxHeight": 2160,
+      "focalPaths": { "x": "inquiry.focal_x", "y": "inquiry.focal_y" },
+      "outputs": [
+        { "role": "video", "path": "assets/media/editorial/zema-inquiry-scrub.mp4", "contentPath": "inquiry.video_mp4", "width": 1280, "height": 720, "crf": 26.5 },
+        { "role": "poster", "path": "assets/media/editorial/zema-inquiry-poster.webp", "contentPath": "inquiry.poster", "width": 1920, "height": 1080, "quality": 86 }
+      ]
+    },
+    {
+      "id": "soundtrack",
+      "label": "Site soundtrack",
+      "description": "Mastered full soundtrack. Loudness is preserved; no normalization is applied.",
+      "kind": "audio",
+      "maxBytes": 5368709120,
+      "maxDurationSeconds": 900,
+      "acceptedExtensions": ["wav", "aif", "aiff", "flac"],
+      "outputs": [
+        { "role": "audio-opus", "path": "assets/media/editorial/zema-soundtrack.webm", "contentPath": "soundtrack.sources.0.src", "codec": "libopus", "bitrate": "64k" },
+        { "role": "audio-aac", "path": "assets/media/editorial/zema-soundtrack.m4a", "contentPath": "soundtrack.sources.1.src", "codec": "aac", "bitrate": "80k" }
+      ]
+    },
+    {
+      "id": "intro-image",
+      "label": "Venue introduction image",
+      "description": "Atmospheric background for the introduction section.",
+      "kind": "image",
+      "maxBytes": 536870912,
+      "acceptedExtensions": ["jpg", "jpeg", "png", "tif", "tiff", "webp"],
+      "focalPaths": { "x": "intro.focal_x", "y": "intro.focal_y" },
+      "outputs": [
+        { "role": "image", "path": "assets/media/editorial/zema-listening-room.webp", "contentPath": "intro.background", "width": 1500, "height": 1215, "quality": 86 }
+      ]
+    },
+    {
+      "id": "social-image",
+      "label": "Social sharing card",
+      "description": "Open Graph and social preview image.",
+      "kind": "image",
+      "maxBytes": 536870912,
+      "acceptedExtensions": ["jpg", "jpeg", "png", "tif", "tiff", "webp"],
+      "focalPaths": { "x": "seo.social_focal_x", "y": "seo.social_focal_y" },
+      "outputs": [
+        { "role": "image", "path": "assets/media/editorial/zema-social.jpg", "contentPath": "seo.social_image", "width": 1200, "height": 630, "quality": 88 }
+      ]
+    },
+    {
+      "id": "film-poster",
+      "label": "Complete film poster",
+      "description": "Local facade shown before the visitor explicitly loads YouTube.",
+      "kind": "image",
+      "maxBytes": 536870912,
+      "acceptedExtensions": ["jpg", "jpeg", "png", "tif", "tiff", "webp"],
+      "focalPaths": { "x": "film.focal_x", "y": "film.focal_y" },
+      "outputs": [
+        { "role": "image", "path": "assets/media/editorial/zema-film-youtube-thumbnail.webp", "contentPath": "film.poster", "width": 1280, "height": 720, "quality": 86 }
+      ]
+    }
+  ]
+}

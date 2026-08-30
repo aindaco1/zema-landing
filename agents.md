@@ -15,7 +15,7 @@ The site is for the venue—not a portfolio page for the web build or a generic 
 - Jekyll + GitHub Pages.
 - Static Liquid/HTML, SCSS compiled by Jekyll, and framework-free JavaScript.
 - No GSAP or other animation runtime unless a future interaction demonstrably cannot be delivered with native sticky layout and a small script.
-- No database or custom backend. Formspree handles inquiry delivery.
+- No public database or custom backend. Formspree handles inquiry delivery. The approved owner-only media uploader is an isolated Cloudflare Worker/R2 control plane and must never enter the visitor runtime.
 - No analytics by default.
 - Keep every production asset below GitHub's normal per-file limit. The hero, three gallery scrubs, and closing inquiry scrub are local; the complete film is embedded from YouTube.
 
@@ -39,6 +39,8 @@ The Bloomscroll reference informs the cinematic scale, restrained navigation, ta
 - Brand direction and official marks: Notion Research & Planning
 - Narrative chapters, creative intent, credits, and deliverables: original ZEMA proposal PDF
 - Site content model: `_data/frames.yml`
+- Pages CMS editor schema: `.pages.yml`
+- Raw-media slot/output contract: `_admin/media-slots.json`
 - Form endpoint: Formspree form `xdaqrwyo`, project `Zema Vinyl Lounge Website`
 
 Hours and operational policies can change. Confirm them with the venue immediately before public launch; do not preserve expired seasonal schedules just because they exist on an older page.
@@ -65,6 +67,7 @@ Hours and operational policies can change. Confirm them with the venue immediate
 - Keep CSS under 20 KB gzipped and JavaScript under 8 KB gzipped.
 - Hero LCP is the poster, not the MP4. The YouTube iframe is created only after the visitor activates the local play facade.
 - Run `npm test` before merging interaction, responsive-layout, footer, or media changes. Keep the Playwright scrub, reduced-motion, cache-version, overflow, and byte-range assertions intact.
+- Keep the Pages CMS content/ownership validator and the uploader Worker tests in that same gate. Formspree/service fields and official brand assets are not editor-owned.
 - Preserve the axe-backed WCAG 2.2 AA, keyboard, focus, target-size, required-field, and form-error assertions. Automated checks do not replace the manual VoiceOver, zoom, forced-colors, and YouTube-caption release checks in `docs/ACCESSIBILITY_SEO.md`.
 - Keep canonical, Open Graph, Twitter, JSON-LD, `robots.txt`, and sitemap facts aligned with visible content and `_data/frames.yml`. Do not add FAQ, review, rating, offer, or event schema without complete authoritative visible data.
 - Treat `docs/BRAND_GUIDE.md` and the tokens in `assets/css/_theme70s.scss` as the typography source of truth. Georgia handles general display copy; the licensed TAN Kindred subset is restricted to the `ZEMA` word in the opening hero title; Arial/Helvetica handles body and utility text. Browser-default Times or isolated component type scales are regressions.
@@ -79,11 +82,13 @@ Hours and operational policies can change. Confirm them with the venue immediate
 - Site soundtrack: the complete 201.817642-second owner-supplied `From Zema With Love Final audio.wav`. Serve `zema-soundtrack.webm` as 64 kbps VBR Opus with `zema-soundtrack.m4a` as the 80 kbps AAC fallback; only the browser-selected source should download.
 - WebP assets: 1920×1080 hero/inquiry posters and gallery stills, the native 1280×720 YouTube film-thumbnail facade, the native 1500×1215 listening-room photo, and 1200×1200 official ZEMA marks.
 
+Editable web derivatives live under `assets/media/editorial/`; official marks, the favicon, and the pointer remain protected in `assets/media/`. Exact slot limits, focal paths, output names, and encode settings belong only in `_admin/media-slots.json`. Raw masters are private R2 objects under `incoming/`, never Git assets, and expire after 30 days.
+
 The scrub encodes are intentionally lossy, high-quality web derivatives; do not replace them with lossless encodes. Every scrub frame is an I-frame. Each derivative buffers into a local Blob before scrubbing begins so a rapid seek cannot cancel an in-flight server range read; the poster remains visible until that buffer is ready and the requested frame has been decoded and painted. Hero posters must match the scrub's exact opening frame and crop. Responsive seeking then comes from making every frame independently decodable and coalescing rapid scroll updates to the latest target. Gallery sources hydrate one movement at a time as the visitor approaches it; the inquiry montage also hydrates only near its section. Keep aspect ratios explicit in markup to avoid layout shift. Run a full decode check after every encode.
 
 ## Deployment
 
-The repository is deployed through GitHub Actions to the canonical production origin `https://zemabar.com/`; `www.zemabar.com` redirects to the apex domain. Pull requests run the regression gate; pushes to `main` run regression and Pages deployment. `_config.yml` owns the HTTPS origin and empty root `baseurl`. Use `docs/OPERATIONS.md` for release, rollback, domain, and troubleshooting procedures.
+The repository is deployed through GitHub Actions to the canonical production origin `https://zemabar.com/`; `www.zemabar.com` redirects to the apex domain. Pull requests run the shared release gate; ordinary pushes to `main` must pass that same gate inside the Pages workflow before deployment. Raw-media releases generate/rebase/test before their commit and deploy atomically. `_config.yml` owns the HTTPS origin and empty root `baseurl`. Use `docs/OPERATIONS.md` for release, rollback, domain, and troubleshooting procedures.
 
 Pages HTTPS enforcement is enabled. Before public acceptance, retain GitHub's domain-verification TXT record, restrict Formspree submissions to `zemabar.com`, and re-run the cross-origin form checks; media range requests are part of the automated and post-deploy gates.
 

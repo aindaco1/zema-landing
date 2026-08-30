@@ -10,6 +10,7 @@
   </header>
   <div
     class="film__player{% if include.film.youtube_id != empty %} film__player--facade{% endif %}"
+    style="--media-focal-x: {{ include.film.focal_x }}%; --media-focal-y: {{ include.film.focal_y }}%;"
     {% if include.film.youtube_id != empty %}
       data-youtube-embed
       data-youtube-src="https://www.youtube-nocookie.com/embed/{{ include.film.youtube_id }}?autoplay=1&amp;rel=0"

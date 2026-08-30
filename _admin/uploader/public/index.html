@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>ZEMA media uploader</title>
+  <link rel="stylesheet" href="/admin/styles.css">
+  <script src="/admin/app.js" defer></script>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="eyebrow">ZEMA Vinyl Lounge</p>
+      <h1>Media release uploader</h1>
+      <p>Upload an editorially final master. The release workflow will transcode it, generate matching posters where needed, run the site tests, and publish only when every check passes.</p>
+    </header>
+
+    <form id="upload-form">
+      <label>
+        <span>Site slot</span>
+        <select id="slot" name="slot" required disabled>
+          <option value="">Loading slots…</option>
+        </select>
+      </label>
+      <p class="hint" id="slot-description"></p>
+
+      <label>
+        <span>Raw master</span>
+        <input id="file" name="file" type="file" required disabled>
+      </label>
+      <p class="hint" id="file-rules">Choose a slot to see its accepted formats and limits.</p>
+
+      <fieldset id="focal-fields" hidden>
+        <legend>Crop focal point</legend>
+        <p class="hint">Use percentages from the left and top. The default center point is 50 / 50.</p>
+        <div class="focal-grid">
+          <label>
+            <span>Horizontal</span>
+            <input id="focal-x" name="focalX" type="number" min="0" max="100" step="1" value="50">
+          </label>
+          <label>
+            <span>Vertical</span>
+            <input id="focal-y" name="focalY" type="number" min="0" max="100" step="1" value="50">
+          </label>
+        </div>
+      </fieldset>
+
+      <div class="actions">
+        <button id="upload-button" type="submit" disabled>Upload and publish</button>
+        <button id="cancel-button" class="secondary" type="button" hidden>Cancel upload</button>
+      </div>
+    </form>
+
+    <section class="progress-panel" aria-labelledby="progress-title" hidden>
+      <h2 id="progress-title">Release progress</h2>
+      <progress id="progress" max="100" value="0">0%</progress>
+      <p id="progress-copy" aria-live="polite">Waiting to start.</p>
+    </section>
+
+    <section class="result" aria-live="polite" aria-atomic="true">
+      <p id="status"></p>
+      <p id="release-link" hidden><a href="#">Open the release run on GitHub</a></p>
+    </section>
+
+    <footer>
+      <p>Raw masters remain private in Cloudflare R2 and expire after 30 days. Closing this page ends local retry state; completed uploads can still be processed by their GitHub release run.</p>
+    </footer>
+  </main>
+</body>
+</html>

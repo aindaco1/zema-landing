@@ -1,5 +1,12 @@
 site_title: "ZEMA Vinyl Lounge"
 tagline: "Albuquerque's first HiFi vinyl speakeasy"
+seo:
+  title: "ZEMA Vinyl Lounge | HiFi Cocktails in Albuquerque"
+  description: "Albuquerque's first HiFi vinyl speakeasy—cocktails, records, and private events in the heart of Nob Hill."
+  social_image: "assets/media/editorial/zema-social.jpg"
+  social_image_alt: "A record spinning under magenta and blue light at ZEMA Vinyl Lounge"
+  social_focal_x: 50
+  social_focal_y: 50
 address_street: "3711 Central Ave NE"
 address_locality: "Albuquerque"
 address_region: "NM"
@@ -13,19 +20,31 @@ instagram: "https://www.instagram.com/baratzazz/"
 events_url: "https://www.hotelzazz.com/events-calendar#:~:text=Zazzy%20Events"
 logo_white: "assets/media/zema-logo-white.webp"
 logo_black: "assets/media/zema-logo-black.webp"
-intro_background: "assets/media/zema-listening-room.webp"
+
+intro:
+  background: "assets/media/editorial/zema-listening-room.webp"
+  focal_x: 50
+  focal_y: 50
+  title: "A listening room with something to say."
+  body:
+    - "ZEMA is a mood shapeshifter: a neighborhood gathering place where sound is felt, drinks are sipped with intention, and a night can turn into a memory."
+    - "Drop in, discover a record, meet Albuquerque’s artistic community, or make the lounge the setting for your next occasion."
+  inquiry_link_label: "Ask about an event"
+  events_link_label: "Upcoming events"
 
 soundtrack:
   title: "From Zema with Love"
   sources:
-    - src: "assets/media/zema-soundtrack.webm"
+    - src: "assets/media/editorial/zema-soundtrack.webm"
       type: "audio/webm; codecs=opus"
-    - src: "assets/media/zema-soundtrack.m4a"
+    - src: "assets/media/editorial/zema-soundtrack.m4a"
       type: "audio/mp4; codecs=mp4a.40.2"
 
 hero:
-  poster: "assets/media/zema-hero-poster.webp"
-  video_mp4: "assets/media/zema-scroll.mp4"
+  poster: "assets/media/editorial/zema-hero-poster.webp"
+  video_mp4: "assets/media/editorial/zema-scroll.mp4"
+  focal_x: 50
+  focal_y: 50
   beats:
     - eyebrow: "The spin"
       title_mark: "ZEMA"
@@ -42,16 +61,22 @@ hero:
       copy: "Join us for a drink or ask about bringing your next event into the lounge."
 
 gallery:
-  - image: "assets/media/zema-exterior.webp"
-    video_mp4: "assets/media/zema-gallery-arrival.mp4"
+  - image: "assets/media/editorial/zema-exterior.webp"
+    video_mp4: "assets/media/editorial/zema-gallery-arrival.mp4"
+    focal_x: 50
+    focal_y: 50
     alt: "The entrance to Hotel Zazz in Albuquerque at dusk"
     caption: "Tap the banana three times"
-  - image: "assets/media/zema-evening.webp"
-    video_mp4: "assets/media/zema-gallery-cocktails.mp4"
+  - image: "assets/media/editorial/zema-evening.webp"
+    video_mp4: "assets/media/editorial/zema-gallery-cocktails.mp4"
+    focal_x: 50
+    focal_y: 50
     alt: "Guests sharing cocktails at the ZEMA bar"
     caption: "Cocktails meet high fidelity"
-  - image: "assets/media/zema-dance.webp"
-    video_mp4: "assets/media/zema-gallery-dance.mp4"
+  - image: "assets/media/editorial/zema-dance.webp"
+    video_mp4: "assets/media/editorial/zema-gallery-dance.mp4"
+    focal_x: 50
+    focal_y: 50
     alt: "A guest dancing beneath the neon lights at ZEMA"
     caption: "A room with its own rhythm"
 
@@ -96,8 +121,10 @@ inquiry:
   title: "Put your night on the record."
   copy: "Tell us what you are planning and our team will follow up with availability and next steps."
   scrub_label: "Make the lounge yours"
-  poster: "assets/media/zema-inquiry-poster.webp"
-  video_mp4: "assets/media/zema-inquiry-scrub.mp4"
+  poster: "assets/media/editorial/zema-inquiry-poster.webp"
+  video_mp4: "assets/media/editorial/zema-inquiry-scrub.mp4"
+  focal_x: 50
+  focal_y: 50
   form_action: "https://formspree.io/f/xdaqrwyo"
 
 film:
@@ -121,5 +148,7 @@ film:
     - "Gaffer: Samuel Shorty"
     - "Makeup / Hair: Rhiannon Barela"
     - "Special Thanks: Lucy Church · Brenda Ramos · Camille Griego · Grace Walker · Anthony Ortiz · Alan de Lira Richards · Jax Maloney"
-  poster: "assets/media/zema-film-youtube-thumbnail.webp"
+  poster: "assets/media/editorial/zema-film-youtube-thumbnail.webp"
+  focal_x: 50
+  focal_y: 50
   youtube_id: "He3yv-EXuRk"

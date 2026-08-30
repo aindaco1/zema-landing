@@ -4,15 +4,29 @@
 
 **Purpose:** preserve the source ranges, delivery formats, performance rules, and validation procedure for production media
 
-**Last verified:** August 21, 2026
+**Last verified:** August 29, 2026
 
 ## Media policy
 
-The film master is owner-supplied and intentionally kept out of the repository. The site contains only web delivery derivatives, posters, official marks, the small soundtrack cut, and the decorative pointer. The complete film is hosted once on YouTube.
+Owner-supplied masters are intentionally kept out of the repository. The site contains only web delivery derivatives, posters, official marks, the soundtrack derivatives, and the decorative pointer. The complete film is hosted once on YouTube.
 
 The current scrub derivatives were generated from the owner-supplied `From Zema With Love FINAL.mp4`: 4096×2048 H.264 at `24000/1001` fps, 216.257708 seconds, SHA-256 `5c89e01021005886c49d15f3cece6270343dbc467d6ca0b16f4ee63e34a69dbd`. The source remains outside the repository.
 
 Scroll reliability comes from all-intra H.264 derivatives, controlled hydration, and coalesced seeks. The files are high-quality lossy web encodes—not lossless masters. Replacing them with lossless video would increase transfer and decode cost without improving the source experience.
+
+## Raw-master release workflow
+
+The preferred replacement path is the Access-protected ZEMA media uploader. An editor supplies the exact final cut for a declared slot; the pipeline does not choose editorial in/out points.
+
+1. The browser validates the selected file against `_admin/media-slots.json`, then uploads it in 20 MiB parts with three concurrent requests, byte progress, cancellation, and up to three per-part attempts.
+2. The Cloudflare Worker repeats slot, extension, size, focal-point, key, and multipart validation and stores the object privately below `incoming/<slot>/<job>/` in R2.
+3. After R2 completion, the Worker dispatches `media-release.yml` using a repository-scoped GitHub App. The raw object is streamed to runner-temporary storage using a separate bearer secret; it is never committed or published.
+4. The processor preflights source duration, stream, codec, and dimensions; writes only the canonical paths in `_admin/media-slots.json`; fully decodes every output; verifies all video frames are keyframes; records sizes and SHA-256 values; and updates the cache version.
+5. The workflow rejects any file outside `_config.yml`, `_data/frames.yml`, and the selected slot outputs. It rebases on current `main`, runs the complete shared release gate, and only then pushes and deploys.
+
+Video slots accept an editorially final MOV/MP4 with H.264, HEVC, or ProRes video, at most 3840×2160, 60 seconds, and 5 GB. The soundtrack slot accepts WAV, AIFF, or FLAC up to 15 minutes and 5 GB; the pipeline changes codec/bitrate but does not normalize loudness. Image slots accept JPEG, PNG, TIFF, or WebP up to 512 MB. Crop focal points are percentages from the left and top.
+
+Completed raw objects expire from R2 after 30 days; incomplete multipart uploads abort after one day. This retention is recovery time, not a permanent master archive.
 
 ## Production inventory
 
@@ -34,7 +48,7 @@ Scroll reliability comes from all-intra H.264 derivatives, controlled hydration,
 | `zema-logo-black/white.webp` | Official marks | 1200×1200 WebP | 224–225 KB | Header/footer and metadata |
 | `zema-vinyl-cursor.webp` | Derived pointer | 256×256 transparent WebP | 6 KB | Runtime pointer and audio control |
 
-Exact file paths and runtime assignments are canonical in `_data/frames.yml` and the templates. File sizes above are review aids, not configuration.
+Exact file paths and runtime assignments are canonical in `_admin/media-slots.json` and `_data/frames.yml`. Editable outputs live under `assets/media/editorial/`; protected marks, the favicon, and pointer remain outside that directory. File sizes above are review aids, not configuration.
 
 ## Video encoding contract
 
@@ -47,7 +61,7 @@ Every scrub derivative must preserve these properties:
 - No audio track; scroll media is decorative and muted.
 - Original aspect ratio remains 16:9.
 - 1440×810 only for the tested hero; 1280×720 for gallery and inquiry scrubs.
-- No file above GitHub's 100 MB hard limit; retain the current practical target below approximately 15 MB per derivative.
+- No generated file above the pipeline's 45 MiB ceiling or GitHub's 100 MB hard limit; retain the current review target below approximately 15 MB per scrub when practical.
 
 Do not substitute WebM or a long-GOP encode without full browser testing. File extension and codec must agree.
 
@@ -81,7 +95,7 @@ ffmpeg -i input.mp4 \
   -movflags +faststart OUTPUT.mp4
 ```
 
-Always review the first and last decoded frames. A technically exact timestamp can still be editorially wrong. The hero poster must be generated from the exact opening frame with the same normalized crop so delayed video hydration cannot create a visible reframe.
+Always review the first and last decoded frames. A technically exact timestamp can still be editorially wrong. The automated workflow assumes the upload already is that final cut. It converts video to constant `24000/1001` fps, all-intra H.264 and generates its poster from the exact first encoded frame, scaled to the slot's poster dimensions. This guarantees that delayed video hydration does not introduce a different composition.
 
 The current inquiry derivative uses `-crf 26.5` with the same all-intra settings to keep the final-grade encode below the practical 15 MB target. Its range ends before `212.003458`, the first credited frame in the current master; the last included source frame is the clean record at `211.961750`.
 
@@ -112,7 +126,7 @@ The HTML renders `data-src`, not `src`; JavaScript hydrates the browser-selectab
 - Do not stretch or reconstruct the official ZEMA marks.
 - Keep essential words out of imagery; all operational content belongs in HTML.
 
-Example still export:
+Example manual still export:
 
 ```sh
 ffmpeg -ss FRAME_TIME -i input.mp4 -frames:v 1 \
@@ -156,11 +170,15 @@ No output means no decode error.
 
 ### 5. Verify browser behavior
 
+For manual developer work:
+
 1. Replace the file without changing its declared role.
 2. Bump `asset_version` in `_config.yml`.
 3. Run `npm test`.
 4. Confirm forward and reverse scrubbing in a real browser.
 5. After deployment, request `Range: bytes=0-1023` and verify `206 Partial Content`.
+
+For an uploader release, the processor performs steps 1–3 and the complete automated browser gate. Still review the GitHub report, first/last editorial frames, public scrub behavior, and production range request. A successful R2 upload alone proves none of those later stages.
 
 ## Runtime loading contract
 

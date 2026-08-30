@@ -8,15 +8,21 @@
 
 ## Architecture summary
 
-ZEMA is a statically generated, single-page Jekyll site. Liquid templates render structured YAML content into semantic HTML; Jekyll compiles SCSS; one framework-free JavaScript file progressively enhances scroll media, audio, the YouTube facade, the custom pointer, and form feedback. GitHub Actions builds the site and GitHub Pages serves the output over HTTPS.
+ZEMA is a statically generated, single-page Jekyll site. Liquid templates render structured YAML content into semantic HTML; Jekyll compiles SCSS; one framework-free JavaScript file progressively enhances scroll media, audio, the YouTube facade, the custom pointer, and form feedback. GitHub Actions verifies and builds the site, and GitHub Pages serves the output over HTTPS.
 
-There is no application server, database, client-side router, package runtime, analytics SDK, or repository secret.
+The public site has no application server, database, client-side router, package runtime, or analytics SDK. A separate authenticated editorial control plane uses Pages CMS for content commits and a Cloudflare Worker/R2 uploader for private raw masters; none of that code executes for public visitors.
 
 ```mermaid
 flowchart LR
-    A["_data/frames.yml\ncontent and service URLs"] --> B["Liquid templates\nand Jekyll"]
+    CMS["Pages CMS\nGitHub-authenticated editing"] --> A["_data/frames.yml\ncontent and service URLs"]
+    U["Cloudflare Access\nprotected uploader"] --> R2["Private R2 raw master\n30-day retention"]
+    R2 --> M["Media release Action\ntranscode and verify"]
+    M --> A
+    M --> D["Editorial derivatives"]
+    A --> B["Liquid templates\nand Jekyll"]
     C["SCSS tokens and partials"] --> B
-    D["Local fonts and media"] --> B
+    D --> B
+    FONTS["Protected marks and fonts"] --> B
     B --> E["Static _site artifact"]
     E --> F["GitHub Pages CDN"]
     F --> G["Browser: semantic HTML first"]
@@ -35,6 +41,8 @@ flowchart LR
 | Styling | SCSS compiled and compressed by Jekyll | Shared tokens and primitives without a client runtime |
 | Interaction | Framework-free JavaScript | The behavior is small, page-specific, and based on native browser APIs |
 | Media | Local optimized derivatives plus local posters | Reliable scroll seeking and controlled LCP |
+| Content editing | Pages CMS over the Git repository | Owner-friendly editing without a runtime CMS or second content database |
+| Raw-media processing | Access-protected Cloudflare Worker, private R2, and GitHub Actions | Large-master upload, automatic derivatives, and test-gated publication without committing raw files |
 | Complete film | `youtube-nocookie.com` facade | Native video controls and captions without a second large local master |
 | Inquiry delivery | Formspree | Static-site-compatible delivery with native POST fallback |
 | Hosting | GitHub Pages | No server maintenance, low cost, HTTPS, and history-backed deployment |
@@ -46,8 +54,11 @@ See [the decision record](DECISIONS.md) for alternatives and tradeoffs.
 
 | Path | Responsibility |
 | --- | --- |
-| `_config.yml` | Host/base path, SEO defaults, cache version, Sass and build exclusions |
+| `_config.yml` | Host/base path, cache version, Sass and build exclusions |
 | `_data/frames.yml` | Public content model, venue facts, form endpoint, external links, film credits, and media paths |
+| `.pages.yml` | Pages CMS schema, editable fields, media boundaries, and commit behavior |
+| `_admin/media-slots.json` | Shared upload/transcode/output contract for all nine editable media slots |
+| `_admin/uploader/` | Access-aware Worker, private R2 multipart API, tests, and framework-free admin UI |
 | `index.html` | Ordered page composition and the inline intro/gallery sections |
 | `_layouts/default.html` | Document shell, skip link, global header/footer, soundtrack, pointer, and script loading |
 | `_includes/head.html` | Metadata, social cards, canonical URL, preload, and JSON-LD |
@@ -58,19 +69,37 @@ See [the decision record](DECISIONS.md) for alternatives and tradeoffs.
 | `assets/css/_layout.scss` | Header, footer, soundtrack, pointer, and global layout |
 | `assets/css/_frame.scss` | Page-section layout and responsive behavior |
 | `assets/js/main.js` | All progressive enhancement behavior |
-| `assets/media/` and `assets/fonts/` | Production media, marks, posters, pointer, and the licensed title font |
+| `assets/media/editorial/` | CMS-editable and pipeline-generated production media |
+| `assets/media/` and `assets/fonts/` | Protected marks, icon, pointer, and licensed title fonts |
 | `tests/e2e/` | Browser contracts and accessibility/SEO checks |
 | `scripts/serve-test-site.sh` | Deterministic production-mode Jekyll build and byte-range-capable local server |
 | `scripts/check-docs.js` | Dependency-free handbook presence, heading, whitespace, and relative-link validation |
-| `.github/workflows/` | Pull-request regression and GitHub Pages deployment pipelines |
+| `scripts/validate-content.js` | Content/CMS/media-manifest ownership and integrity contract |
+| `scripts/media/` | Private-source download, deterministic derivative generation, decoding, and release-scope validation |
+| `.github/actions/verify-site/` | DRY full-site verification and production-build composite action |
+| `.github/workflows/` | Pull-request regression, GitHub Pages, and atomic media-release pipelines |
 
 ## Content and rendering model
 
-`_data/frames.yml` is the only content model. Templates access it as `site.data.frames`; the same fields feed visible text, links, the form, audio sources, film metadata, and LocalBusiness structured data.
+`_data/frames.yml` is the only public content model. Templates access it as `site.data.frames`; the same fields feed visible text, links, the form, audio sources, film metadata, social metadata, and LocalBusiness structured data. Pages CMS edits that file directly through repository commits; it does not introduce another content store.
 
 This avoids a common static-site failure mode: duplicating venue facts in visible HTML, metadata, and schema. Opening hours, address, phone, and Instagram should be changed in YAML and then verified in both rendered content and JSON-LD.
 
 The page has no client-side route. The production site is served from the root of `https://zemabar.com`, so `_config.yml` uses an empty `baseurl`. Liquid's `relative_url` and `absolute_url` filters keep root-relative assets and canonical metadata aligned with that origin.
+
+Pages CMS exposes copy, public links, the YouTube ID, reorderable visitor notes/FAQs/credits/production links, and web-ready editorial media. Its schema keeps Formspree/service fields, official marks, the favicon, and pointer assets out of the editor. The content validator enforces four hero beats, three gallery movements, valid focal percentages, canonical derivative paths, and the protected service boundary before either release path can deploy.
+
+## Editorial and media control plane
+
+Content-only changes and raw-media changes share the same tested `main`/Pages destination but use different inputs:
+
+- Pages CMS commits `_data/frames.yml` and web-ready files under `assets/media/editorial/`. A normal `main` push runs the complete shared verification action before Pages deployment.
+- The protected uploader accepts an editorially final raw master for one declared slot. It uses browser-to-Worker multipart requests, stores the object below `incoming/` in private R2, and dispatches `media-release.yml` through a repository-scoped GitHub App.
+- The media Action streams the private source to runner-temporary storage, checks its declared type, duration, codec, dimensions, and size, then writes only the canonical outputs declared in `_admin/media-slots.json`.
+- Video outputs are silent all-intra H.264 and receive a WebP poster generated from their exact first encoded frame. Images are cropped from a percentage focal point. Soundtrack outputs preserve source loudness.
+- The Action validates the exact diff, rebases on current `main`, runs the same content/docs/Worker/browser/build gate as an ordinary release, and only then pushes and deploys. A failure leaves both `main` and production unchanged.
+
+Raw files never enter Git. R2 lifecycle policy expires completed raw objects after 30 days and aborts incomplete multipart uploads after one day. The admin route is protected by Cloudflare Access and independently validates the Access JWT; the source-stream route uses a separate bearer secret shared only with GitHub Actions.
 
 ## JavaScript subsystem boundaries
 
@@ -124,8 +153,11 @@ When Reduced Motion or Save-Data is active, scrub sections receive a static stat
 | Formspree | Only when the inquiry form is submitted | The fields the visitor entered |
 | YouTube privacy-enhanced domain | Only after play intent; or through the `noscript` fallback | Standard embed/player request data |
 | Hotel Zazz, Google Maps, Instagram, Dust Wave, Phantasmagoria | Only after an external link is activated | Standard outbound navigation data |
+| Pages CMS and GitHub | Only while an authorized editor changes content | GitHub identity and the repository commit |
+| Cloudflare Access, Worker, and R2 | Only while the owner uploads a raw master | Access identity, upload metadata, and private source bytes |
+| GitHub Actions | Only for repository or media releases | Release payload and temporary private-source stream |
 
-The site sets no first-party analytics cookies and contains no tracking pixel. No API key or Formspree secret belongs in the repository; the public form endpoint is intentionally public.
+The public site sets no first-party analytics cookies and contains no tracking pixel. No API key or private credential belongs in committed source; the public Formspree endpoint is intentionally public. Editorial-plane secrets live in Cloudflare Worker secrets or GitHub Actions secrets.
 
 ## Performance model and budgets
 
@@ -141,28 +173,23 @@ The site sets no first-party analytics cookies and contains no tracking pixel. N
 
 ```mermaid
 sequenceDiagram
-    participant Dev as Contributor
-    participant PR as Pull request
-    participant CI as Regression workflow
+    participant Editor as Contributor or Pages CMS
     participant Main as main branch
-    participant Pages as Pages workflow
+    participant CI as Shared verification action
     participant CDN as GitHub Pages
-    Dev->>PR: Push source and docs
-    PR->>CI: Build Jekyll and run Playwright
-    CI-->>PR: 16 browser checks pass
-    PR->>Main: Merge with history preserved
-    Main->>CI: Re-run regression suite
-    Main->>Pages: Build and upload _site artifact
-    Pages->>CDN: Deploy github-pages environment
+    Editor->>Main: Merge or content commit
+    Main->>CI: Content, docs, Worker, browser, and build checks
+    CI-->>CDN: Upload and deploy only after success
 ```
 
-The Pages and regression workflows both run on `main`; the pull-request gate is therefore the place to prevent an unverified change from deploying. Actions are pinned to commit SHAs with readable release comments. Regression uses Ruby 3.3 and Node 24.
+Pull requests run the shared verification action without deployment. Every ordinary `main` push runs the same action inside the Pages workflow and cannot upload a Pages artifact until it succeeds. Media releases perform that gate after rebasing and before both push and deployment. Actions are pinned to commit SHAs with readable release comments; CI uses Ruby 3.3 and Node 24.
 
 ## Security and maintainability practices
 
-- Minimal external runtime surface: no framework, package CDN, analytics, or custom backend.
+- Minimal public runtime surface: no framework, package CDN, analytics, or custom backend.
 - Dependencies are locked for local/CI tooling; production serves static output only.
-- GitHub Actions receive least-privilege permissions; only Pages deployment gets `pages: write` and `id-token: write`.
+- GitHub Actions receive least-privilege permissions. The ordinary gate is read-only; Pages gets deployment permissions; the media workflow alone gets `contents: write` for its tested generated commit.
+- The uploader fails closed when Access or GitHub App configuration is absent, rejects cross-origin mutations, bounds JSON metadata, validates slot/key ownership, and never logs source bytes or credentials.
 - External new-tab links use `noopener`.
 - YouTube uses a strict referrer policy and privacy-enhanced origin.
 - Form submission never logs visitor content in client code.

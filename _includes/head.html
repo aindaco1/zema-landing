@@ -1,15 +1,15 @@
 {% assign canonical_url = page.url | default: '/' | absolute_url %}
-{% assign meta_title = page.seo_title | default: site.seo_title %}
-{% assign meta_description = page.description | default: site.description %}
-{% assign social_image_url = site.social_image | absolute_url %}
+{% assign meta_title = page.seo_title | default: site.data.frames.seo.title %}
+{% assign meta_description = page.description | default: site.data.frames.seo.description %}
+{% assign social_image_url = site.data.frames.seo.social_image | absolute_url %}
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#130b17">
   <meta name="color-scheme" content="dark">
   <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
-  <meta name="application-name" content="{{ site.title | escape }}">
-  <meta name="apple-mobile-web-app-title" content="{{ site.title | escape }}">
+  <meta name="application-name" content="{{ site.data.frames.site_title | escape }}">
+  <meta name="apple-mobile-web-app-title" content="{{ site.data.frames.site_title | escape }}">
 
   <title>{{ meta_title | escape }}</title>
   <meta name="description" content="{{ meta_description | escape }}">
@@ -20,7 +20,7 @@
   <meta property="og:title" content="{{ meta_title | escape }}">
   <meta property="og:description" content="{{ meta_description | escape }}">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="{{ site.title | escape }}">
+  <meta property="og:site_name" content="{{ site.data.frames.site_title | escape }}">
   <meta property="og:locale" content="{{ site.locale }}">
   <meta property="og:url" content="{{ canonical_url }}">
   <meta property="og:image" content="{{ social_image_url }}">
@@ -28,13 +28,13 @@
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="{{ site.social_image_alt | escape }}">
+  <meta property="og:image:alt" content="{{ site.data.frames.seo.social_image_alt | escape }}">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{{ meta_title | escape }}">
   <meta name="twitter:description" content="{{ meta_description | escape }}">
   <meta name="twitter:image" content="{{ social_image_url }}">
-  <meta name="twitter:image:alt" content="{{ site.social_image_alt | escape }}">
+  <meta name="twitter:image:alt" content="{{ site.data.frames.seo.social_image_alt | escape }}">
 
   <link rel="preload" as="image" href="{{ site.data.frames.hero.poster | relative_url }}?v={{ site.asset_version }}" fetchpriority="high">
   <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}?v={{ site.asset_version }}">
@@ -47,7 +47,7 @@
         "@type": "WebSite",
         "@id": "{{ canonical_url }}#website",
         "url": "{{ canonical_url }}",
-        "name": {{ site.title | jsonify }},
+        "name": {{ site.data.frames.site_title | jsonify }},
         "description": {{ meta_description | jsonify }},
         "inLanguage": {{ site.lang | jsonify }},
         "publisher": {"@id": "{{ canonical_url }}#business"}
@@ -66,13 +66,13 @@
           "url": "{{ social_image_url }}",
           "width": 1200,
           "height": 630,
-          "caption": {{ site.social_image_alt | jsonify }}
+          "caption": {{ site.data.frames.seo.social_image_alt | jsonify }}
         }
       },
       {
         "@type": "BarOrPub",
         "@id": "{{ canonical_url }}#business",
-        "name": {{ site.title | jsonify }},
+        "name": {{ site.data.frames.site_title | jsonify }},
         "description": {{ meta_description | jsonify }},
         "url": "{{ canonical_url }}",
         "telephone": {{ site.data.frames.phone_href | jsonify }},

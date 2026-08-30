@@ -25,7 +25,9 @@ Do not infer that a new visual request authorizes a new framework, backend, anal
 - Semantic section templates: `index.html`, `_layouts/`, `_includes/`.
 - Design system: `assets/css/_theme70s.scss`; component layout in the other SCSS partials.
 - All enhanced behavior: `assets/js/main.js`.
-- Production media: `assets/media/`; master film remains outside the repository.
+- Editable production media: `assets/media/editorial/`; protected marks/icon/pointer remain in `assets/media/`; raw masters remain outside Git.
+- Editorial schema: `.pages.yml`; shared raw-media contract: `_admin/media-slots.json`.
+- Protected upload plane: `_admin/uploader/`; deterministic processing: `scripts/media/` and `media-release.yml`.
 - Browser contracts: `tests/e2e/`.
 - Canonical production URL: `https://zemabar.com/`.
 
@@ -42,7 +44,7 @@ Do not infer that a new visual request authorizes a new framework, backend, anal
 - Header remains opaque black with cream foreground content across every section.
 - Three equal footer tracks, including mobile; 320 px minimum with no horizontal overflow.
 - Fonts, colors, and layout roles follow `docs/BRAND_GUIDE.md`.
-- No analytics, tracking pixel, secret, custom backend, or runtime framework by default.
+- No public analytics, tracking pixel, secret, custom backend, or runtime framework by default. The approved owner-only uploader remains isolated from the public site and fails closed behind Cloudflare Access.
 - Preserve Git history.
 
 ## Change routing
@@ -50,6 +52,8 @@ Do not infer that a new visual request authorizes a new framework, backend, anal
 | Request type | Start with | Also inspect | Required validation |
 | --- | --- | --- | --- |
 | Venue fact, CTA, credit, link | `_data/frames.yml` | head/schema templates and relevant test expectations | SEO + full regression |
+| Pages CMS field or media ownership | `.pages.yml` | `_data/frames.yml`, protected service/brand fields, content validator | Content contract + full regression |
+| Raw upload slot or derivative | `_admin/media-slots.json` | Worker, media scripts, workflow, media/operations guides | Worker + temp transcode + full regression |
 | Page order or semantic markup | `index.html` / `_includes/` | heading/landmark tests and experience guide | Accessibility + full regression |
 | Color, typography, spacing | `_theme70s.scss` | brand guide and typography tests | Full regression + visual review |
 | Header/footer/responsive layout | `_layout.scss` | responsive matrix and footer assertions | Full regression |
@@ -71,6 +75,7 @@ Do not infer that a new visual request authorizes a new framework, backend, anal
 - Extend existing `data-*` behavior APIs instead of introducing parallel selectors.
 - Add a breakpoint only when content pressure cannot be solved by fluid tokens/grid behavior.
 - Link documentation to canonical values rather than copying values into multiple pages.
+- Add a media role once in `_admin/media-slots.json`; the Worker UI and processor both consume that contract.
 
 ### Preserve progressive enhancement
 
@@ -107,12 +112,16 @@ Do not remove assertions to make a visual change pass. If the requested outcome 
 8. Report changed files, tests, known manual checks, and any owner decision still required.
 9. Commit/push/deploy only when the user request authorizes it.
 
+For an uploader release, keep upload, GitHub generation, commit, CI, Pages deployment, and public acceptance as separate claims. Never bypass the media workflow by committing a raw master or partially generated output.
+
 ## Commands
 
 ```sh
 bundle check
 JEKYLL_ENV=production bundle exec jekyll build
 npm run test:docs
+npm run test:content
+npm run test:uploader
 npm test
 npm run test:accessibility
 npm run test:seo
@@ -135,6 +144,8 @@ Use `rg`/`rg --files` for repository searches. Edit source files with patch-base
 - Venue facts duplicated in schema drift from visible copy.
 - A plain Ruby test server cannot see Bundler-installed WEBrick; keep `bundle exec ruby`.
 - Pinned Actions built on deprecated Node runtimes create warnings even if the job installs a newer Node for application steps; verify the action runtime itself.
+- Allowing Vitest to discover Playwright files imports incompatible Node modules into the Workers runtime; keep uploader test inclusion scoped to `_admin/uploader/test/`.
+- FFmpeg builds do not all include a WebP encoder; the media workflow owns `cwebp` explicitly.
 
 ## Stop and ask the owner when
 

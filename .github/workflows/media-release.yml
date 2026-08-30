@@ -1,0 +1,124 @@
+name: Process and publish media
+
+on:
+  workflow_dispatch:
+    inputs:
+      payload:
+        description: Validated uploader payload as JSON
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: media-release
+  cancel-in-progress: false
+
+jobs:
+  process-verify-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    outputs:
+      release_sha: ${{ steps.release.outputs.sha }}
+    env:
+      MEDIA_RELEASE_PAYLOAD: ${{ inputs.payload }}
+      MEDIA_UPLOADER_URL: ${{ vars.MEDIA_UPLOADER_URL }}
+      MEDIA_SOURCE_TOKEN: ${{ secrets.MEDIA_SOURCE_TOKEN }}
+      MEDIA_RELEASE_REPORT: ${{ runner.temp }}/zema-media-release.json
+    steps:
+      - name: Check out main with release history
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Node.js for the media processor
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "24"
+          cache: npm
+
+      - name: Install JavaScript dependencies
+        run: npm ci
+
+      - name: Install deterministic image encoder
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes webp
+
+      - name: Verify media encoders
+        run: |
+          ffmpeg -version
+          ffmpeg -hide_banner -encoders | grep -E 'libx264|libopus|aac'
+          cwebp -version
+
+      - name: Download private raw source
+        run: node scripts/media/download-source.js "$RUNNER_TEMP/zema-raw-source"
+
+      - name: Generate deterministic web derivatives
+        run: node scripts/media/process-upload.js "$RUNNER_TEMP/zema-raw-source"
+
+      - name: Validate generated content and release scope
+        run: |
+          npm run test:content
+          node scripts/media/verify-release-diff.js
+          git diff --check
+
+      - name: Commit generated release locally
+        run: |
+          slot=$(node -e 'const p=JSON.parse(process.env.MEDIA_RELEASE_PAYLOAD); process.stdout.write(p.slotId)')
+          git config user.name "ZEMA Media Release"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add _config.yml _data/frames.yml assets/media/editorial
+          git commit -m "media: publish ${slot}"
+
+      - name: Rebase onto current main
+        run: |
+          git fetch origin main
+          git rebase origin/main
+
+      - name: Verify rebased release and build production artifact
+        uses: ./.github/actions/verify-site
+
+      - name: Push tested release
+        id: release
+        run: |
+          git push origin HEAD:main
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5.0.0
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: _site
+
+      - name: Upload media release report
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: media-release-report
+          path: |
+            ${{ runner.temp }}/zema-media-release.json
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
+          retention-days: 30
+
+  deploy:
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: process-verify-build
+    steps:
+      - name: Deploy tested media release to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0

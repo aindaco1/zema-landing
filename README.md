@@ -9,6 +9,8 @@ Live production site: [https://zemabar.com/](https://zemabar.com/)
 - Jekyll, Liquid/HTML, compressed SCSS, and framework-free JavaScript.
 - Static deployment to GitHub Pages through pinned GitHub Actions.
 - Structured public content in `_data/frames.yml`.
+- Pages CMS editing backed by Git commits, with service and brand fields protected.
+- Access-protected raw-master upload to private R2 with automatic test-gated media releases.
 - Local all-intra H.264 derivatives for scroll scrubbing; local WebP fallbacks.
 - Privacy-enhanced, intent-loaded YouTube player for the complete film.
 - Formspree inquiry delivery with native no-JavaScript POST fallback.
@@ -38,7 +40,7 @@ npm run test:accessibility
 npm run test:seo
 ```
 
-The complete browser suite builds and serves the site at its production root path and runs 15 production-oriented checks. See [Quality assurance](docs/QUALITY_ASSURANCE.md) for test coverage, the responsive matrix, manual release checks, and diagnosis.
+The complete gate validates content/CMS ownership, type-checks and tests the uploader Worker, builds and serves the site at its production root path, and runs 16 browser checks. See [Quality assurance](docs/QUALITY_ASSURANCE.md) for test coverage, the responsive matrix, manual release checks, and diagnosis.
 
 ## Documentation
 
@@ -64,7 +66,9 @@ The [project handbook](docs/README.md) is the documentation entry point for huma
 | Concern | Source |
 | --- | --- |
 | Public copy, venue facts, credits, form endpoint, links, and media paths | `_data/frames.yml` |
-| Site URL, SEO defaults, asset cache version, and Jekyll settings | `_config.yml` |
+| CMS editor fields and protected ownership boundary | `.pages.yml` |
+| Raw-media slots, limits, and canonical outputs | `_admin/media-slots.json` |
+| Site URL, asset cache version, and Jekyll settings | `_config.yml` |
 | Semantic composition | `index.html`, `_layouts/`, `_includes/` |
 | Design implementation | `assets/css/` |
 | Enhanced interaction | `assets/js/main.js` |
@@ -75,6 +79,6 @@ Confirm changing hours and operational policies with the venue before public lau
 
 ## Deployment
 
-Pull requests run the regression workflow. Pushes to `main` run regression again and deploy the Jekyll artifact to GitHub Pages.
+Pull requests run the shared release gate. Ordinary pushes to `main` rerun that gate before deploying the Jekyll artifact to GitHub Pages. Protected raw-media uploads use a separate Action that generates, rebases, tests, commits, and deploys only after every check passes.
 
 The canonical production domain is `zemabar.com`. Follow [the custom-domain runbook](docs/OPERATIONS.md#custom-domain-migration) when validating or changing configuration, canonical URLs, crawl files, Formspree restrictions, tests, or DNS.

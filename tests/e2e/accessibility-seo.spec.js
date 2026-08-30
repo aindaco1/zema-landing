@@ -200,7 +200,7 @@ test("public metadata, structured data, and crawl files stay coherent", async ({
   expect(metadata.ogDescription).toBe(metadata.description);
   expect(metadata.ogSiteName).toBe("ZEMA Vinyl Lounge");
   expect(metadata.ogLocale).toBe("en_US");
-  expect(metadata.ogImage).toBe("https://zemabar.com/assets/media/zema-social.jpg");
+  expect(metadata.ogImage).toBe("https://zemabar.com/assets/media/editorial/zema-social.jpg");
   expect(metadata.ogImageAlt).not.toBe("");
   expect(metadata.ogImageWidth).toBe("1200");
   expect(metadata.ogImageHeight).toBe("630");
@@ -227,7 +227,7 @@ test("public metadata, structured data, and crawl files stay coherent", async ({
   const [robotsResponse, sitemapResponse, socialImageResponse] = await Promise.all([
     request.get("/robots.txt"),
     request.get("/sitemap.xml"),
-    request.get("/assets/media/zema-social.jpg")
+    request.get("/assets/media/editorial/zema-social.jpg")
   ]);
   expect(robotsResponse.status()).toBe(200);
   expect(await robotsResponse.text()).toContain("Sitemap: https://zemabar.com/sitemap.xml");

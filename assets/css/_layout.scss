@@ -207,6 +207,7 @@
 
 .intro__background {
   @extend %cover-media;
+  object-position: var(--media-focal-x, 50%) var(--media-focal-y, 50%);
   z-index: 0;
   height: 100%;
   opacity: 0.72;

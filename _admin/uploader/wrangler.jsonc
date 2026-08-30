@@ -1,0 +1,33 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "zema-media-uploader",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-29",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  },
+  "r2_buckets": [
+    {
+      "binding": "MEDIA_BUCKET",
+      "bucket_name": "zema-media-masters"
+    }
+  ],
+  "vars": {
+    "TEAM_DOMAIN": "https://REPLACE.cloudflareaccess.com",
+    "POLICY_AUD": "REPLACE_WITH_ACCESS_AUD",
+    "GITHUB_OWNER": "aindaco1",
+    "GITHUB_REPO": "zema-landing",
+    "GITHUB_REF": "main",
+    "GITHUB_WORKFLOW": "media-release.yml",
+    "GITHUB_APP_CLIENT_ID": "REPLACE_WITH_GITHUB_APP_CLIENT_ID",
+    "GITHUB_APP_INSTALLATION_ID": "REPLACE_WITH_GITHUB_APP_INSTALLATION_ID"
+  },
+  "observability": {
+    "enabled": true,
+    "logs": { "head_sampling_rate": 1 },
+    "traces": { "enabled": true, "head_sampling_rate": 0.05 }
+  }
+}

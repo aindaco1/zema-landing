@@ -17,8 +17,11 @@
 | Formspree form | `xdaqrwyo` in `Zema Vinyl Lounge Website` |
 | Complete film | YouTube `He3yv-EXuRk` via `youtube-nocookie.com` |
 | Events source | Hotel Zazz events calendar, targeted to “Zazzy Events” |
+| Content editor | [Pages CMS app](https://app.pagescms.org/), configured by `.pages.yml` |
+| Raw-master storage | Private Cloudflare R2 bucket `zema-media-masters` |
+| Media release | Access-protected `zema-media-uploader` Worker → `media-release.yml` |
 
-No production secret is stored in the repository.
+No production secret is stored in committed source. The media control plane uses Cloudflare Worker secrets plus one matching GitHub Actions secret.
 
 ## Local setup
 
@@ -62,15 +65,15 @@ Never rewrite project history to “reset” a design. Earlier prototypes are pa
 
 ## Common maintenance tasks
 
-### Change copy, hours, links, phone, address, credits, or form endpoint
+### Change copy, hours, links, phone, address, or credits
 
-1. Edit `_data/frames.yml`.
-2. If the public URL/SEO defaults change, edit `_config.yml` too.
-3. Run `npm run test:seo` and `npm test`.
-4. Inspect visible content and JSON-LD.
-5. Confirm time-sensitive facts with the venue.
+1. Sign into the [Pages CMS app](https://app.pagescms.org/) with the GitHub account authorized for `aindaco1/zema-landing`, then open **ZEMA site content**.
+2. Edit and save. Pages CMS commits `_data/frames.yml` directly; it does not maintain a second copy of the content.
+3. Watch the Pages workflow. Its content, documentation, Worker, browser, and build checks must pass before deployment.
+4. Inspect visible content and JSON-LD on production.
+5. Confirm time-sensitive facts with the venue before saving them.
 
-Do not hard-code a second copy in a template or script.
+Developers can still edit `_data/frames.yml` directly and use the normal pull-request flow. Do not hard-code a second copy in a template or script. Formspree/service fields and official brand assets are intentionally absent from Pages CMS; change them through reviewed source work.
 
 ### Change CSS, JavaScript, scrub media, soundtrack, pointer, or inquiry poster
 
@@ -81,9 +84,19 @@ Do not hard-code a second copy in a template or script.
 
 The version currently covers CSS, JavaScript, scrub media, soundtrack sources, the pointer, hero poster, and inquiry poster. For an unversioned logo, gallery poster, film poster, icon, or social image replacement, prefer a new filename or explicitly verify cache invalidation.
 
-### Replace media
+### Replace a web-ready editorial asset
 
-Follow [Media pipeline](MEDIA_PIPELINE.md). Preserve dimensions, codec/keyframe behavior, editorial boundaries, and file budgets. Decode the complete file before browser testing.
+Pages CMS may upload already optimized images, MP4, WebM, or M4A files inside `assets/media/editorial/`. Use a new safe filename so caches cannot retain a same-name replacement, update the corresponding field, and wait for the full Pages release gate. Do not upload raw masters or ordinary long-GOP video through this path.
+
+### Replace media from a raw master
+
+1. Open the Access-protected ZEMA media uploader and authenticate with the allowed Cloudflare Access identity.
+2. Choose the semantic site slot. For images/video, set the crop focal point as percentages from the left and top; `50 / 50` is centered.
+3. Select the editorially final source and choose **Upload and publish**. Video accepts MOV/MP4 H.264, HEVC, or ProRes up to 4K, 60 seconds, and 5 GB. Audio accepts WAV/AIFF/FLAC up to 15 minutes. Images accept JPEG/PNG/TIFF/WebP.
+4. Keep the page open for browser upload progress, retry, or cancellation. Upload state is intentionally not resumed after the browser closes.
+5. Open the linked GitHub run. It downloads the private object, transcodes canonical derivatives, validates the exact diff, rebases on current `main`, runs the complete release gate, commits, and deploys automatically.
+
+Raw upload success is not production success. Production remains unchanged unless the GitHub run passes and the Pages deployment completes. Follow [Media pipeline](MEDIA_PIPELINE.md) for the derivative contract and editorial review.
 
 ### Change design tokens or responsive behavior
 
@@ -99,17 +112,17 @@ Start in `assets/css/_theme70s.scss`; reuse `%page-gutters`, `%utility-label`, a
 
 ## Deployment
 
-`.github/workflows/pages.yml` runs on every `main` push and manual dispatch:
+`.github/workflows/pages.yml` runs on every ordinary `main` push and manual dispatch:
 
 1. check out the exact commit;
-2. configure Pages paths;
-3. build Jekyll into `_site`;
-4. upload the Pages artifact;
+2. run the shared content, documentation, Worker, browser, and production-build verification;
+3. configure Pages paths;
+4. upload the verified `_site` artifact;
 5. deploy to the protected `github-pages` environment.
 
 Official Actions are pinned to immutable commit SHAs with release comments. Update both when refreshing an action. Confirm the selected release uses Node 24 or newer to avoid deprecated-runtime annotations.
 
-The regression workflow independently re-runs the 16 browser tests on `main`. The deploy and regression workflows can run concurrently, so the pull-request test is the release gate.
+The regression workflow runs the same shared gate on pull requests. `media-release.yml` uses that gate after generating and rebasing a media commit and before pushing or deploying it. A failed ordinary or media verification never uploads a Pages artifact.
 
 ### Post-deploy smoke test
 
@@ -119,7 +132,7 @@ curl --fail --location --output /dev/null --write-out '%{http_code}\n' \
 
 curl --fail --location --range 0-1023 --output /dev/null \
   --write-out '%{http_code} %{size_download}\n' \
-  https://zemabar.com/assets/media/zema-scroll.mp4
+  https://zemabar.com/assets/media/editorial/zema-scroll.mp4
 ```
 
 Expected responses are `200` and `206 1024`.
@@ -148,6 +161,8 @@ git push origin main
 
 Watch both workflows and repeat the smoke test. If the bad deployment involves an external service or venue fact, correct that source as well; a code rollback cannot reverse changes made in Formspree, YouTube, or Hotel Zazz.
 
+For a generated media release, revert its single `media: publish …` commit. The raw source remains private in R2 until lifecycle expiry, so a corrected replacement can be re-uploaded without restoring the old derivative by hand.
+
 ## Custom domain migration
 
 The canonical production origin is `https://zemabar.com/`, served from the root with an empty Jekyll `baseurl`. GoDaddy is authoritative for DNS; the apex publishes GitHub Pages A records and `www` is a CNAME to `aindaco1.github.io`. The repository uses a custom Actions workflow, so a source-tree `CNAME` file is ignored and not required.
@@ -171,6 +186,37 @@ For any future domain change:
 Do not point DNS at GitHub Pages before the domain is verified and assigned to the repository.
 
 ## External-service runbooks
+
+### Pages CMS
+
+- `.pages.yml` is the schema and editable-boundary source. Keep `settings.content.merge: true` so unmanaged service fields survive CMS saves.
+- The CMS edits only `_data/frames.yml` and `assets/media/editorial/`; it cannot delete the content file or edit Formspree, logos, favicon, or pointer assets.
+- Four hero beats and three gallery movements are fixed structural counts. Visitor notes, FAQs, credits, and production links remain reorderable.
+- A Pages CMS save is a Git commit, not a live database mutation. Confirm the resulting commit, Pages run, and deployed public page separately.
+
+### Cloudflare media uploader
+
+The canonical slot/output contract is `_admin/media-slots.json`; the Worker UI and GitHub processor both consume it. Do not duplicate slot limits in Worker code.
+
+Production Cloudflare configuration:
+
+- R2 bucket: `zema-media-masters`, private, with prefix `incoming/` expiring after 30 days and incomplete multipart uploads aborting after one day.
+- Access application: exact uploader admin path, one authorized owner identity, with its team-domain issuer and application AUD in `_admin/uploader/wrangler.jsonc`.
+- Worker secrets: `GITHUB_APP_PRIVATE_KEY` in unencrypted PKCS#8 PEM form and `MEDIA_SOURCE_TOKEN`. Never commit `.dev.vars` or a PEM file.
+- GitHub App: installed only on `aindaco1/zema-landing`, with repository Actions write permission and metadata read permission. Store its client ID and installation ID as non-secret Worker variables.
+- GitHub repository Actions secret: `MEDIA_SOURCE_TOKEN`, identical to the Worker secret. Repository variable: `MEDIA_UPLOADER_URL`, the deployed Worker HTTPS origin.
+
+The GitHub-generated private key may need conversion before `wrangler secret put`:
+
+```sh
+openssl pkcs8 -topk8 -nocrypt -in github-app-key.pem -out github-app-key-pkcs8.pem
+npx wrangler secret put GITHUB_APP_PRIVATE_KEY --cwd _admin/uploader
+npx wrangler secret put MEDIA_SOURCE_TOKEN --cwd _admin/uploader
+npx wrangler deploy --cwd _admin/uploader
+npx wrangler r2 bucket lifecycle list zema-media-masters
+```
+
+Pass secret values through the interactive prompts; do not place them in shell history. Remove the downloaded/generated PEM files after the Worker secret is confirmed. The `/admin/` API validates Cloudflare's Access JWT in addition to the edge policy. `/pipeline/source` is not an admin route and requires the independent bearer token used by the GitHub runner.
 
 ### Formspree
 
@@ -211,6 +257,20 @@ Open `/`, not `/zema-landing/`. Check that templates use `relative_url`, `_confi
 - Confirm the video has the expected duration and an `is-ready` state.
 - Check whether a stale asset version is mixing old HTML/JS/media.
 - Do not add arbitrary scroll delays; inspect the latest-target seek controller and hydration path.
+
+### Raw upload completes but no release starts
+
+- Inspect the Worker log for a GitHub App configuration/authentication error; do not log the private key or bearer token.
+- Confirm the App is still installed only on the repository and can write Actions.
+- Confirm `media-release.yml` exists on `main` and GitHub Actions is enabled.
+- A completed R2 object is safe to leave in place while diagnosing; lifecycle policy will remove it after 30 days.
+
+### Media release fails
+
+- Download the 30-day `media-release-report` artifact and inspect the first source/encode/decode/content/browser failure.
+- Confirm runner FFmpeg exposes `libx264`, `libopus`, and `aac`, and that `cwebp` was installed.
+- Do not manually push partially generated derivatives. Correct the source or pipeline and start a new upload.
+- If the run fails after rebasing, production is unchanged; inspect current `main` for a concurrent content change before retrying.
 
 ### YouTube loads too early
 

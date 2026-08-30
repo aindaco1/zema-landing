@@ -1,6 +1,6 @@
 <section class="scrub-story" id="top" data-scrub-story aria-label="An introduction to ZEMA Vinyl Lounge">
   <div class="scrub-story__sticky">
-    <div class="scrub-story__media" aria-hidden="true">
+    <div class="scrub-story__media" aria-hidden="true" style="--media-focal-x: {{ include.hero.focal_x }}%; --media-focal-y: {{ include.hero.focal_y }}%;">
       <img src="{{ include.hero.poster | relative_url }}?v={{ site.asset_version }}" alt="" width="1920" height="1080" fetchpriority="high">
       <video muted playsinline preload="none" tabindex="-1" data-scrub-video data-src="{{ include.hero.video_mp4 | relative_url }}?v={{ site.asset_version }}"></video>
     </div>

@@ -197,6 +197,37 @@ These are lightweight architecture decision records. A decision is “accepted�
 - GoDaddy remains the authoritative DNS provider while GitHub Pages provides hosting and certificates.
 - Domain ownership verification, HTTPS enforcement, Formspree restrictions, and post-deploy checks remain release responsibilities.
 
+## D-014 — Repository-backed Pages CMS editing
+
+**Status:** Accepted
+
+**Decision:** Use Pages CMS as an editing interface over `_data/frames.yml` and `assets/media/editorial/`, without adding a second content database.
+
+**Why:** The owner wants future non-code content and web-ready media changes to remain possible while preserving Git history, Jekyll rendering, and one public-content source.
+
+**Consequences:**
+
+- `.pages.yml` defines the editor schema, fixed structural counts, and media boundary.
+- Formspree/service fields, official marks, the favicon, and the pointer remain outside CMS ownership.
+- CMS saves are ordinary Git commits and must pass the same Pages release gate as developer changes.
+- Four hero beats and three gallery movements remain fixed; notes, FAQs, credits, and production links remain reorderable.
+
+## D-015 — Private raw masters and atomic generated-media releases
+
+**Status:** Accepted
+
+**Decision:** Upload exact editorial masters through a Cloudflare Access-protected Worker to private R2, and use a repository-scoped GitHub App plus GitHub Actions to generate, test, commit, and deploy canonical derivatives.
+
+**Why:** Large ProRes/HEVC, lossless audio, and image masters need automatic web conversion without entering Git or granting the browser a long-lived personal token. Production must not change when transcoding or regression checks fail.
+
+**Consequences:**
+
+- `_admin/media-slots.json` is the single contract for the Worker UI, source validation, focal points, canonical outputs, and processor settings.
+- Raw objects under `incoming/` expire after 30 days; incomplete multipart uploads abort after one day.
+- Video posters are generated from the exact first encoded frame; audio loudness is preserved; every video output is fully decoded and proven all-intra.
+- `media-release.yml` permits only the selected slot outputs plus content/cache metadata, rebases before verification, and pushes/deploys only after the full shared gate passes.
+- Access, GitHub App, and source-stream credentials remain outside the repository. Upload completion, generated commit, workflow success, Pages deployment, and public acceptance are separate evidence states.
+
 ## Adding a decision
 
 Use this shape:

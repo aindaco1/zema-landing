@@ -1,5 +1,5 @@
 <section class="inquiry" id="inquire" data-inquiry-scrub aria-labelledby="inquiry-title">
-  <div class="inquiry__scrub" aria-hidden="true">
+  <div class="inquiry__scrub" aria-hidden="true" style="--media-focal-x: {{ include.inquiry.focal_x }}%; --media-focal-y: {{ include.inquiry.focal_y }}%;">
     <img src="{{ include.inquiry.poster | relative_url }}?v={{ site.asset_version }}" alt="" width="1920" height="1080" loading="lazy">
     <video muted playsinline preload="none" tabindex="-1" data-inquiry-video data-src="{{ include.inquiry.video_mp4 | relative_url }}?v={{ site.asset_version }}"></video>
     <span>{{ include.inquiry.scrub_label }}</span>

@@ -16,6 +16,8 @@ test-results/
 
 # macOS
 .DS_Store
+.dev.vars
+.wrangler/
 .AppleDouble
 .LSOverride
 ._*

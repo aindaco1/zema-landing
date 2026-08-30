@@ -1,0 +1,514 @@
+settings:
+  hide: true
+  content:
+    merge: true
+  commit:
+    identity: user
+    templates:
+      update: "content: update ZEMA site via Pages CMS"
+
+media:
+  - name: editorial-images
+    label: Editorial images
+    input: assets/media/editorial
+    output: /assets/media/editorial
+    extensions: [webp, jpg, jpeg, png]
+    categories: [image]
+    rename: safe
+    commit:
+      templates:
+        create: "media: add {filename} via Pages CMS"
+        update: "media: update {filename} via Pages CMS"
+        delete: "media: remove {filename} via Pages CMS"
+        rename: "media: rename {oldFilename} to {newFilename} via Pages CMS"
+  - name: editorial-video
+    label: Web-ready video
+    input: assets/media/editorial
+    output: /assets/media/editorial
+    extensions: [mp4]
+    categories: [video]
+    rename: safe
+  - name: editorial-audio
+    label: Web-ready audio
+    input: assets/media/editorial
+    output: /assets/media/editorial
+    extensions: [webm, m4a]
+    categories: [audio]
+    rename: safe
+
+components:
+  focal-point:
+    type: object
+    label: Image focal point
+    fields:
+      - name: x
+        label: Horizontal focal point
+        type: number
+        required: true
+        default: 50
+        options:
+          min: 0
+          max: 100
+          step: 1
+      - name: y
+        label: Vertical focal point
+        type: number
+        required: true
+        default: 50
+        options:
+          min: 0
+          max: 100
+          step: 1
+
+content:
+  - name: site-content
+    label: ZEMA site content
+    type: file
+    path: _data/frames.yml
+    format: yaml
+    operations:
+      create: false
+      rename: false
+      delete: false
+    fields:
+      - name: site_title
+        label: Venue name
+        type: string
+        required: true
+      - name: tagline
+        label: Venue tagline
+        type: string
+        required: true
+
+      - name: seo
+        label: Search and sharing
+        type: object
+        required: true
+        fields:
+          - name: title
+            label: Search title
+            type: string
+            required: true
+            options:
+              maxlength: 70
+          - name: description
+            label: Search description
+            type: text
+            required: true
+            options:
+              maxlength: 170
+          - name: social_image
+            label: Social card image
+            type: image
+            required: true
+            options:
+              media: editorial-images
+              extensions: [jpg, jpeg, webp, png]
+          - name: social_image_alt
+            label: Social card description
+            type: string
+            required: true
+          - name: social_focal_x
+            label: Social image horizontal focal point
+            type: number
+            required: true
+            options: { min: 0, max: 100, step: 1 }
+          - name: social_focal_y
+            label: Social image vertical focal point
+            type: number
+            required: true
+            options: { min: 0, max: 100, step: 1 }
+
+      - name: address_street
+        label: Street address
+        type: string
+        required: true
+      - name: address_locality
+        label: City
+        type: string
+        required: true
+      - name: address_region
+        label: State
+        type: string
+        required: true
+      - name: address_postal_code
+        label: ZIP code
+        type: string
+        required: true
+      - name: address_country
+        label: Country code
+        type: string
+        required: true
+        pattern:
+          regex: "^[A-Z]{2}$"
+          message: "Use a two-letter country code such as US."
+      - name: phone_display
+        label: Phone number as displayed
+        type: string
+        required: true
+      - name: phone_href
+        label: Phone number for links
+        type: string
+        required: true
+        pattern:
+          regex: "^\\+[1-9][0-9]{7,14}$"
+          message: "Use international format, for example +15053532455."
+      - name: instagram
+        label: Instagram URL
+        type: string
+        required: true
+        pattern: "^https://"
+      - name: events_url
+        label: Events calendar URL
+        type: string
+        required: true
+        pattern: "^https://"
+
+      - name: intro
+        label: Venue introduction
+        type: object
+        required: true
+        fields:
+          - name: background
+            label: Background image
+            type: image
+            required: true
+            options:
+              media: editorial-images
+          - name: focal_x
+            label: Horizontal focal point
+            type: number
+            required: true
+            options: { min: 0, max: 100, step: 1 }
+          - name: focal_y
+            label: Vertical focal point
+            type: number
+            required: true
+            options: { min: 0, max: 100, step: 1 }
+          - name: title
+            label: Heading
+            type: string
+            required: true
+          - name: body
+            label: Paragraphs
+            type: text
+            required: true
+            list:
+              min: 1
+          - name: inquiry_link_label
+            label: Inquiry link label
+            type: string
+            required: true
+          - name: events_link_label
+            label: Events link label
+            type: string
+            required: true
+
+      - name: soundtrack
+        label: Site soundtrack
+        type: object
+        required: true
+        fields:
+          - name: title
+            label: Soundtrack title
+            type: string
+            required: true
+          - name: sources
+            label: Browser sources
+            type: object
+            list:
+              min: 2
+              max: 2
+              collapsible:
+                collapsed: true
+                summary: "{type}"
+            fields:
+              - name: src
+                label: Audio file
+                type: file
+                required: true
+                options:
+                  media: editorial-audio
+                  extensions: [webm, m4a]
+              - name: type
+                label: Browser MIME type
+                type: string
+                required: true
+                readonly: true
+
+      - name: hero
+        label: Opening turntable hero
+        type: object
+        required: true
+        fields:
+          - name: poster
+            label: Opening poster
+            type: image
+            required: true
+            description: "Use the protected uploader to regenerate this from the exact first video frame."
+            options:
+              media: editorial-images
+          - name: video_mp4
+            label: Scroll video
+            type: file
+            required: true
+            description: "Upload web-ready MP4 here, or use the protected raw-media uploader for automatic transcoding."
+            options:
+              media: editorial-video
+              extensions: [mp4]
+          - name: focal_x
+            label: Horizontal focal point
+            type: number
+            required: true
+            options: { min: 0, max: 100, step: 1 }
+          - name: focal_y
+            label: Vertical focal point
+            type: number
+            required: true
+            options: { min: 0, max: 100, step: 1 }
+          - name: beats
+            label: Narrative beats
+            type: object
+            list:
+              min: 4
+              max: 4
+              collapsible:
+                collapsed: true
+                summary: "{eyebrow}: {title}"
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+                required: true
+              - name: title_mark
+                label: Licensed ZEMA title mark
+                type: string
+                description: "Only the first beat uses the branded display mark."
+              - name: title
+                label: Heading
+                type: string
+                required: true
+              - name: copy
+                label: Supporting copy
+                type: text
+                required: true
+
+      - name: gallery
+        label: Three gallery movements
+        type: object
+        list:
+          min: 3
+          max: 3
+          collapsible:
+            collapsed: true
+            summary: "{caption}"
+        fields:
+          - name: image
+            label: Opening poster
+            type: image
+            required: true
+            description: "Use the protected uploader to regenerate this from the exact first video frame."
+            options:
+              media: editorial-images
+          - name: video_mp4
+            label: Scroll video
+            type: file
+            required: true
+            options:
+              media: editorial-video
+              extensions: [mp4]
+          - name: focal_x
+            label: Horizontal focal point
+            type: number
+            required: true
+            options: { min: 0, max: 100, step: 1 }
+          - name: focal_y
+            label: Vertical focal point
+            type: number
+            required: true
+            options: { min: 0, max: 100, step: 1 }
+          - name: alt
+            label: Image description
+            type: string
+            required: true
+          - name: caption
+            label: Caption
+            type: string
+            required: true
+
+      - name: dossier
+        label: Visitor information
+        type: object
+        required: true
+        fields:
+          - name: eyebrow
+            label: Eyebrow
+            type: string
+            required: true
+          - name: title
+            label: Heading
+            type: string
+            required: true
+          - name: intro
+            label: Introduction
+            type: text
+            required: true
+          - name: hours
+            label: Opening hours
+            type: object
+            list:
+              min: 1
+              collapsible:
+                collapsed: true
+                summary: "{days}: {time}"
+            fields:
+              - name: days
+                label: Days as displayed
+                type: string
+                required: true
+              - name: time
+                label: Hours as displayed
+                type: string
+                required: true
+              - name: schema_days
+                label: Machine-readable days
+                type: select
+                required: true
+                options:
+                  multiple: true
+                  min: 1
+                  values: [Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday]
+              - name: opens
+                label: Opening time (24-hour)
+                type: string
+                required: true
+                pattern:
+                  regex: "^(?:[01][0-9]|2[0-3]):[0-5][0-9]$"
+                  message: "Use 24-hour HH:MM format."
+              - name: closes
+                label: Closing time (24-hour)
+                type: string
+                required: true
+                pattern:
+                  regex: "^(?:[01][0-9]|2[0-3]):[0-5][0-9]$"
+                  message: "Use 24-hour HH:MM format."
+          - name: notes
+            label: Visitor notes
+            type: text
+            list: true
+          - name: faqs
+            label: Frequently asked questions
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{q}"
+            fields:
+              - name: q
+                label: Question
+                type: string
+                required: true
+              - name: a
+                label: Answer
+                type: text
+                required: true
+
+      - name: inquiry
+        label: Venue inquiry section
+        type: object
+        required: true
+        fields:
+          - name: eyebrow
+            label: Eyebrow
+            type: string
+            required: true
+          - name: title
+            label: Heading
+            type: string
+            required: true
+          - name: copy
+            label: Supporting copy
+            type: text
+            required: true
+          - name: scrub_label
+            label: Scroll-video label
+            type: string
+            required: true
+          - name: poster
+            label: Opening poster
+            type: image
+            required: true
+            description: "Use the protected uploader to regenerate this from the exact first video frame."
+            options:
+              media: editorial-images
+          - name: video_mp4
+            label: Scroll video
+            type: file
+            required: true
+            options:
+              media: editorial-video
+              extensions: [mp4]
+          - name: focal_x
+            label: Horizontal focal point
+            type: number
+            required: true
+            options: { min: 0, max: 100, step: 1 }
+          - name: focal_y
+            label: Vertical focal point
+            type: number
+            required: true
+            options: { min: 0, max: 100, step: 1 }
+
+      - name: film
+        label: Complete film
+        type: object
+        required: true
+        fields:
+          - name: production
+            label: Production companies
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{name}"
+            fields:
+              - name: name
+                label: Name
+                type: string
+                required: true
+              - name: url
+                label: Website
+                type: string
+                required: true
+                pattern: "^https://"
+          - name: title
+            label: Film title
+            type: string
+            required: true
+          - name: credits
+            label: Credits
+            type: text
+            list: true
+          - name: poster
+            label: Film poster
+            type: image
+            required: true
+            options:
+              media: editorial-images
+          - name: focal_x
+            label: Horizontal focal point
+            type: number
+            required: true
+            options: { min: 0, max: 100, step: 1 }
+          - name: focal_y
+            label: Vertical focal point
+            type: number
+            required: true
+            options: { min: 0, max: 100, step: 1 }
+          - name: youtube_id
+            label: YouTube video ID
+            type: string
+            required: true
+            pattern:
+              regex: "^[A-Za-z0-9_-]{11}$"
+              message: "Paste only the 11-character YouTube video ID."

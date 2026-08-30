@@ -29,6 +29,7 @@
 .scrub-story__media img,
 .scrub-story__media video {
   @extend %cover-media;
+  object-position: var(--media-focal-x, 50%) var(--media-focal-y, 50%);
 }
 
 .scrub-story__media img {
@@ -214,6 +215,7 @@
 .venue-gallery img,
 .venue-gallery video {
   @extend %cover-media;
+  object-position: var(--media-focal-x, 50%) var(--media-focal-y, 50%);
 }
 
 .venue-gallery img {
@@ -573,6 +575,7 @@
 .inquiry__scrub img,
 .inquiry__scrub video {
   @extend %cover-media;
+  object-position: var(--media-focal-x, 50%) var(--media-focal-y, 50%);
   filter: saturate(0.82) contrast(1.05);
 }
 
@@ -832,6 +835,7 @@
 
 .film__poster {
   @extend %cover-media;
+  object-position: var(--media-focal-x, 50%) var(--media-focal-y, 50%);
   filter: saturate(0.82) contrast(1.05);
 }
 

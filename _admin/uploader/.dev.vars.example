@@ -1,0 +1,4 @@
+# Copy to .dev.vars for local development. Never commit real values.
+GITHUB_APP_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nLOCAL_DEVELOPMENT_ONLY\n-----END PRIVATE KEY-----"
+MEDIA_SOURCE_TOKEN="local-development-source-token"
+LOCAL_ADMIN_BYPASS="local-development-admin-token"
