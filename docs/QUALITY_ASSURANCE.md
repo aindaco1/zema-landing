@@ -64,6 +64,8 @@ This is useful when another local Jekyll process is running.
 - Pages CMS ownership of `_data/frames.yml`, merge preservation, editorial-media containment, and exclusion of Formspree/brand assets;
 - immutable Formspree endpoint and one-to-one alignment between `_admin/media-slots.json` and `_data/frames.yml`.
 
+The browser suites load editor-owned copy, links, contact facts, credits, and metadata from `_data/frames.yml`. A valid Pages CMS save therefore verifies that the new canonical content renders without requiring a duplicate test fixture update.
+
 `_admin/uploader/test/uploader.spec.ts` verifies the Worker fails closed without Access configuration, returns authorized slot data, rejects invalid source types, creates/cancels R2 multipart uploads, and protects raw-source streaming with its independent bearer token. Type generation, strict TypeScript, and a real Wrangler dry-run bundle are part of the same command.
 
 ### Accessibility and SEO

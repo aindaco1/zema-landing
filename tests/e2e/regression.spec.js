@@ -1,4 +1,5 @@
 const { test, expect } = require("@playwright/test");
+const content = require("./project-content");
 
 async function disableSmoothScroll(page) {
   await page.addStyleTag({ content: "html { scroll-behavior: auto !important; }" });
@@ -592,25 +593,11 @@ test("static fallbacks, cache versions, footer, and media ranges stay intact", a
 
   await expect(page.locator("h1")).toHaveCount(1);
   await expect(page.getByText("The complete film, presented with sound.", { exact: true })).toHaveCount(0);
-  await expect(page.locator("[data-gallery-panel] figcaption").first()).toHaveText("Tap the banana three times");
-  await expect(page.locator(".inquiry__scrub > span")).toHaveText("Make the lounge yours");
+  await expect(page.locator("[data-gallery-panel] figcaption").first()).toHaveText(content.gallery[0].caption);
+  await expect(page.locator(".inquiry__scrub > span")).toHaveText(content.inquiry.scrub_label);
   await expect(page.getByText("Scroll through the night", { exact: true })).toHaveCount(0);
   await expect(page.getByText("Submissions are processed securely by Formspree. No tracking pixels.")).toHaveCount(0);
-  await expect(page.locator(".film__meta li")).toHaveText([
-    "Consolee Mutusi as Zema",
-    "Lex Lotito as Agent",
-    "Director / Editor: Luca Silver",
-    "Producers: Sharmin Dharas · Rylee Norman",
-    "Writers: Luca Silver · Anna Buan · Alonso Indacochea",
-    "Theme Music by Thomas Ropp",
-    "Assistant Director: Rylee Norman",
-    "2nd AD: Iz Zamora",
-    "Cinematographer: Nata Aguilar",
-    "1st AC: Aaron Cassini Beltran",
-    "Gaffer: Samuel Shorty",
-    "Makeup / Hair: Rhiannon Barela",
-    "Special Thanks: Lucy Church · Brenda Ramos · Camille Griego · Grace Walker · Anthony Ortiz · Alan de Lira Richards · Jax Maloney"
-  ]);
+  await expect(page.locator(".film__meta li")).toHaveText(content.film.credits);
   const castLines = await page.locator(".film__meta li").evaluateAll((credits) => (
     credits.slice(0, 2).map((credit) => Math.round(credit.getBoundingClientRect().top))
   ));
@@ -625,12 +612,12 @@ test("static fallbacks, cache versions, footer, and media ranges stay intact", a
   await expect(page.getByRole("link", { name: "ZEMA on Instagram" })).toHaveCount(1);
   await expect(page.getByRole("link", { name: "ZEMA on Instagram" }).locator("svg")).toHaveCount(1);
   await expect(page.getByRole("link", { name: "ZEMA events calendar" }).locator("svg")).toHaveCount(1);
-  const eventsUrl = "https://www.hotelzazz.com/events-calendar#:~:text=Zazzy%20Events";
+  const eventsUrl = content.events_url;
   const eventsLinks = page.locator(`a[href="${eventsUrl}"]`);
   await expect(eventsLinks).toHaveCount(3);
-  await expect(page.getByRole("link", { name: "Upcoming events" })).toHaveAttribute("href", eventsUrl);
-  await expect(page.getByRole("link", { name: "Upcoming events" })).toHaveAttribute("target", "_blank");
-  await expect(page.getByRole("link", { name: "Upcoming events" })).toHaveAttribute("rel", /noopener/);
+  await expect(page.getByRole("link", { name: content.intro.events_link_label })).toHaveAttribute("href", eventsUrl);
+  await expect(page.getByRole("link", { name: content.intro.events_link_label })).toHaveAttribute("target", "_blank");
+  await expect(page.getByRole("link", { name: content.intro.events_link_label })).toHaveAttribute("rel", /noopener/);
   await expect(page.locator(".site-nav a", { hasText: "Events" })).toHaveAttribute("href", eventsUrl);
   await expect(page.locator(".site-nav a", { hasText: "Events" })).toHaveAttribute("target", "_blank");
   await expect(page.locator(".site-nav a", { hasText: "Events" })).toHaveAttribute("rel", /noopener/);
@@ -638,12 +625,13 @@ test("static fallbacks, cache versions, footer, and media ranges stay intact", a
   await expect(page.getByRole("link", { name: "ZEMA events calendar" })).toHaveAttribute("target", "_blank");
   await expect(page.getByRole("link", { name: "ZEMA events calendar" })).toHaveAttribute("rel", /noopener/);
   await expect(page.locator(".site-footer address a")).toHaveAttribute("href", /google\.com\/maps\/search/);
-  await expect(page.locator(".site-footer a[href^='tel:']")).toHaveAttribute("href", "tel:+15053532455");
-  await expect(page.locator(".site-footer a[href^='tel:']")).toHaveText("(505) 353-2455");
+  await expect(page.locator(".site-footer a[href^='tel:']")).toHaveAttribute("href", `tel:${content.phone_href}`);
+  await expect(page.locator(".site-footer a[href^='tel:']")).toHaveText(content.phone_display);
   await expect(page.locator(".dossier__contact")).toHaveCount(0);
-  await expect(page.locator(".film__header .eyebrow a")).toHaveText(["Dust Wave", "Phantasmagoria"]);
-  await expect(page.locator(".film__header .eyebrow a").nth(0)).toHaveAttribute("href", "https://dustwave.xyz");
-  await expect(page.locator(".film__header .eyebrow a").nth(1)).toHaveAttribute("href", "https://phantasmagoria.xyz");
+  await expect(page.locator(".film__header .eyebrow a")).toHaveText(content.film.production.map(({ name }) => name));
+  for (const [index, studio] of content.film.production.entries()) {
+    await expect(page.locator(".film__header .eyebrow a").nth(index)).toHaveAttribute("href", studio.url);
+  }
   await expect(page.locator("[data-scrub-story]")).toHaveClass(/is-static/);
   await expect(page.locator("[data-gallery-scrub]")).toHaveClass(/is-static/);
   await expect(page.locator("[data-inquiry-scrub]")).toHaveClass(/is-static/);

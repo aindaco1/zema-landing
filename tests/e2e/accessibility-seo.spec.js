@@ -1,5 +1,6 @@
 const { test, expect } = require("@playwright/test");
 const AxeBuilder = require("@axe-core/playwright").default;
+const content = require("./project-content");
 
 function formatViolations(violations) {
   return violations.map((violation) => {
@@ -75,7 +76,7 @@ test("landmarks, headings, skip link, FAQ, and form work from the keyboard", asy
   await expect(filmFacade.locator("iframe")).toHaveCount(0);
   await expect(filmFacade.locator(".film__poster")).toHaveAttribute("loading", "lazy");
   await expect(filmFacade.locator(".film__poster")).toHaveAttribute("alt", "");
-  await expect(filmFacade.getByRole("button")).toHaveAccessibleName("Play From Zema with Love — complete film");
+  await expect(filmFacade.getByRole("button")).toHaveAccessibleName(`Play ${content.film.title} — complete film`);
 
   await page.keyboard.press("Tab");
   const skipLink = page.getByRole("link", { name: "Skip to content" });
@@ -191,16 +192,18 @@ test("public metadata, structured data, and crawl files stay coherent", async ({
 
   expect(metadata.title.length).toBeGreaterThanOrEqual(30);
   expect(metadata.title.length).toBeLessThanOrEqual(60);
+  expect(metadata.title).toBe(content.seo.title);
   expect(metadata.description.length).toBeGreaterThanOrEqual(70);
   expect(metadata.description.length).toBeLessThanOrEqual(160);
+  expect(metadata.description).toBe(content.seo.description);
   expect(metadata.robots).toContain("index");
   expect(metadata.robots).toContain("max-image-preview:large");
   expect(metadata.canonical).toBe("https://zemabar.com/");
   expect(metadata.ogTitle).toBe(metadata.title);
   expect(metadata.ogDescription).toBe(metadata.description);
-  expect(metadata.ogSiteName).toBe("ZEMA Vinyl Lounge");
+  expect(metadata.ogSiteName).toBe(content.site_title);
   expect(metadata.ogLocale).toBe("en_US");
-  expect(metadata.ogImage).toBe("https://zemabar.com/assets/media/editorial/zema-social.jpg");
+  expect(metadata.ogImage).toBe(new URL(content.seo.social_image, "https://zemabar.com/").href);
   expect(metadata.ogImageAlt).not.toBe("");
   expect(metadata.ogImageWidth).toBe("1200");
   expect(metadata.ogImageHeight).toBe("630");
@@ -218,16 +221,16 @@ test("public metadata, structured data, and crawl files stay coherent", async ({
   expect(website.url).toBe("https://zemabar.com/");
   expect(webpage.url).toBe("https://zemabar.com/");
   expect(business.url).toBe("https://zemabar.com/");
-  expect(business.name).toBe("ZEMA Vinyl Lounge");
-  expect(business.telephone).toBe("+15053532455");
-  expect(business.address.addressLocality).toBe("Albuquerque");
-  expect(business.openingHoursSpecification).toHaveLength(3);
-  expect(business.sameAs).toContain("https://www.instagram.com/baratzazz/");
+  expect(business.name).toBe(content.site_title);
+  expect(business.telephone).toBe(content.phone_href);
+  expect(business.address.addressLocality).toBe(content.address_locality);
+  expect(business.openingHoursSpecification).toHaveLength(content.dossier.hours.length);
+  expect(business.sameAs).toContain(content.instagram);
 
   const [robotsResponse, sitemapResponse, socialImageResponse] = await Promise.all([
     request.get("/robots.txt"),
     request.get("/sitemap.xml"),
-    request.get("/assets/media/editorial/zema-social.jpg")
+    request.get(content.seo.social_image)
   ]);
   expect(robotsResponse.status()).toBe(200);
   expect(await robotsResponse.text()).toContain("Sitemap: https://zemabar.com/sitemap.xml");
