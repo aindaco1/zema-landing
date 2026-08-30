@@ -37,6 +37,7 @@ npx playwright install chromium
 | `npm run test:docs` | Required handbook files, duplicate headings, trailing whitespace, and relative links |
 | `npm run test:content` | Pages CMS, public-content, service-boundary, and nine-slot media-manifest contract |
 | `npm run test:uploader` | Worker types/dry-run bundle plus five Miniflare/R2 request tests |
+| `npm run test:workflows` | GitHub Actions syntax, expression contexts, shell, and dependency checks |
 | `npm test` | Content, documentation, Worker, and complete 16-test browser release gate |
 | `npm run test:accessibility` | Focused WCAG, interaction-state, keyboard, and form checks |
 | `npm run test:seo` | Focused metadata, JSON-LD, sitemap, and social-image checks |
@@ -217,7 +218,7 @@ gzip -c _site/assets/js/main.js | wc -c
 
 ## CI contract
 
-The composite `.github/actions/verify-site` action owns one DRY release gate: Ruby/Node setup, dependency installation, Chromium, `npm test`, and the production Jekyll build. Pull requests invoke it through the regression workflow. Ordinary `main` pushes invoke it through the Pages workflow before any artifact upload. Media releases invoke it after generation and rebase but before push and deployment. CI uses Node 24 and pinned official Actions.
+The composite `.github/actions/verify-site` action owns one DRY release gate: checksum-verified actionlint, Ruby/Node setup, dependency installation, Chromium, `npm test`, and the production Jekyll build. Pull requests invoke it through the regression workflow. Ordinary `main` pushes invoke it through the Pages workflow before any artifact upload. Media releases invoke it after generation and rebase but before push and deployment. CI uses Node 24 and pinned official Actions.
 
 The media workflow additionally installs `cwebp`, checks the required FFmpeg encoders, streams the private source, validates the generated diff, commits locally, and retains a release report for 30 days. A failure before the push leaves `main` and production unchanged; do not treat an uploaded R2 object as a release.
 

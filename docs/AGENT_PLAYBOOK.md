@@ -121,6 +121,7 @@ bundle check
 JEKYLL_ENV=production bundle exec jekyll build
 npm run test:docs
 npm run test:content
+npm run test:workflows
 npm run test:uploader
 npm test
 npm run test:accessibility

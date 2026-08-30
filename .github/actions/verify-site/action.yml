@@ -4,6 +4,17 @@ description: Install pinned toolchains, run every contract and browser test, and
 runs:
   using: composite
   steps:
+    - name: Install actionlint
+      shell: bash
+      run: |
+        mkdir -p "$RUNNER_TEMP/actionlint"
+        curl --fail --location --silent --show-error \
+          --output "$RUNNER_TEMP/actionlint/actionlint.tar.gz" \
+          https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz
+        echo "8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8  $RUNNER_TEMP/actionlint/actionlint.tar.gz" | sha256sum --check
+        tar -xzf "$RUNNER_TEMP/actionlint/actionlint.tar.gz" -C "$RUNNER_TEMP/actionlint" actionlint
+        echo "$RUNNER_TEMP/actionlint" >> "$GITHUB_PATH"
+
     - name: Set up Ruby
       uses: ruby/setup-ruby@95ef2b042f9d7a56d8268cba8559e2842e2ad01b # v1
       with:

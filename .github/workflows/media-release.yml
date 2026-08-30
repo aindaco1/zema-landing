@@ -27,7 +27,6 @@ jobs:
       MEDIA_RELEASE_PAYLOAD: ${{ inputs.payload }}
       MEDIA_UPLOADER_URL: ${{ vars.MEDIA_UPLOADER_URL }}
       MEDIA_SOURCE_TOKEN: ${{ secrets.MEDIA_SOURCE_TOKEN }}
-      MEDIA_RELEASE_REPORT: ${{ runner.temp }}/zema-media-release.json
     steps:
       - name: Check out main with release history
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -59,6 +58,8 @@ jobs:
         run: node scripts/media/download-source.js "$RUNNER_TEMP/zema-raw-source"
 
       - name: Generate deterministic web derivatives
+        env:
+          MEDIA_RELEASE_REPORT: ${{ runner.temp }}/zema-media-release.json
         run: node scripts/media/process-upload.js "$RUNNER_TEMP/zema-raw-source"
 
       - name: Validate generated content and release scope
