@@ -88,7 +88,7 @@ This avoids a common static-site failure mode: duplicating venue facts in visibl
 
 The page has no client-side route. The production site is served from the root of `https://zemabar.com`, so `_config.yml` uses an empty `baseurl`. Liquid's `relative_url` and `absolute_url` filters keep root-relative assets and canonical metadata aligned with that origin.
 
-Pages CMS exposes copy, public links, the YouTube ID, reorderable visitor notes/FAQs/credits/production links, and web-ready editorial media. Its schema keeps Formspree/service fields, official marks, the favicon, and pointer assets out of the editor. The content validator enforces four hero beats, three gallery movements, valid focal percentages, canonical derivative paths, and the protected service boundary before either release path can deploy.
+Pages CMS exposes copy, public links, the YouTube ID, reorderable visitor notes/FAQs/credits/production links, and web-ready editorial media. Its schema keeps Formspree/service fields, official marks, the favicon, and pointer assets out of the editor. CMS media fields store root-relative public URLs such as `/assets/media/editorial/example.webp`; `_admin/media-slots.json` retains repository-relative filesystem paths, and the shared media contract derives the public form so CMS and raw-media releases converge. The content validator enforces four hero beats, three gallery movements, valid focal percentages, canonical derivative paths, and the protected service boundary before either release path can deploy.
 
 ## Editorial and media control plane
 

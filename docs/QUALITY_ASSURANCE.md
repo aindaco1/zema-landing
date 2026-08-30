@@ -36,7 +36,7 @@ npx playwright install chromium
 | --- | --- |
 | `npm run test:docs` | Required handbook files, duplicate headings, trailing whitespace, and relative links |
 | `npm run test:content` | Pages CMS, public-content, service-boundary, and nine-slot media-manifest contract |
-| `npm run test:uploader` | Worker types, both deployment dry-run bundles, and six Miniflare/R2 request tests |
+| `npm run test:uploader` | Worker types, both deployment dry-run bundles, and seven Miniflare/R2 request tests |
 | `npm run test:workflows` | GitHub Actions syntax, expression contexts, shell, and dependency checks |
 | `npm test` | Content, documentation, Worker, and complete 16-test browser release gate |
 | `npm run test:accessibility` | Focused WCAG, interaction-state, keyboard, and form checks |
@@ -60,7 +60,7 @@ This is useful when another local Jekyll process is running.
 
 - required text, public HTTPS links, phone format, YouTube ID, and machine-readable opening hours;
 - exactly four hero beats and three gallery movements;
-- valid focal-point percentages and existing canonical output files for all nine media slots;
+- valid focal-point percentages, root-relative CMS media values, and existing canonical output files for all nine media slots;
 - Pages CMS ownership of `_data/frames.yml`, merge preservation, editorial-media containment, and exclusion of Formspree/brand assets;
 - immutable Formspree endpoint and one-to-one alignment between `_admin/media-slots.json` and `_data/frames.yml`.
 

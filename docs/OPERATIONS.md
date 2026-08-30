@@ -192,6 +192,7 @@ Do not point DNS at GitHub Pages before the domain is verified and assigned to t
 
 - `.pages.yml` is the schema and editable-boundary source. Keep `settings.content.merge: true` so unmanaged service fields survive CMS saves.
 - The CMS edits only `_data/frames.yml` and `assets/media/editorial/`; it cannot delete the content file or edit Formspree, logos, favicon, or pointer assets.
+- Media fields serialize the configured root-relative `/assets/media/editorial/...` public URL. The validator and raw-media processor derive that value from each repository-relative manifest output; do not hand-maintain a second path mapping.
 - Four hero beats and three gallery movements are fixed structural counts. Visitor notes, FAQs, credits, and production links remain reorderable.
 - A Pages CMS save is a Git commit, not a live database mutation. Confirm the resulting commit, Pages run, and deployed public page separately.
 

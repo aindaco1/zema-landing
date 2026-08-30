@@ -44,6 +44,19 @@ function resolveRepositoryPath(relativePath) {
   return resolved;
 }
 
+function toPublicPath(repositoryPath) {
+  if (
+    typeof repositoryPath !== "string"
+    || !repositoryPath
+    || repositoryPath.startsWith("/")
+    || repositoryPath.includes("\\")
+    || repositoryPath.split("/").includes("..")
+  ) {
+    throw new Error(`Media output is not a canonical repository path: ${repositoryPath}`);
+  }
+  return `/${repositoryPath}`;
+}
+
 function setAtPath(value, dottedPath, nextValue) {
   const segments = dottedPath.split(".");
   let current = value;
@@ -63,4 +76,5 @@ module.exports = {
   resolveRepositoryPath,
   root,
   setAtPath,
+  toPublicPath,
 };

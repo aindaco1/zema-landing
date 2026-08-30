@@ -3,7 +3,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { spawnSync } = require("node:child_process");
 const YAML = require("yaml");
-const { parseReleasePayload, resolveRepositoryPath, root } = require("./contract");
+const { parseReleasePayload, resolveRepositoryPath, root, toPublicPath } = require("./contract");
 
 const MAX_REPOSITORY_MEDIA_BYTES = 45 * 1024 * 1024;
 const FRAME_RATE = "24000/1001";
@@ -238,7 +238,7 @@ async function hashFile(filePath) {
 function updateContent(slot, payload) {
   const framesPath = resolveRepositoryPath("_data/frames.yml");
   const framesDocument = YAML.parseDocument(fs.readFileSync(framesPath, "utf8"), { keepSourceTokens: true });
-  for (const output of slot.outputs) framesDocument.setIn(yamlPath(output.contentPath), output.path);
+  for (const output of slot.outputs) framesDocument.setIn(yamlPath(output.contentPath), toPublicPath(output.path));
   if (slot.focalPaths) {
     framesDocument.setIn(yamlPath(slot.focalPaths.x), payload.focalX);
     framesDocument.setIn(yamlPath(slot.focalPaths.y), payload.focalY);

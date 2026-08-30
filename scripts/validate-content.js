@@ -1,6 +1,7 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const YAML = require("yaml");
+const { toPublicPath } = require("./media/contract");
 
 const root = path.resolve(__dirname, "..");
 const framesPath = path.join(root, "_data/frames.yml");
@@ -118,7 +119,8 @@ for (const slot of manifest.slots || []) {
     check(!outputPaths.has(output.path), `duplicate media output path: ${output.path}`);
     outputPaths.add(output.path);
     check(output.path.startsWith("assets/media/editorial/"), `${output.path} must remain in editable editorial media`);
-    check(getAtPath(frames, output.contentPath) === output.path, `${output.contentPath} must point to ${output.path}`);
+    const publicPath = toPublicPath(output.path);
+    check(getAtPath(frames, output.contentPath) === publicPath, `${output.contentPath} must point to ${publicPath}`);
     check(fs.existsSync(path.join(root, output.path)), `missing published media file: ${output.path}`);
   }
   if (slot.focalPaths) {
@@ -133,6 +135,7 @@ check(Boolean(contentFile), "Pages CMS must edit _data/frames.yml directly");
 check(contentFile?.operations?.delete === false, "Pages CMS must not allow deleting the content source");
 for (const mediaSource of pages.media || []) {
   check(mediaSource.input === "assets/media/editorial", `Pages CMS media source ${mediaSource.name} must stay inside editorial media`);
+  check(mediaSource.output === toPublicPath(mediaSource.input), `Pages CMS media source ${mediaSource.name} must write root-relative editorial URLs`);
 }
 const pagesSource = fs.readFileSync(pagesPath, "utf8");
 for (const protectedName of ["form_action", "zema-logo", "zema-icon", "zema-vinyl-cursor"]) {
