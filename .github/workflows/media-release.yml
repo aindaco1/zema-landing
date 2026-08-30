@@ -25,7 +25,7 @@ jobs:
       release_sha: ${{ steps.release.outputs.sha }}
     env:
       MEDIA_RELEASE_PAYLOAD: ${{ inputs.payload }}
-      MEDIA_UPLOADER_URL: ${{ vars.MEDIA_UPLOADER_URL }}
+      MEDIA_SOURCE_URL: ${{ vars.MEDIA_SOURCE_URL }}
       MEDIA_SOURCE_TOKEN: ${{ secrets.MEDIA_SOURCE_TOKEN }}
     steps:
       - name: Check out main with release history

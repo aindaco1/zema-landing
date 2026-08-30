@@ -15,7 +15,7 @@ The site is for the venue—not a portfolio page for the web build or a generic 
 - Jekyll + GitHub Pages.
 - Static Liquid/HTML, SCSS compiled by Jekyll, and framework-free JavaScript.
 - No GSAP or other animation runtime unless a future interaction demonstrably cannot be delivered with native sticky layout and a small script.
-- No public database or custom backend. Formspree handles inquiry delivery. The approved owner-only media uploader is an isolated Cloudflare Worker/R2 control plane and must never enter the visitor runtime.
+- No public database or custom backend. Formspree handles inquiry delivery. The approved owner-only media uploader and bearer-only source Worker are an isolated Cloudflare Worker/R2 control plane and must never enter the visitor runtime.
 - No analytics by default.
 - Keep every production asset below GitHub's normal per-file limit. The hero, three gallery scrubs, and closing inquiry scrub are local; the complete film is embedded from YouTube.
 

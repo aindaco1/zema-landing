@@ -4,7 +4,7 @@
 
 **Purpose:** map project risks to repeatable automated and manual checks
 
-**Last verified:** August 29, 2026
+**Last verified:** August 30, 2026
 
 ## Quality model
 
@@ -36,7 +36,7 @@ npx playwright install chromium
 | --- | --- |
 | `npm run test:docs` | Required handbook files, duplicate headings, trailing whitespace, and relative links |
 | `npm run test:content` | Pages CMS, public-content, service-boundary, and nine-slot media-manifest contract |
-| `npm run test:uploader` | Worker types/dry-run bundle plus five Miniflare/R2 request tests |
+| `npm run test:uploader` | Worker types, both deployment dry-run bundles, and six Miniflare/R2 request tests |
 | `npm run test:workflows` | GitHub Actions syntax, expression contexts, shell, and dependency checks |
 | `npm test` | Content, documentation, Worker, and complete 16-test browser release gate |
 | `npm run test:accessibility` | Focused WCAG, interaction-state, keyboard, and form checks |

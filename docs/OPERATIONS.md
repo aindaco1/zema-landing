@@ -4,7 +4,7 @@
 
 **Purpose:** provide tested procedures for local development, content maintenance, deployment, rollback, and service changes
 
-**Last verified:** August 29, 2026
+**Last verified:** August 30, 2026
 
 ## Production endpoints
 
@@ -19,7 +19,8 @@
 | Events source | Hotel Zazz events calendar, targeted to “Zazzy Events” |
 | Content editor | [Pages CMS app](https://app.pagescms.org/), configured by `.pages.yml` |
 | Raw-master storage | Private Cloudflare R2 bucket `zema-media-masters` |
-| Media release | Access-protected `zema-media-uploader` Worker → `media-release.yml` |
+| Media upload | Access-protected `zema-media-uploader` Worker |
+| Private source stream | Bearer-only `zema-media-source` Worker → `media-release.yml` |
 
 No production secret is stored in committed source. The media control plane uses Cloudflare Worker secrets plus one matching GitHub Actions secret.
 
@@ -201,22 +202,23 @@ The canonical slot/output contract is `_admin/media-slots.json`; the Worker UI a
 Production Cloudflare configuration:
 
 - R2 bucket: `zema-media-masters`, private, with prefix `incoming/` expiring after 30 days and incomplete multipart uploads aborting after one day.
-- Access application: exact uploader admin path, one authorized owner identity, with its team-domain issuer and application AUD in `_admin/uploader/wrangler.jsonc`.
-- Worker secrets: `GITHUB_APP_PRIVATE_KEY` in unencrypted PKCS#8 PEM form and `MEDIA_SOURCE_TOKEN`. Never commit `.dev.vars` or a PEM file.
+- Access application: the complete `zema-media-uploader` Worker, one authorized owner identity, with its team-domain issuer and application AUD in `_admin/uploader/wrangler.jsonc`.
+- Admin Worker secret: `GITHUB_APP_PRIVATE_KEY` in unencrypted PKCS#8 PEM form. Source Worker secret: `MEDIA_SOURCE_TOKEN`. Never commit `.dev.vars` or a PEM file.
 - GitHub App: installed only on `aindaco1/zema-landing`, with repository Actions write permission and metadata read permission. Store its client ID and installation ID as non-secret Worker variables.
-- GitHub repository Actions secret: `MEDIA_SOURCE_TOKEN`, identical to the Worker secret. Repository variable: `MEDIA_UPLOADER_URL`, the deployed Worker HTTPS origin.
+- GitHub repository Actions secret: `MEDIA_SOURCE_TOKEN`, identical to the source Worker secret. Repository variable: `MEDIA_SOURCE_URL`, the `zema-media-source` HTTPS origin.
 
 The GitHub-generated private key may need conversion before `wrangler secret put`:
 
 ```sh
 openssl pkcs8 -topk8 -nocrypt -in github-app-key.pem -out github-app-key-pkcs8.pem
 npx wrangler secret put GITHUB_APP_PRIVATE_KEY --cwd _admin/uploader
-npx wrangler secret put MEDIA_SOURCE_TOKEN --cwd _admin/uploader
 npx wrangler deploy --cwd _admin/uploader
+npx wrangler secret put MEDIA_SOURCE_TOKEN --cwd _admin/uploader --config wrangler.source.jsonc
+npx wrangler deploy --cwd _admin/uploader --config wrangler.source.jsonc
 npx wrangler r2 bucket lifecycle list zema-media-masters
 ```
 
-Pass secret values through the interactive prompts; do not place them in shell history. Remove the downloaded/generated PEM files after the Worker secret is confirmed. The `/admin/` API validates Cloudflare's Access JWT in addition to the edge policy. `/pipeline/source` is not an admin route and requires the independent bearer token used by the GitHub runner.
+Pass secret values through the interactive prompts; do not place them in shell history. Remove the downloaded/generated PEM files after the Worker secret is confirmed. The admin deployment validates Cloudflare's Access JWT in addition to the edge policy and does not expose `/pipeline/source`. The source deployment rejects admin routes and serves only the bearer-protected `/pipeline/source` plus its health check.
 
 ### Formspree
 

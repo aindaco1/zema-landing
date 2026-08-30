@@ -216,13 +216,14 @@ These are lightweight architecture decision records. A decision is â€œacceptedâ€
 
 **Status:** Accepted
 
-**Decision:** Upload exact editorial masters through a Cloudflare Access-protected Worker to private R2, and use a repository-scoped GitHub App plus GitHub Actions to generate, test, commit, and deploy canonical derivatives.
+**Decision:** Upload exact editorial masters through a Cloudflare Access-protected Worker to private R2, stream them through a separate bearer-only source Worker, and use a repository-scoped GitHub App plus GitHub Actions to generate, test, commit, and deploy canonical derivatives.
 
 **Why:** Large ProRes/HEVC, lossless audio, and image masters need automatic web conversion without entering Git or granting the browser a long-lived personal token. Production must not change when transcoding or regression checks fail.
 
 **Consequences:**
 
 - `_admin/media-slots.json` is the single contract for the Worker UI, source validation, focal points, canonical outputs, and processor settings.
+- One role-gated Worker module backs two deployments: the Access-protected admin plane and a source-only plane that rejects all admin routes. This prevents the edge Access policy from blocking the GitHub runner without duplicating upload or source logic.
 - Raw objects under `incoming/` expire after 30 days; incomplete multipart uploads abort after one day.
 - Video posters are generated from the exact first encoded frame; audio loudness is preserved; every video output is fully decoded and proven all-intra.
 - `media-release.yml` permits only the selected slot outputs plus content/cache metadata, rebases before verification, and pushes/deploys only after the full shared gate passes.

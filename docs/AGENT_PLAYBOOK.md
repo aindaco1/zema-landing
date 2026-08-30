@@ -4,7 +4,7 @@
 
 **Purpose:** provide a fast, safe path from request to verified change
 
-**Last verified:** August 29, 2026
+**Last verified:** August 30, 2026
 
 ## Required reading order
 
@@ -27,7 +27,7 @@ Do not infer that a new visual request authorizes a new framework, backend, anal
 - All enhanced behavior: `assets/js/main.js`.
 - Editable production media: `assets/media/editorial/`; protected marks/icon/pointer remain in `assets/media/`; raw masters remain outside Git.
 - Editorial schema: `.pages.yml`; shared raw-media contract: `_admin/media-slots.json`.
-- Protected upload plane: `_admin/uploader/`; deterministic processing: `scripts/media/` and `media-release.yml`.
+- Protected upload and source-only deployments: `_admin/uploader/`; deterministic processing: `scripts/media/` and `media-release.yml`.
 - Browser contracts: `tests/e2e/`.
 - Canonical production URL: `https://zemabar.com/`.
 
@@ -76,6 +76,7 @@ Do not infer that a new visual request authorizes a new framework, backend, anal
 - Add a breakpoint only when content pressure cannot be solved by fluid tokens/grid behavior.
 - Link documentation to canonical values rather than copying values into multiple pages.
 - Add a media role once in `_admin/media-slots.json`; the Worker UI and processor both consume that contract.
+- Keep uploader/source behavior in the shared role-gated Worker module; do not fork a second implementation for the source deployment.
 
 ### Preserve progressive enhancement
 

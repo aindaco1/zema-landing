@@ -5,10 +5,10 @@ const { pipeline } = require("node:stream/promises");
 const { parseReleasePayload } = require("./contract");
 
 async function main() {
-  const endpoint = process.env.MEDIA_UPLOADER_URL;
+  const endpoint = process.env.MEDIA_SOURCE_URL;
   const token = process.env.MEDIA_SOURCE_TOKEN;
   const destination = process.argv[2];
-  if (!endpoint || !/^https:\/\//.test(endpoint)) throw new Error("MEDIA_UPLOADER_URL must be an HTTPS origin");
+  if (!endpoint || !/^https:\/\//.test(endpoint)) throw new Error("MEDIA_SOURCE_URL must be an HTTPS origin");
   if (!token) throw new Error("MEDIA_SOURCE_TOKEN is required");
   if (!destination || !path.isAbsolute(destination)) throw new Error("An absolute destination path is required");
   const { payload } = parseReleasePayload();

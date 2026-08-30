@@ -4,7 +4,7 @@
 
 **Purpose:** describe the production system, its boundaries, and the runtime data flow
 
-**Last verified:** August 29, 2026
+**Last verified:** August 30, 2026
 
 ## Architecture summary
 
@@ -16,7 +16,8 @@ The public site has no application server, database, client-side router, package
 flowchart LR
     CMS["Pages CMS\nGitHub-authenticated editing"] --> A["_data/frames.yml\ncontent and service URLs"]
     U["Cloudflare Access\nprotected uploader"] --> R2["Private R2 raw master\n30-day retention"]
-    R2 --> M["Media release Action\ntranscode and verify"]
+    R2 --> S["Bearer-only source Worker"]
+    S --> M["Media release Action\ntranscode and verify"]
     M --> A
     M --> D["Editorial derivatives"]
     A --> B["Liquid templates\nand Jekyll"]
@@ -42,7 +43,7 @@ flowchart LR
 | Interaction | Framework-free JavaScript | The behavior is small, page-specific, and based on native browser APIs |
 | Media | Local optimized derivatives plus local posters | Reliable scroll seeking and controlled LCP |
 | Content editing | Pages CMS over the Git repository | Owner-friendly editing without a runtime CMS or second content database |
-| Raw-media processing | Access-protected Cloudflare Worker, private R2, and GitHub Actions | Large-master upload, automatic derivatives, and test-gated publication without committing raw files |
+| Raw-media processing | Access-protected admin Worker, bearer-only source Worker, private R2, and GitHub Actions | Large-master upload, automatic derivatives, and test-gated publication without committing raw files |
 | Complete film | `youtube-nocookie.com` facade | Native video controls and captions without a second large local master |
 | Inquiry delivery | Formspree | Static-site-compatible delivery with native POST fallback |
 | Hosting | GitHub Pages | No server maintenance, low cost, HTTPS, and history-backed deployment |
@@ -58,7 +59,7 @@ See [the decision record](DECISIONS.md) for alternatives and tradeoffs.
 | `_data/frames.yml` | Public content model, venue facts, form endpoint, external links, film credits, and media paths |
 | `.pages.yml` | Pages CMS schema, editable fields, media boundaries, and commit behavior |
 | `_admin/media-slots.json` | Shared upload/transcode/output contract for all nine editable media slots |
-| `_admin/uploader/` | Access-aware Worker, private R2 multipart API, tests, and framework-free admin UI |
+| `_admin/uploader/` | Shared role-gated Worker code, private R2 multipart/source APIs, tests, framework-free admin UI, and both deployment configs |
 | `index.html` | Ordered page composition and the inline intro/gallery sections |
 | `_layouts/default.html` | Document shell, skip link, global header/footer, soundtrack, pointer, and script loading |
 | `_includes/head.html` | Metadata, social cards, canonical URL, preload, and JSON-LD |
@@ -95,11 +96,12 @@ Content-only changes and raw-media changes share the same tested `main`/Pages de
 
 - Pages CMS commits `_data/frames.yml` and web-ready files under `assets/media/editorial/`. A normal `main` push runs the complete shared verification action before Pages deployment.
 - The protected uploader accepts an editorially final raw master for one declared slot. It uses browser-to-Worker multipart requests, stores the object below `incoming/` in private R2, and dispatches `media-release.yml` through a repository-scoped GitHub App.
-- The media Action streams the private source to runner-temporary storage, checks its declared type, duration, codec, dimensions, and size, then writes only the canonical outputs declared in `_admin/media-slots.json`.
+- The uploader and source endpoints deploy the same role-gated Worker module. Cloudflare Access covers the complete admin Worker, while the separate source Worker exposes only `/pipeline/source` and requires the independent bearer secret shared with GitHub Actions.
+- The media Action streams the private source from that source-only Worker to runner-temporary storage, checks its declared type, duration, codec, dimensions, and size, then writes only the canonical outputs declared in `_admin/media-slots.json`.
 - Video outputs are silent all-intra H.264 and receive a WebP poster generated from their exact first encoded frame. Images are cropped from a percentage focal point. Soundtrack outputs preserve source loudness.
 - The Action validates the exact diff, rebases on current `main`, runs the same content/docs/Worker/browser/build gate as an ordinary release, and only then pushes and deploys. A failure leaves both `main` and production unchanged.
 
-Raw files never enter Git. R2 lifecycle policy expires completed raw objects after 30 days and aborts incomplete multipart uploads after one day. The admin route is protected by Cloudflare Access and independently validates the Access JWT; the source-stream route uses a separate bearer secret shared only with GitHub Actions.
+Raw files never enter Git. R2 lifecycle policy expires completed raw objects after 30 days and aborts incomplete multipart uploads after one day. The admin Worker is protected by Cloudflare Access and independently validates the Access JWT. The source deployment rejects every admin route and its single download route requires a separate bearer secret shared only with GitHub Actions.
 
 ## JavaScript subsystem boundaries
 

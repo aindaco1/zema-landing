@@ -18,6 +18,7 @@ test-results/
 .DS_Store
 .dev.vars
 .wrangler/
+*.pem
 .AppleDouble
 .LSOverride
 ._*

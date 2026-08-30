@@ -202,7 +202,9 @@ async function authenticateAdmin(request: Request, env: Env): Promise<UploadIden
 }
 
 function assertSecretConfiguration(env: Env): void {
-  if (!env.GITHUB_APP_PRIVATE_KEY.includes("BEGIN PRIVATE KEY")) throw new HttpError(503, "GITHUB_APP_NOT_CONFIGURED", "GitHub App signing is not configured");
+  if (typeof env.GITHUB_APP_PRIVATE_KEY !== "string" || !env.GITHUB_APP_PRIVATE_KEY.includes("BEGIN PRIVATE KEY")) {
+    throw new HttpError(503, "GITHUB_APP_NOT_CONFIGURED", "GitHub App signing is not configured");
+  }
   if (env.GITHUB_APP_CLIENT_ID.startsWith("REPLACE_")) throw new HttpError(503, "GITHUB_APP_NOT_CONFIGURED", "GitHub App client ID is not configured");
   if (env.GITHUB_APP_INSTALLATION_ID.startsWith("REPLACE_")) throw new HttpError(503, "GITHUB_APP_NOT_CONFIGURED", "GitHub App installation is not configured");
 }
@@ -403,9 +405,17 @@ async function serveAdminAsset(request: Request, env: Env): Promise<Response> {
 
 async function handleRequest(request: Request, env: Env): Promise<Response> {
   const url = new URL(request.url);
+  const deploymentRole: string = env.DEPLOYMENT_ROLE;
+  if (deploymentRole === "source") {
+    if (url.pathname === "/health") return jsonResponse({ status: "ok", role: "source" });
+    if (url.pathname === "/pipeline/source" && (request.method === "GET" || request.method === "HEAD")) {
+      return servePipelineSource(request, env);
+    }
+    throw new HttpError(404, "NOT_FOUND", "Not found");
+  }
+  if (deploymentRole !== "admin") throw new HttpError(503, "ROLE_NOT_CONFIGURED", "Worker deployment role is not configured");
   if (url.pathname === "/") return Response.redirect(`${url.origin}/admin/`, 302);
-  if (url.pathname === "/health") return jsonResponse({ status: "ok", accessConfigured: !env.POLICY_AUD.startsWith("REPLACE_") });
-  if (url.pathname === "/pipeline/source" && (request.method === "GET" || request.method === "HEAD")) return servePipelineSource(request, env);
+  if (url.pathname === "/health") return jsonResponse({ status: "ok", role: "admin", accessConfigured: !env.POLICY_AUD.startsWith("REPLACE_") });
   if (!url.pathname.startsWith("/admin")) throw new HttpError(404, "NOT_FOUND", "Not found");
 
   const identity = await authenticateAdmin(request, env);
@@ -439,15 +449,15 @@ async function handleRequest(request: Request, env: Env): Promise<Response> {
   return serveAdminAsset(request, env);
 }
 
-export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
-    const pathname = new URL(request.url).pathname;
-    try {
-      return await handleRequest(request, env);
-    } catch (error) {
-      return errorResponse(error, pathname);
-    }
-  },
-} satisfies ExportedHandler<Env>;
+async function workerFetch(request: Request, env: Env): Promise<Response> {
+  const pathname = new URL(request.url).pathname;
+  try {
+    return await handleRequest(request, env);
+  } catch (error) {
+    return errorResponse(error, pathname);
+  }
+}
 
-export { handleRequest, secureEqual };
+export default { fetch: workerFetch } satisfies ExportedHandler<Env>;
+
+export { handleRequest, secureEqual, workerFetch };

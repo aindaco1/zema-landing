@@ -8,7 +8,7 @@
     "test:workflows": "actionlint -color .github/workflows/*.yml",
     "test:uploader": "npm run typecheck:uploader && npm run build:uploader && vitest run --config _admin/uploader/vitest.config.mts",
     "typecheck:uploader": "node scripts/check-uploader-types.js && tsc --noEmit -p _admin/uploader/tsconfig.json",
-    "build:uploader": "wrangler deploy --dry-run --cwd _admin/uploader --outdir .wrangler/dry-run",
+    "build:uploader": "wrangler deploy --dry-run --cwd _admin/uploader --outdir .wrangler/dry-run/admin && wrangler deploy --dry-run --cwd _admin/uploader --config wrangler.source.jsonc --outdir .wrangler/dry-run/source",
     "test:regression": "playwright test",
     "test:accessibility": "playwright test tests/e2e/accessibility-seo.spec.js --grep \"WCAG|enhanced scroll|landmarks|form validation\"",
     "test:seo": "playwright test tests/e2e/accessibility-seo.spec.js --grep \"metadata\"",

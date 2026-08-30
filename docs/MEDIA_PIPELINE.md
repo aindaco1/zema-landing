@@ -4,7 +4,7 @@
 
 **Purpose:** preserve the source ranges, delivery formats, performance rules, and validation procedure for production media
 
-**Last verified:** August 29, 2026
+**Last verified:** August 30, 2026
 
 ## Media policy
 
@@ -20,7 +20,7 @@ The preferred replacement path is the Access-protected ZEMA media uploader. An e
 
 1. The browser validates the selected file against `_admin/media-slots.json`, then uploads it in 20 MiB parts with three concurrent requests, byte progress, cancellation, and up to three per-part attempts.
 2. The Cloudflare Worker repeats slot, extension, size, focal-point, key, and multipart validation and stores the object privately below `incoming/<slot>/<job>/` in R2.
-3. After R2 completion, the Worker dispatches `media-release.yml` using a repository-scoped GitHub App. The raw object is streamed to runner-temporary storage using a separate bearer secret; it is never committed or published.
+3. After R2 completion, the admin Worker dispatches `media-release.yml` using a repository-scoped GitHub App. The raw object is streamed to runner-temporary storage through the source-only Worker using a separate bearer secret; it is never committed or published.
 4. The processor preflights source duration, stream, codec, and dimensions; writes only the canonical paths in `_admin/media-slots.json`; fully decodes every output; verifies all video frames are keyframes; records sizes and SHA-256 values; and updates the cache version.
 5. The workflow rejects any file outside `_config.yml`, `_data/frames.yml`, and the selected slot outputs. It rebases on current `main`, runs the complete shared release gate, and only then pushes and deploys.
 

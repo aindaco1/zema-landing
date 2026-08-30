@@ -16,14 +16,15 @@
     }
   ],
   "vars": {
-    "TEAM_DOMAIN": "https://REPLACE.cloudflareaccess.com",
-    "POLICY_AUD": "REPLACE_WITH_ACCESS_AUD",
+    "DEPLOYMENT_ROLE": "admin",
+    "TEAM_DOMAIN": "https://alonsoflix.cloudflareaccess.com",
+    "POLICY_AUD": "a136e34fc461278616b9b8301cf5cb8894839d551ba000f356adaddcc0085ddc",
     "GITHUB_OWNER": "aindaco1",
     "GITHUB_REPO": "zema-landing",
     "GITHUB_REF": "main",
     "GITHUB_WORKFLOW": "media-release.yml",
-    "GITHUB_APP_CLIENT_ID": "REPLACE_WITH_GITHUB_APP_CLIENT_ID",
-    "GITHUB_APP_INSTALLATION_ID": "REPLACE_WITH_GITHUB_APP_INSTALLATION_ID"
+    "GITHUB_APP_CLIENT_ID": "Iv23linMcjeQof5k4hmX",
+    "GITHUB_APP_INSTALLATION_ID": "157660824"
   },
   "observability": {
     "enabled": true,
