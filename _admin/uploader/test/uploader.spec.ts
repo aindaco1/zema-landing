@@ -38,6 +38,15 @@ describe("ZEMA media uploader Worker", () => {
     expect(body.slots).toHaveLength(9);
   });
 
+  it("serves the authenticated admin shell without an asset redirect loop", async () => {
+    const response = await exports.default.fetch(new Request("http://localhost/admin/", { headers: adminHeaders }), {
+      redirect: "manual",
+    });
+    expect(response.status).toBe(200);
+    expect(response.headers.get("location")).toBeNull();
+    expect(await response.text()).toContain("Media release uploader");
+  });
+
   it("rejects unsupported raw file types before creating an upload", async () => {
     const response = await exports.default.fetch(new Request("http://localhost/admin/api/uploads", {
       method: "POST",

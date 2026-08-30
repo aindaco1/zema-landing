@@ -202,7 +202,7 @@ The canonical slot/output contract is `_admin/media-slots.json`; the Worker UI a
 Production Cloudflare configuration:
 
 - R2 bucket: `zema-media-masters`, private, with prefix `incoming/` expiring after 30 days and incomplete multipart uploads aborting after one day.
-- Access application: the complete `zema-media-uploader` Worker, one authorized owner identity, with its team-domain issuer and application AUD in `_admin/uploader/wrangler.jsonc`.
+- Access application: protect the exact public hostname `zema-media-uploader.jogo.workers.dev` and the complete `zema-media-uploader` Worker with the same application, one authorized owner identity, policy, and AUD. Keep eager redirect cookies disabled; the team-domain issuer and application AUD live in `_admin/uploader/wrangler.jsonc`.
 - Admin Worker secret: `GITHUB_APP_PRIVATE_KEY` in unencrypted PKCS#8 PEM form. Source Worker secret: `MEDIA_SOURCE_TOKEN`. Never commit `.dev.vars` or a PEM file.
 - GitHub App: installed only on `aindaco1/zema-landing`, with repository Actions write permission and metadata read permission. Store its client ID and installation ID as non-secret Worker variables.
 - GitHub repository Actions secret: `MEDIA_SOURCE_TOKEN`, identical to the source Worker secret. Repository variable: `MEDIA_SOURCE_URL`, the `zema-media-source` HTTPS origin.
@@ -266,6 +266,13 @@ Open `/`, not `/zema-landing/`. Check that templates use `relative_url`, `_confi
 - Confirm the App is still installed only on the repository and can write Actions.
 - Confirm `media-release.yml` exists on `main` and GitHub Actions is enabled.
 - A completed R2 object is safe to leave in place while diagnosing; lifecycle policy will remove it after 30 days.
+
+### Uploader login redirects repeatedly
+
+- Confirm the Access authentication log shows an allowed event for the owner before changing identity policy.
+- Trace a single reload with `npx wrangler tail zema-media-uploader --format=json`. A request reaching the Worker with redacted `cf-access-jwt-assertion` and `cf-access-authenticated-user-email` headers proves the Access handoff succeeded.
+- The authenticated `/admin/` response must be `200` with no `Location` header. The Worker must fetch the asset root `/`; Cloudflare Assets canonicalizes `/index.html` to `/`, which otherwise loops against the public `/` to `/admin/` redirect. The uploader test suite guards this contract.
+- After an Access destination or cookie-setting change, remove only the uploader hostname's site data before retrying. Do not clear the team-domain session unless re-authentication is intentional.
 
 ### Media release fails
 

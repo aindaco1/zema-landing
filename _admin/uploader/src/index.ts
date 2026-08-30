@@ -392,7 +392,10 @@ async function servePipelineSource(request: Request, env: Env): Promise<Response
 async function serveAdminAsset(request: Request, env: Env): Promise<Response> {
   const url = new URL(request.url);
   const assetUrl = new URL(request.url);
-  assetUrl.pathname = url.pathname === "/admin/" ? "/index.html" : url.pathname.replace(/^\/admin/, "") || "/index.html";
+  // Fetch the asset root for the admin shell. Cloudflare Assets canonicalizes
+  // `/index.html` to `/`; requesting that path here would bounce between the
+  // asset redirect and the public `/` -> `/admin/` redirect below.
+  assetUrl.pathname = url.pathname === "/admin/" ? "/" : url.pathname.replace(/^\/admin/, "") || "/";
   const assetResponse = await env.ASSETS.fetch(new Request(assetUrl, request));
   const headers = new Headers(assetResponse.headers);
   for (const [name, value] of responseHeaders()) {
