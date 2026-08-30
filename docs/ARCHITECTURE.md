@@ -81,7 +81,7 @@ The page has no client-side route. The production site is served from the root o
 | Hero scrub | `data-scrub-*`, passive scroll, `requestAnimationFrame` | Map native section progress to media time and expose one narrative beat |
 | Gallery scrub | `data-gallery-*`, `IntersectionObserver` | Divide progress into thirds; hydrate current/next video only |
 | Inquiry scrub | `data-inquiry-*`, `IntersectionObserver` | Map ordinary section passage to a full-section background clip |
-| Media hydration | `fetch`, Blob URLs, native `video.src` fallback | Buffer each scrub before rapid seeks; preserve poster until ready |
+| Media hydration | `fetch`, Blob URLs, native `video.src` fallback | Buffer each scrub before rapid seeks; preserve poster until the requested frame is decoded and painted |
 | Soundtrack | `data-site-audio-*`, idle callback | Remain muted by default; skip automatic hydration under Save-Data |
 | Vinyl pointer | `data-vinyl-cursor`, pointer media query | Fine pointers only; never capture clicks; preserve native form/player cursors |
 | Complete film | `data-youtube-*` | Create the privacy-enhanced iframe once, after explicit play intent |
@@ -149,7 +149,7 @@ sequenceDiagram
     participant CDN as GitHub Pages
     Dev->>PR: Push source and docs
     PR->>CI: Build Jekyll and run Playwright
-    CI-->>PR: 15 browser checks pass
+    CI-->>PR: 16 browser checks pass
     PR->>Main: Merge with history preserved
     Main->>CI: Re-run regression suite
     Main->>Pages: Build and upload _site artifact

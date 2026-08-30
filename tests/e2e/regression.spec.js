@@ -24,6 +24,60 @@ async function expectMediaAtProgress(page, selector, progress, tolerance = 0.75)
   }, progress)).toBeLessThan(tolerance);
 }
 
+test("hero preserves its poster until the matching opening frame is painted", async ({ page }) => {
+  await page.route(/\/assets\/media\/zema-scroll\.mp4(?:\?.*)?$/, async (route) => {
+    const response = await route.fetch();
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    await route.fulfill({ response });
+  });
+
+  await page.goto("./", { waitUntil: "domcontentloaded" });
+
+  const poster = page.locator(".scrub-story__media img");
+  const video = page.locator("[data-scrub-video]");
+  await expect(video).not.toHaveClass(/is-ready/);
+  await expect(video).toHaveCSS("opacity", "0");
+
+  await expect(video).toHaveClass(/is-ready/, { timeout: 30_000 });
+  const handoff = await page.evaluate(() => {
+    const posterImage = document.querySelector(".scrub-story__media img");
+    const scrubVideo = document.querySelector("[data-scrub-video]");
+    const posterRect = posterImage.getBoundingClientRect();
+    const videoRect = scrubVideo.getBoundingClientRect();
+    const width = 160;
+    const height = 90;
+    const posterCanvas = document.createElement("canvas");
+    const videoCanvas = document.createElement("canvas");
+    posterCanvas.width = videoCanvas.width = width;
+    posterCanvas.height = videoCanvas.height = height;
+    posterCanvas.getContext("2d").drawImage(posterImage, 0, 0, width, height);
+    videoCanvas.getContext("2d").drawImage(scrubVideo, 0, 0, width, height);
+    const posterPixels = posterCanvas.getContext("2d").getImageData(0, 0, width, height).data;
+    const videoPixels = videoCanvas.getContext("2d").getImageData(0, 0, width, height).data;
+    let absoluteDifference = 0;
+    for (let index = 0; index < posterPixels.length; index += 4) {
+      absoluteDifference += Math.abs(posterPixels[index] - videoPixels[index]);
+      absoluteDifference += Math.abs(posterPixels[index + 1] - videoPixels[index + 1]);
+      absoluteDifference += Math.abs(posterPixels[index + 2] - videoPixels[index + 2]);
+    }
+
+    return {
+      posterRect: [posterRect.x, posterRect.y, posterRect.width, posterRect.height],
+      videoRect: [videoRect.x, videoRect.y, videoRect.width, videoRect.height],
+      readyState: scrubVideo.readyState,
+      seeking: scrubVideo.seeking,
+      currentTime: scrubVideo.currentTime,
+      meanPixelDifference: absoluteDifference / (width * height * 3)
+    };
+  });
+
+  expect(handoff.videoRect).toEqual(handoff.posterRect);
+  expect(handoff.readyState).toBeGreaterThanOrEqual(2);
+  expect(handoff.seeking).toBe(false);
+  expect(handoff.currentTime).toBeLessThan(0.018);
+  expect(handoff.meanPixelDifference).toBeLessThan(6);
+});
+
 test("hero repeatedly resolves to the latest forward and reverse scrub position", async ({ page }) => {
   await page.goto("./");
   await disableSmoothScroll(page);
@@ -612,6 +666,7 @@ test("static fallbacks, cache versions, footer, and media ranges stay intact", a
     const assetUrls = [
       Array.from(document.styleSheets).map((sheet) => sheet.href).find((href) => href && href.includes("main.css")),
       Array.from(document.scripts).map((script) => script.src).find((src) => src.includes("main.js")),
+      document.querySelector(".scrub-story__media img").src,
       document.querySelector("[data-vinyl-cursor] img").src,
       document.querySelector(".intro__background").src,
       document.querySelector(".inquiry__scrub img").src,

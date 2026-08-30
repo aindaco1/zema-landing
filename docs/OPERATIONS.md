@@ -79,7 +79,7 @@ Do not hard-code a second copy in a template or script.
 3. Run `npm test` and a production build.
 4. Verify the new version appears on all versioned runtime URLs.
 
-The version currently covers CSS, JavaScript, scrub media, soundtrack sources, the pointer, and inquiry poster. For an unversioned logo, gallery poster, hero poster, film poster, icon, or social image replacement, prefer a new filename or explicitly verify cache invalidation.
+The version currently covers CSS, JavaScript, scrub media, soundtrack sources, the pointer, hero poster, and inquiry poster. For an unversioned logo, gallery poster, film poster, icon, or social image replacement, prefer a new filename or explicitly verify cache invalidation.
 
 ### Replace media
 
@@ -109,7 +109,7 @@ Start in `assets/css/_theme70s.scss`; reuse `%page-gutters`, `%utility-label`, a
 
 Official Actions are pinned to immutable commit SHAs with release comments. Update both when refreshing an action. Confirm the selected release uses Node 24 or newer to avoid deprecated-runtime annotations.
 
-The regression workflow independently re-runs the 15 browser tests on `main`. The deploy and regression workflows can run concurrently, so the pull-request test is the release gate.
+The regression workflow independently re-runs the 16 browser tests on `main`. The deploy and regression workflows can run concurrently, so the pull-request test is the release gate.
 
 ### Post-deploy smoke test
 

@@ -25,7 +25,7 @@ Scroll reliability comes from all-intra H.264 derivatives, controlled hydration,
 | `zema-inquiry-scrub.mp4` | `186.52–212.003` | 1280×720 H.264, all-intra | 14.3 MB | Agent awakening through the final clean record tilt |
 | `zema-soundtrack.webm` | Complete 201.817642-second WAV | 64 kbps VBR Opus | 1.8 MB | Primary soundtrack source |
 | `zema-soundtrack.m4a` | Complete 201.817642-second WAV | 80 kbps AAC | 2.1 MB | Compatibility soundtrack source |
-| `zema-hero-poster.webp` | Film still | 1920×1080 WebP | 88 KB | Reframed hero LCP and static fallback |
+| `zema-hero-poster.webp` | Exact opening scrub frame | 1920×1080 WebP | 115 KB | Crop-matched hero LCP and static fallback |
 | `zema-inquiry-poster.webp` | Film still | 1920×1080 WebP | 51 KB | Inquiry fallback |
 | `zema-film-youtube-thumbnail.webp` | Local snapshot of the YouTube max-resolution thumbnail | 1280×720 WebP | 53 KB | Complete-film play facade |
 | `zema-listening-room.webp` | Venue-supplied photo | 1500×1215 WebP | 219 KB | Venue introduction background |
@@ -81,7 +81,7 @@ ffmpeg -i input.mp4 \
   -movflags +faststart OUTPUT.mp4
 ```
 
-Always review the first and last decoded frames. A technically exact timestamp can still be editorially wrong.
+Always review the first and last decoded frames. A technically exact timestamp can still be editorially wrong. The hero poster must be generated from the exact opening frame with the same normalized crop so delayed video hydration cannot create a visible reframe.
 
 The current inquiry derivative uses `-crf 26.5` with the same all-intra settings to keep the final-grade encode below the practical 15 MB target. Its range ends before `212.003458`, the first credited frame in the current master; the last included source frame is the clean record at `211.961750`.
 
@@ -164,7 +164,7 @@ No output means no decode error.
 
 ## Runtime loading contract
 
-- Hero video hydrates immediately only when motion and data preferences permit; its poster remains the LCP candidate.
+- Hero video hydrates immediately only when motion and data preferences permit; its poster remains the LCP candidate and stays visible until the requested video frame has been decoded and submitted for paint.
 - Gallery hydration begins within a `150%` root margin and stages one movement at a time.
 - Inquiry hydration begins within a `100%` root margin.
 - Scrub files are fetched as Blobs before seeking; native URL loading is the fallback.

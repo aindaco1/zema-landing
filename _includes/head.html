@@ -36,7 +36,7 @@
   <meta name="twitter:image" content="{{ social_image_url }}">
   <meta name="twitter:image:alt" content="{{ site.social_image_alt | escape }}">
 
-  <link rel="preload" as="image" href="{{ site.data.frames.hero.poster | relative_url }}" fetchpriority="high">
+  <link rel="preload" as="image" href="{{ site.data.frames.hero.poster | relative_url }}?v={{ site.asset_version }}" fetchpriority="high">
   <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}?v={{ site.asset_version }}">
 
   <script type="application/ld+json">

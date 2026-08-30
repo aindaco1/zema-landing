@@ -42,13 +42,31 @@
     let targetProgress = 0;
     let seekFrame = 0;
     let lastAssignedTime = -1;
+    let initialFrameRequested = false;
+
+    function getTargetTime() {
+      if (!Number.isFinite(video.duration)) return NaN;
+      return targetProgress * Math.max(0, video.duration - 0.05);
+    }
 
     function requestSeek() {
       if (seekFrame) return;
       seekFrame = window.requestAnimationFrame(function () {
         seekFrame = 0;
         if (!Number.isFinite(video.duration) || video.readyState < 1) return;
-        const targetTime = targetProgress * Math.max(0, video.duration - 0.05);
+        const targetTime = getTargetTime();
+        if (!initialFrameRequested) {
+          initialFrameRequested = true;
+          const initialDecodeTime = targetTime === 0 ? Math.min(0.001, video.duration) : targetTime;
+          try {
+            lastAssignedTime = targetTime;
+            video.currentTime = initialDecodeTime;
+          } catch (error) {
+            initialFrameRequested = false;
+            lastAssignedTime = -1;
+          }
+          return;
+        }
         if (Math.abs(video.currentTime - targetTime) < 0.018) {
           lastAssignedTime = targetTime;
           return;
@@ -76,23 +94,99 @@
         targetProgress = clamp(progress, 0, 1);
         requestSeek();
       },
-      request: requestSeek
+      request: requestSeek,
+      isAtTarget: function () {
+        const targetTime = getTargetTime();
+        return Number.isFinite(targetTime)
+          && Math.abs(video.currentTime - targetTime) < 0.018;
+      }
     };
+  }
+
+  function revealScrubVideoWhenReady(video, controller, onReady) {
+    let revealed = false;
+    let revealFrame = 0;
+    let videoFrameCallback = 0;
+    let videoFrameFallback = 0;
+
+    function queuePaintFallback() {
+      if (revealed || revealFrame) return;
+      revealFrame = window.requestAnimationFrame(function () {
+        revealFrame = window.requestAnimationFrame(function () {
+          revealFrame = 0;
+          if (video.seeking || !controller.isAtTarget()) {
+            requestReveal();
+            return;
+          }
+          reveal();
+        });
+      });
+    }
+
+    function requestReveal() {
+      if (revealed || revealFrame || videoFrameCallback || videoFrameFallback || video.readyState < 2) return;
+      controller.request();
+      revealFrame = window.requestAnimationFrame(function () {
+        revealFrame = 0;
+        if (video.seeking || !controller.isAtTarget()) return;
+
+        if ("requestVideoFrameCallback" in video) {
+          videoFrameCallback = video.requestVideoFrameCallback(function () {
+            videoFrameCallback = 0;
+            window.clearTimeout(videoFrameFallback);
+            videoFrameFallback = 0;
+            if (video.seeking || !controller.isAtTarget()) {
+              requestReveal();
+              return;
+            }
+            reveal();
+          });
+          videoFrameFallback = window.setTimeout(function () {
+            if (videoFrameCallback && "cancelVideoFrameCallback" in video) {
+              video.cancelVideoFrameCallback(videoFrameCallback);
+            }
+            videoFrameCallback = 0;
+            videoFrameFallback = 0;
+            queuePaintFallback();
+          }, 120);
+          return;
+        }
+
+        queuePaintFallback();
+      });
+    }
+
+    function reveal() {
+      if (revealed || video.seeking || !controller.isAtTarget()) return;
+      revealed = true;
+      window.clearTimeout(videoFrameFallback);
+      videoFrameFallback = 0;
+      video.classList.add("is-ready");
+      video.removeEventListener("canplay", requestReveal);
+      video.removeEventListener("seeked", requestReveal);
+      if (onReady) onReady();
+    }
+
+    video.addEventListener("canplay", requestReveal);
+    video.addEventListener("seeked", requestReveal);
+
+    return requestReveal;
   }
 
   function hydrateScrubVideo(video, controller, onReady) {
     if (!video || video.dataset.hydrated === "true") return;
     video.dataset.hydrated = "true";
     video.preload = "auto";
+    const requestReveal = revealScrubVideoWhenReady(video, controller, onReady);
     video.addEventListener("loadedmetadata", function () {
       video.pause();
       controller.request();
       if (onReady) onReady();
     }, { once: true });
     video.addEventListener("canplay", function () {
-      video.classList.add("is-ready");
       controller.request();
       if (onReady) onReady();
+      requestReveal();
     }, { once: true });
 
     function attachSource(source) {

@@ -7,7 +7,7 @@ lang: "en-US"
 locale: "en_US"
 social_image: "assets/media/zema-social.jpg"
 social_image_alt: "A record spinning under magenta and blue light at ZEMA Vinyl Lounge"
-asset_version: "20260821b"
+asset_version: "20260829a"
 
 markdown: kramdown
 sass:
