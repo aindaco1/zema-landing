@@ -1,154 +1,161 @@
-site_title: "ZEMA Vinyl Lounge"
-tagline: "Albuquerque's first HiFi vinyl speakeasy"
+site_title: ZEMA Vinyl Lounge
+tagline: Albuquerque's first HiFi vinyl speakeasy
 seo:
-  title: "ZEMA Vinyl Lounge | HiFi Cocktails in Albuquerque"
-  description: "Albuquerque's first HiFi vinyl speakeasy—cocktails, records, and private events in the heart of Nob Hill."
-  social_image: "assets/media/editorial/zema-social.jpg"
-  social_image_alt: "A record spinning under magenta and blue light at ZEMA Vinyl Lounge"
+  title: ZEMA Vinyl Lounge | HiFi Cocktails in Albuquerque
+  description: Albuquerque's first HiFi vinyl speakeasy—cocktails, records, and
+    private events in the heart of Nob Hill.
+  social_image: /assets/media/editorial/zema-social.jpg
+  social_image_alt: A record spinning under magenta and blue light at ZEMA Vinyl Lounge
   social_focal_x: 50
   social_focal_y: 50
-address_street: "3711 Central Ave NE"
-address_locality: "Albuquerque"
-address_region: "NM"
+address_street: 3711 Central Ave NE
+address_locality: Albuquerque
+address_region: NM
 address_postal_code: "87108"
-address_country: "US"
-phone_display: "(505) 353-2455"
+address_country: US
+phone_display: (505) 353-2455
 phone_href: "+15053532455"
-instagram: "https://www.instagram.com/baratzazz/"
-# Hotel Zazz exposes no ID on its calendar embed. This text fragment targets the
-# adjacent heading and positions the embedded calendar inside the viewport.
-events_url: "https://www.hotelzazz.com/events-calendar#:~:text=Zazzy%20Events"
-logo_white: "assets/media/zema-logo-white.webp"
-logo_black: "assets/media/zema-logo-black.webp"
-
+instagram: https://www.instagram.com/baratzazz/
+events_url: https://www.hotelzazz.com/events-calendar#:~:text=Zazzy%20Events
+logo_white: assets/media/zema-logo-white.webp
+logo_black: assets/media/zema-logo-black.webp
 intro:
-  background: "assets/media/editorial/zema-listening-room.webp"
+  background: /assets/media/editorial/zema-listening-room.webp
   focal_x: 50
   focal_y: 50
-  title: "A listening room with something to say."
+  title: A listening room with something to say.
   body:
-    - "ZEMA is a mood shapeshifter: a neighborhood gathering place where sound is felt, drinks are sipped with intention, and a night can turn into a memory."
-    - "Drop in, discover a record, meet Albuquerque’s artistic community, or make the lounge the setting for your next occasion."
-  inquiry_link_label: "Ask about an event"
-  events_link_label: "Upcoming events"
-
+    - "ZEMA is a mood shapeshifter: a neighborhood gathering place where sound
+      is felt, drinks are sipped with intention, and a night can turn into a
+      memory."
+    - Drop in, discover a record, meet Albuquerque’s artistic community, or make
+      the lounge the setting for your next occasion.
+  inquiry_link_label: Ask about an event
+  events_link_label: Upcoming events
 soundtrack:
-  title: "From Zema with Love"
+  title: From Zema with Love
   sources:
-    - src: "assets/media/editorial/zema-soundtrack.webm"
-      type: "audio/webm; codecs=opus"
-    - src: "assets/media/editorial/zema-soundtrack.m4a"
-      type: "audio/mp4; codecs=mp4a.40.2"
-
+    - src: /assets/media/editorial/zema-soundtrack.webm
+      type: audio/webm; codecs=opus
+    - src: /assets/media/editorial/zema-soundtrack.m4a
+      type: audio/mp4; codecs=mp4a.40.2
 hero:
-  poster: "assets/media/editorial/zema-hero-poster.webp"
-  video_mp4: "assets/media/editorial/zema-scroll.mp4"
+  poster: /assets/media/editorial/zema-hero-poster.webp
+  video_mp4: /assets/media/editorial/zema-scroll.mp4
   focal_x: 50
   focal_y: 50
   beats:
-    - eyebrow: "The spin"
-      title_mark: "ZEMA"
-      title: "Vinyl Lounge"
-      copy: "A neighborhood lounge devoted to vinyl, exciting cocktails, and the art of listening well."
-    - eyebrow: "The muse"
-      title: "High fidelity, groovy vibes."
-      copy: "Come for one side. Stay for the whole record."
-    - eyebrow: "The encounter"
-      title: "Cocktails find their rhythm."
-      copy: "A warm room for old friends, new discoveries, and nights worth replaying."
-    - eyebrow: "The smile"
-      title: "Make it an occasion."
-      copy: "Join us for a drink or ask about bringing your next event into the lounge."
-
+    - eyebrow: The spin
+      title_mark: ZEMA
+      title: Vinyl Lounge
+      copy: A neighborhood lounge devoted to vinyl, exciting cocktails, and the art of
+        listening well.
+    - eyebrow: The muse
+      title: High fidelity, groovy vibes.
+      copy: Come for one side. Stay for the whole record.
+    - eyebrow: The encounter
+      title: Cocktails find their rhythm.
+      copy: A warm room for old friends, new discoveries, and nights worth replaying.
+    - eyebrow: The smile
+      title: Make it an occasion.
+      copy: Join us for a drink or ask about bringing your next event into the lounge.
 gallery:
-  - image: "assets/media/editorial/zema-exterior.webp"
-    video_mp4: "assets/media/editorial/zema-gallery-arrival.mp4"
+  - image: /assets/media/editorial/zema-exterior.webp
+    video_mp4: /assets/media/editorial/zema-gallery-arrival.mp4
     focal_x: 50
     focal_y: 50
-    alt: "The entrance to Hotel Zazz in Albuquerque at dusk"
-    caption: "Tap the banana three times"
-  - image: "assets/media/editorial/zema-evening.webp"
-    video_mp4: "assets/media/editorial/zema-gallery-cocktails.mp4"
+    alt: The entrance to Hotel Zazz in Albuquerque at dusk
+    caption: Tap the banana three times
+  - image: /assets/media/editorial/zema-evening.webp
+    video_mp4: /assets/media/editorial/zema-gallery-cocktails.mp4
     focal_x: 50
     focal_y: 50
-    alt: "Guests sharing cocktails at the ZEMA bar"
-    caption: "Cocktails meet high fidelity"
-  - image: "assets/media/editorial/zema-dance.webp"
-    video_mp4: "assets/media/editorial/zema-gallery-dance.mp4"
+    alt: Guests sharing cocktails at the ZEMA bar
+    caption: Cocktails meet high fidelity
+  - image: /assets/media/editorial/zema-dance.webp
+    video_mp4: /assets/media/editorial/zema-gallery-dance.mp4
     focal_x: 50
     focal_y: 50
-    alt: "A guest dancing beneath the neon lights at ZEMA"
-    caption: "A room with its own rhythm"
-
+    alt: A guest dancing beneath the neon lights at ZEMA
+    caption: A room with its own rhythm
 dossier:
-  eyebrow: "Declassified lounge notes"
-  title: "The ZEMA file"
-  intro: "Everything you need before the needle drops."
+  eyebrow: Declassified lounge notes
+  title: The ZEMA file
+  intro: Everything you need before the needle drops.
   hours:
-    - days: "Monday–Thursday"
-      time: "6 PM–11 PM"
-      schema_days: ["Monday", "Tuesday", "Wednesday", "Thursday"]
-      opens: "18:00"
-      closes: "23:00"
-    - days: "Friday–Saturday"
-      time: "6 PM–1 AM"
-      schema_days: ["Friday", "Saturday"]
-      opens: "18:00"
-      closes: "01:00"
-    - days: "Sunday"
-      time: "6 PM–11 PM"
-      schema_days: ["Sunday"]
-      opens: "18:00"
-      closes: "23:00"
+    - days: Monday–Thursday
+      time: 6 PM–11 PM
+      schema_days:
+        - Monday
+        - Tuesday
+        - Wednesday
+        - Thursday
+      opens: 18:00
+      closes: 23:00
+    - days: Friday–Saturday
+      time: 6 PM–1 AM
+      schema_days:
+        - Friday
+        - Saturday
+      opens: 18:00
+      closes: 01:00
+    - days: Sunday
+      time: 6 PM–11 PM
+      schema_days:
+        - Sunday
+      opens: 18:00
+      closes: 23:00
   notes:
-    - "Happy hour is Monday–Thursday, 6–7 PM, with $2 off house cocktails."
-    - "Last call is 30 minutes before close."
-    - "The ready-to-drink menu is available daily from 10 AM at Hotel Zazz."
+    - Happy hour is Monday–Thursday, 6–7 PM, with $2 off house cocktails.
+    - Last call is 30 minutes before close.
+    - The ready-to-drink menu is available daily from 10 AM at Hotel Zazz.
   faqs:
-    - q: "Do I need a reservation?"
-      a: "Walk-ins are welcome when space allows. Reservations are highly suggested on weekends and event nights, and requested for groups larger than three."
-    - q: "How long is a reservation?"
-      a: "Reserved seating is held for 90 minutes beginning at the reservation time."
-    - q: "Is there parking?"
-      a: "Yes. Free street parking is available around Hotel Zazz in Nob Hill."
-    - q: "Is there food?"
-      a: "The lounge offers nightly snacks and regularly welcomes local food trucks."
-    - q: "What happens at ZEMA?"
-      a: "Expect curated vinyl, musical guests, community gatherings, and special events. Check the current calendar before your visit."
-
+    - q: Do I need a reservation?
+      a: Walk-ins are welcome when space allows. Reservations are highly suggested on
+        weekends and event nights, and requested for groups larger than three.
+    - q: How long is a reservation?
+      a: Reserved seating is held for 90 minutes beginning at the reservation time.
+    - q: Is there parking?
+      a: Yes. Free street parking is available around Hotel Zazz in Nob Hill.
+    - q: Is there food?
+      a: The lounge offers nightly snacks and regularly welcomes local food trucks.
+    - q: What happens at ZEMA?
+      a: Expect curated vinyl, musical guests, community gatherings, and special
+        events. Check the current calendar before your visit.
 inquiry:
-  eyebrow: "Private events & venue inquiries"
-  title: "Put your night on the record."
-  copy: "Tell us what you are planning and our team will follow up with availability and next steps."
-  scrub_label: "Make the lounge yours"
-  poster: "assets/media/editorial/zema-inquiry-poster.webp"
-  video_mp4: "assets/media/editorial/zema-inquiry-scrub.mp4"
+  eyebrow: Private events & venue inquiries
+  title: Put your night on the record.
+  copy: Tell us what you are planning and our team will follow up with
+    availability and next steps.
+  scrub_label: Make the lounge yours
+  poster: /assets/media/editorial/zema-inquiry-poster.webp
+  video_mp4: /assets/media/editorial/zema-inquiry-scrub.mp4
   focal_x: 50
   focal_y: 50
-  form_action: "https://formspree.io/f/xdaqrwyo"
-
+  form_action: https://formspree.io/f/xdaqrwyo
 film:
   production:
-    - name: "Dust Wave"
-      url: "https://dustwave.xyz"
-    - name: "Phantasmagoria"
-      url: "https://phantasmagoria.xyz"
-  title: "From Zema with Love"
+    - name: Dust Wave
+      url: https://dustwave.xyz
+    - name: Phantasmagoria
+      url: https://phantasmagoria.xyz
+  title: From Zema with Love
   credits:
-    - "Consolee Mutusi as Zema"
-    - "Lex Lotito as Agent"
+    - Consolee Mutusi as Zema
+    - Lex Lotito as Agent
     - "Director / Editor: Luca Silver"
     - "Producers: Sharmin Dharas · Rylee Norman"
     - "Writers: Luca Silver · Anna Buan · Alonso Indacochea"
-    - "Theme Music by Thomas Ropp"
+    - Music by Thomas Ropp
     - "Assistant Director: Rylee Norman"
     - "2nd AD: Iz Zamora"
     - "Cinematographer: Nata Aguilar"
     - "1st AC: Aaron Cassini Beltran"
     - "Gaffer: Samuel Shorty"
     - "Makeup / Hair: Rhiannon Barela"
-    - "Special Thanks: Lucy Church · Brenda Ramos · Camille Griego · Grace Walker · Anthony Ortiz · Alan de Lira Richards · Jax Maloney"
-  poster: "assets/media/editorial/zema-film-youtube-thumbnail.webp"
+    - "Special Thanks: Lucy Church · Brenda Ramos · Camille Griego · Grace
+      Walker · Anthony Ortiz · Alan de Lira Richards · Jax Maloney"
+  poster: /assets/media/editorial/zema-film-youtube-thumbnail.webp
   focal_x: 50
   focal_y: 50
-  youtube_id: "He3yv-EXuRk"
+  youtube_id: He3yv-EXuRk
