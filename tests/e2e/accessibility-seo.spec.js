@@ -119,6 +119,7 @@ test("landmarks, headings, skip link, FAQ, and form work from the keyboard", asy
   for (const [selector, label] of [
     ["input[name='name']", "Name"],
     ["input[name='email']", "Email"],
+    ["input[name='phone']", "Phone"],
     ["select[name='event_type']", "Event type"],
     ["textarea[name='message']", "Tell us about the evening"]
   ]) {
@@ -126,6 +127,19 @@ test("landmarks, headings, skip link, FAQ, and form work from the keyboard", asy
     expect(snapshot).toContain(label);
     expect(snapshot).toContain("required");
   }
+
+  const formFieldOrder = await page.locator(".form-grid :is(input, select, textarea)").evaluateAll((controls) => (
+    controls.map((control) => control.getAttribute("name"))
+  ));
+  expect(formFieldOrder).toEqual([
+    "name",
+    "email",
+    "phone",
+    "event_type",
+    "preferred_date",
+    "guest_count",
+    "message"
+  ]);
 
   const hiddenFocusable = await page.locator("[aria-hidden='true']").evaluateAll((containers) => (
     containers.flatMap((container) => Array.from(container.querySelectorAll(
@@ -145,13 +159,20 @@ test("form validation and server failures are announced without losing the submi
 
   await page.locator("input[name='name']").fill("Accessibility Test");
   await page.locator("input[name='email']").fill("test@example.com");
+  await page.locator("input[name='phone']").fill("505-555-0123");
   await page.locator("select[name='event_type']").selectOption({ label: "Private party" });
   await page.locator("textarea[name='message']").fill("Testing the accessible form error state.");
-  await page.route("https://formspree.io/**", (route) => route.fulfill({ status: 500, body: "{}" }));
+  let submittedBody = "";
+  await page.route("https://formspree.io/**", (route) => {
+    submittedBody = route.request().postData() || "";
+    return route.fulfill({ status: 500, body: "{}" });
+  });
   await submit.click();
 
   const alert = page.getByRole("alert");
   await expect(alert).toContainText("We could not send that inquiry");
+  expect(submittedBody).toContain('name="phone"');
+  expect(submittedBody).toContain("505-555-0123");
   await expect(submit).toBeEnabled();
   await expect(submit).toHaveAccessibleName("Send inquiry");
 });
