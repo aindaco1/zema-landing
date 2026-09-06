@@ -65,6 +65,16 @@ The experience must never require familiarity with the film to understand the ve
 
 The owner-only Pages CMS and protected raw-media uploader are editorial tooling, not public visitor features or runtime content databases. These boundaries keep public hosting simple, deployment inexpensive, privacy strong, and ownership practical for a small venue team.
 
+## Source material
+
+- Venue information: the official [ZEMA Vinyl Lounge page](https://www.hotelzazz.com/zema-vinyl-lounge).
+- Current events: the [Hotel Zazz events calendar](https://www.hotelzazz.com/events-calendar).
+- Film master: supplied by the owner outside the repository; provenance and derivative ranges live in [Media pipeline](MEDIA_PIPELINE.md).
+- Brand direction and official marks: Notion Research & Planning.
+- Narrative chapters, creative intent, credits, and deliverables: the original ZEMA proposal PDF.
+
+The Bloomscroll reference informs cinematic scale, restrained navigation, tactile transitions, and editorial typography. Do not clone its implementation or obscure practical venue information. Confirm changing hours and operational policies with the venue before public launch.
+
 ## Current production state
 
 - Public repository: `aindaco1/zema-landing` on GitHub.
@@ -72,7 +82,7 @@ The owner-only Pages CMS and protected raw-media uploader are editorial tooling,
 - Inquiry delivery: Formspree form `xdaqrwyo`, project `Zema Vinyl Lounge Website`.
 - Complete film: privacy-enhanced YouTube embed for video `He3yv-EXuRk`.
 - Editorial tooling: Pages CMS for repository-backed content and a Cloudflare Access/R2 uploader for automatic media releases.
-- Regression coverage: a content contract, five Worker tests, and 16 Playwright tests including axe-backed WCAG checks, responsive layout, scroll scrubbing, lazy loading, SEO, form states, and media range delivery.
+- Regression coverage: content and documentation contracts, workflow checks, uploader Worker checks, and Playwright coverage for accessibility, responsive layout, scrubbing, SEO, forms, and media delivery. [Quality assurance](QUALITY_ASSURANCE.md) owns the coverage details and release checklist.
 
 ## Success criteria
 

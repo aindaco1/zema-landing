@@ -13,7 +13,7 @@ sass:
 exclude:
   - README.md
   - LICENSE
-  - agents.md
+  - AGENTS.md
   - Gemfile
   - Gemfile.lock
   - vendor

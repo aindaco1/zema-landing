@@ -112,7 +112,7 @@ These are lightweight architecture decision records. A decision is â€œacceptedâ€
 
 ## D-008 â€” A small self-hosted type system
 
-**Status:** Accepted
+**Status:** Superseded by [D-016](DECISIONS.md#d-016-two-scoped-self-hosted-title-fonts)
 
 **Decision:** Use system Georgia for display, Arial/Helvetica for body/utility, Courier for the dossier, and one 7 KB self-hosted licensed script subset for the film title.
 
@@ -228,6 +228,23 @@ These are lightweight architecture decision records. A decision is â€œacceptedâ€
 - Video posters are generated from the exact first encoded frame; audio loudness is preserved; every video output is fully decoded and proven all-intra.
 - `media-release.yml` permits only the selected slot outputs plus content/cache metadata, rebases before verification, and pushes/deploys only after the full shared gate passes.
 - Access, GitHub App, and source-stream credentials remain outside the repository. Upload completion, generated commit, workflow success, Pages deployment, and public acceptance are separate evidence states.
+
+## D-016: Two scoped self-hosted title fonts
+
+**Status:** Accepted; supersedes D-008
+
+**Recorded:** September 6, 2026, to reconcile the decision record with the existing brand guide, implementation, and regression coverage.
+
+**Decision:** Retain the system display, body/utility, and dossier families, with two self-hosted licensed WOFF2 subsets: TAN Kindred for the opening hero's `ZEMA` word and Italianno for the complete-film title.
+
+**Why:** The hero venue name and the handwritten film title have distinct, deliberately limited roles. The earlier one-WOFF2 constraint no longer describes the implemented brand system.
+
+**Consequences:**
+
+- [Brand guide](BRAND_GUIDE.md#typography) owns the detailed font roles; [`_theme70s.scss`](../assets/css/_theme70s.scss) defines them.
+- TAN Kindred stays restricted to `ZEMA`; the rest of the hero title uses Georgia. Italianno stays restricted to the film title.
+- Both local WOFF2 resources are expected by the [typography regression](../tests/e2e/regression.spec.js). No font CDN is introduced.
+- Further type roles require a deliberate brand decision and corresponding documentation and regression updates.
 
 ## Adding a decision
 

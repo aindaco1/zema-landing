@@ -10,7 +10,7 @@
 
 Before changing the project:
 
-1. Read [`agents.md`](../agents.md) completely. It contains non-negotiable product and engineering boundaries.
+1. Read [`AGENTS.md`](../AGENTS.md) completely. It contains non-negotiable product and engineering boundaries.
 2. Read [the handbook index](README.md) and the guide for the requested area.
 3. Inspect the canonical source and its existing regression tests.
 4. Check Git status and preserve unrelated user work.
@@ -19,33 +19,11 @@ Do not infer that a new visual request authorizes a new framework, backend, anal
 
 ## Fast project model
 
-- Static single-page Jekyll project deployed to GitHub Pages.
-- Public content and service URLs: `_data/frames.yml`.
-- Global URL/SEO/cache settings: `_config.yml`.
-- Semantic section templates: `index.html`, `_layouts/`, `_includes/`.
-- Design system: `assets/css/_theme70s.scss`; component layout in the other SCSS partials.
-- All enhanced behavior: `assets/js/main.js`.
-- Editable production media: `assets/media/editorial/`; protected marks/icon/pointer remain in `assets/media/`; raw masters remain outside Git.
-- Editorial schema: `.pages.yml`; shared raw-media contract: `_admin/media-slots.json`.
-- Protected upload and source-only deployments: `_admin/uploader/`; deterministic processing: `scripts/media/` and `media-release.yml`.
-- Browser contracts: `tests/e2e/`.
-- Canonical production URL: `https://zemabar.com/`.
+Use the [handbook source map](README.md#sources-of-truth) to locate canonical data and configuration, and the [architecture repository map](ARCHITECTURE.md#repository-map) to locate the implementation. The public site is static Jekyll; the owner-only editorial control plane stays separate from the visitor runtime.
 
 ## Non-negotiable invariants
 
-- Native page scroll always works; never trap wheel, touch, keyboard, or history navigation.
-- One page-level `h1`; heading order remains logical.
-- Essential content is HTML; decorative media is muted and hidden from assistive technology.
-- Reduced Motion and Save-Data keep the site complete and avoid unnecessary media hydration.
-- No audible playback without explicit intent.
-- YouTube iframe is created only after play intent.
-- Inquiry form retains native POST and provides enhanced inline state.
-- In-page anchors jump immediately; no smooth-scroll restoration.
-- Header remains opaque black with cream foreground content across every section.
-- Three equal footer tracks, including mobile; 320 px minimum with no horizontal overflow.
-- Fonts, colors, and layout roles follow `docs/BRAND_GUIDE.md`.
-- No public analytics, tracking pixel, secret, custom backend, or runtime framework by default. The approved owner-only uploader remains isolated from the public site and fails closed behind Cloudflare Access.
-- Preserve Git history.
+Preserve the essential constraints in [AGENTS.md](../AGENTS.md), the section contracts in [Experience design](EXPERIENCE_DESIGN.md#section-contracts), and the type/color roles in [Brand guide](BRAND_GUIDE.md). This playbook owns the change workflow; it does not maintain another copy of those contracts.
 
 ## Change routing
 

@@ -14,7 +14,7 @@ Live production site: [https://zemabar.com/](https://zemabar.com/)
 - Local all-intra H.264 derivatives for scroll scrubbing; local WebP fallbacks.
 - Privacy-enhanced, intent-loaded YouTube player for the complete film.
 - Formspree inquiry delivery with native no-JavaScript POST fallback.
-- Self-hosted licensed film-title font; no font CDN, analytics, or custom backend.
+- Self-hosted licensed title fonts; no font CDN, analytics, or public custom backend.
 - Playwright and axe-core regression coverage for accessibility, SEO, responsive layout, media, and interaction.
 
 ## Run locally
@@ -40,45 +40,12 @@ npm run test:accessibility
 npm run test:seo
 ```
 
-The complete gate validates content/CMS ownership, type-checks and tests the uploader Worker, builds and serves the site at its production root path, and runs 16 browser checks. See [Quality assurance](docs/QUALITY_ASSURANCE.md) for test coverage, the responsive matrix, manual release checks, and diagnosis.
+The complete gate validates content/CMS ownership, documentation, and workflows, type-checks and tests the uploader Worker, and runs the browser suite against a production-mode build. See [Quality assurance](docs/QUALITY_ASSURANCE.md) for test coverage, the responsive matrix, manual release checks, and diagnosis.
 
 ## Documentation
 
-The [project handbook](docs/README.md) is the documentation entry point for humans and agents.
+The [project handbook](docs/README.md) owns the guide directory, canonical-source map, and documentation rules. Start there for product, design, architecture, media, accessibility, and operating guidance.
 
-| Guide | Covers |
-| --- | --- |
-| [Project overview](docs/PROJECT_OVERVIEW.md) | Product goals, audiences, experience sequence, and success criteria |
-| [Technical architecture](docs/ARCHITECTURE.md) | Build/runtime structure, content flow, external services, privacy, and budgets |
-| [Experience design](docs/EXPERIENCE_DESIGN.md) | UX/UI hierarchy, interaction contracts, motion, responsive behavior, and fallbacks |
-| [Brand guide](docs/BRAND_GUIDE.md) | Voice, typography, colors, imagery, marks, and design tokens |
-| [Media pipeline](docs/MEDIA_PIPELINE.md) | Source ranges, encodes, posters, audio, file budgets, and validation |
-| [Accessibility and SEO](docs/ACCESSIBILITY_SEO.md) | WCAG posture, structured data, metadata, audits, and manual checks |
-| [Quality assurance](docs/QUALITY_ASSURANCE.md) | Test commands, coverage, change matrix, release checklist, and CI |
-| [Operations runbook](docs/OPERATIONS.md) | Local setup, maintenance, deployment, rollback, domain migration, and troubleshooting |
-| [Decision record](docs/DECISIONS.md) | Why the major technical and experience boundaries exist |
-| [Agent playbook](docs/AGENT_PLAYBOOK.md) | Safe change routing, invariants, regression traps, and definition of done |
+Read [AGENTS.md](AGENTS.md) before changing the project, then follow the [agent playbook](docs/AGENT_PLAYBOOK.md) and the relevant specialist guide.
 
-[`agents.md`](agents.md) remains the short, always-on working brief. Read it before making a project change.
-
-## Canonical sources
-
-| Concern | Source |
-| --- | --- |
-| Public copy, venue facts, credits, form endpoint, links, and media paths | `_data/frames.yml` |
-| CMS editor fields and protected ownership boundary | `.pages.yml` |
-| Raw-media slots, limits, and canonical outputs | `_admin/media-slots.json` |
-| Site URL, asset cache version, and Jekyll settings | `_config.yml` |
-| Semantic composition | `index.html`, `_layouts/`, `_includes/` |
-| Design implementation | `assets/css/` |
-| Enhanced interaction | `assets/js/main.js` |
-| Enforced browser behavior | `tests/e2e/` |
-| CI and deployment | `.github/workflows/` |
-
-Confirm changing hours and operational policies with the venue before public launch.
-
-## Deployment
-
-Pull requests run the shared release gate. Ordinary pushes to `main` rerun that gate before deploying the Jekyll artifact to GitHub Pages. Protected raw-media uploads use a separate Action that generates, rebases, tests, commits, and deploys only after every check passes.
-
-The canonical production domain is `zemabar.com`. Follow [the custom-domain runbook](docs/OPERATIONS.md#custom-domain-migration) when validating or changing configuration, canonical URLs, crawl files, Formspree restrictions, tests, or DNS.
+Use the [operations runbook](docs/OPERATIONS.md) for deployment, rollback, domains, and external services. Confirm changing venue facts with the owner before public launch.

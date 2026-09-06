@@ -14,7 +14,7 @@ const ignoredDirectories = new Set([
 ]);
 const requiredDocs = [
   "README.md",
-  "agents.md",
+  "AGENTS.md",
   "docs/README.md",
   "docs/PROJECT_OVERVIEW.md",
   "docs/ARCHITECTURE.md",

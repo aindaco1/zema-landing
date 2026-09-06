@@ -67,6 +67,8 @@ Do not substitute WebM or a long-GOP encode without full browser testing. File e
 
 ## Hero encode
 
+The 1440×810 derivative is the highest tested all-intra size that seeks reliably in the target Chromium decoder. Do not restore the earlier 1080p all-intra encode without browser testing.
+
 The 288-frame hero holds the record for the first three 72-frame copy beats. The clean vinyl range is used twice, with each copy retimed to 122 frames and joined by a four-frame dissolve around frame 118. This provides nearly twice the source rotation of the previous slow treatment while retaining the full record scale, the 80 px rightward shift, and a mirrored edge extension beneath the dark text shade. A twenty-four-frame dissolve begins at frame 216 and introduces the final beat's 30-frame 8× crop on the screen-left eye, aligned with the record spindle using the focal offset `(660, 386)` in the 1440×810 source canvas. It then uses 42 reversed frames to travel from the portrait to the moment her hand releases the finished glass on the bar. All intervening drink-preparation footage is omitted.
 
 ```sh

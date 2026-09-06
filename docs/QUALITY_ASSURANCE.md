@@ -38,7 +38,7 @@ npx playwright install chromium
 | `npm run test:content` | Pages CMS, public-content, service-boundary, and nine-slot media-manifest contract |
 | `npm run test:uploader` | Worker types, both deployment dry-run bundles, and seven Miniflare/R2 request tests |
 | `npm run test:workflows` | GitHub Actions syntax, expression contexts, shell, and dependency checks |
-| `npm test` | Content, documentation, Worker, and complete 16-test browser release gate |
+| `npm test` | Content, documentation, workflow, Worker, and complete 16-test browser release gate |
 | `npm run test:accessibility` | Focused WCAG, interaction-state, keyboard, and form checks |
 | `npm run test:seo` | Focused metadata, JSON-LD, sitemap, and social-image checks |
 | `npm run test:regression:headed` | Interactive browser diagnosis |
@@ -134,7 +134,7 @@ At each size the test asserts zero document/section overflow, usable header gutt
 | Metadata/schema/canonical/domain | `npm run test:seo`, `npm test` | Search Console/Rich Results after deploy |
 | YouTube facade or soundtrack | `npm test` | Keyboard, captions, sound consent, Save-Data |
 | Jekyll, dependencies, scripts, workflows | `bundle exec jekyll build`, `npm test` | CI logs and Pages artifact |
-| Documentation only | Jekyll build, link/command review | Confirm no stale duplicated value |
+| Documentation only | `npm run test:docs`, production Jekyll build, `git diff --check` | Review links/commands; confirm renamed docs stay excluded from the site and no stale duplicated value remains |
 
 ## Manual release checklist
 

@@ -25,7 +25,19 @@ The live production site is [https://zemabar.com/](https://zemabar.com/).
 | Understand the major architectural choices and their tradeoffs | [Decision record](DECISIONS.md) |
 | Make a safe code or content change as an agent | [Agent playbook](AGENT_PLAYBOOK.md) |
 
-The root [`README.md`](../README.md) is the quick-start page. [`agents.md`](../agents.md) is the short, always-on project brief. This handbook is the detailed source for durable project knowledge.
+The root [`README.md`](../README.md) is the quick-start page. [`AGENTS.md`](../AGENTS.md) is the short, always-on project brief. This handbook owns the detailed guide directory and canonical-source map.
+
+## File placement
+
+| Location | What belongs here |
+| --- | --- |
+| Repository root | `README.md` for introduction and quick start, `LICENSE` for the project license, and `AGENTS.md` for required reading and essential agent constraints |
+| `docs/` | Durable project guides and decision records, routed through this index |
+| Beside the implementation | Build configuration, tool manifests, and asset-specific licenses such as [`assets/fonts/OFL-Italianno.txt`](../assets/fonts/OFL-Italianno.txt) |
+
+[`robots.txt`](../robots.txt), [`sitemap.xml`](../sitemap.xml), and [`sitemap.txt`](../sitemap.txt) are public Jekyll crawl endpoints and remain at the root. They are not handbook documents. [`_config.yml`](../_config.yml) excludes the root documentation and `docs/` from the published site; update exclusions and [`scripts/check-docs.js`](../scripts/check-docs.js) whenever a required document is renamed.
+
+Keep filenames uppercase for handbook Markdown files and preserve exact case in links so local and Linux CI builds agree.
 
 ## Sources of truth
 
@@ -42,7 +54,7 @@ Documentation explains the system; it does not replace executable sources. When 
 | Enhanced interaction behavior | [`assets/js/main.js`](../assets/js/main.js) |
 | Enforced browser contracts | [`tests/e2e/`](../tests/e2e) |
 | Deployment and CI behavior | [`.github/workflows/`](../.github/workflows) and [the shared verification action](../.github/actions/verify-site/action.yml) |
-| Product and engineering invariants | [`agents.md`](../agents.md) |
+| Product and engineering invariants | [`AGENTS.md`](../AGENTS.md) |
 
 For venue facts that may change, the final authority is the venue. Confirm hours, policies, reservation guidance, phone, address, and event links with Hotel Zazz before a public launch.
 
@@ -55,6 +67,7 @@ For venue facts that may change, the final authority is the venue. Confirm hours
 5. Update relevant docs in the same change as architecture, interaction, design-token, media, service, or release-process changes.
 6. Record a durable change in [the decision record](DECISIONS.md) when it alters a project boundary or reverses an earlier choice.
 7. Use absolute dates for audits and time-sensitive venue verification.
+8. Keep detailed navigation and the source map in this index. Other entry points link here; specialist guides own their detailed contracts. Keep test counts in [Quality assurance](QUALITY_ASSURANCE.md) and refer other summaries there.
 
 ## Documentation ownership and review cadence
 

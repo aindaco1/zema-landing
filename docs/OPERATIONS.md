@@ -53,7 +53,7 @@ Generated `_site/`, dependencies, reports, traces, and local caches are ignored 
 ## Normal change workflow
 
 1. Start from current `main` and create a focused branch.
-2. Read the relevant handbook page and `agents.md` before editing.
+2. Read the relevant handbook page and [AGENTS.md](../AGENTS.md) before editing.
 3. Change the canonical source, not generated `_site` output.
 4. Update documentation and regression coverage when a contract changes.
 5. Run the checks in [Quality assurance](QUALITY_ASSURANCE.md).
