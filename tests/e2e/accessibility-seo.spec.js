@@ -258,6 +258,21 @@ test("public metadata, structured data, and crawl files stay coherent", async ({
   expect(sitemapResponse.status()).toBe(200);
   const sitemap = await sitemapResponse.text();
   expect(sitemap).toContain("<loc>https://zemabar.com/</loc>");
+  const sitemapImages = await page.evaluate((xml) => {
+    const document = new DOMParser().parseFromString(xml, "application/xml");
+    const namespace = "http://www.google.com/schemas/sitemap-image/1.1";
+    return {
+      parseErrors: document.querySelectorAll("parsererror").length,
+      images: Array.from(document.getElementsByTagNameNS(namespace, "image"), (image) => ({
+        url: image.getElementsByTagNameNS(namespace, "loc")[0]?.textContent || "",
+        caption: image.getElementsByTagNameNS(namespace, "caption")[0]?.textContent || ""
+      }))
+    };
+  }, sitemap);
+  expect(sitemapImages).toEqual({
+    parseErrors: 0,
+    images: [{ url: metadata.ogImage, caption: content.seo.social_image_alt }]
+  });
   expect(socialImageResponse.status()).toBe(200);
   expect(socialImageResponse.headers()["content-type"]).toContain("image/jpeg");
 });

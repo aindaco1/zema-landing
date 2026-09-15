@@ -7,8 +7,8 @@ permalink: /sitemap.xml
   <url>
     <loc>{{ '/' | absolute_url }}</loc>
     <image:image>
-      <image:loc>{{ site.social_image | absolute_url }}</image:loc>
-      <image:caption>{{ site.social_image_alt | xml_escape }}</image:caption>
+      <image:loc>{{ site.data.frames.seo.social_image | absolute_url | xml_escape }}</image:loc>
+      <image:caption>{{ site.data.frames.seo.social_image_alt | xml_escape }}</image:caption>
     </image:image>
   </url>
 </urlset>
