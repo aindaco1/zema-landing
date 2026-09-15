@@ -99,6 +99,12 @@ Pages CMS may upload already optimized images, MP4, WebM, or M4A files inside `a
 
 Raw upload success is not production success. Production remains unchanged unless the GitHub run passes and the Pages deployment completes. Follow [Media pipeline](MEDIA_PIPELINE.md) for the derivative contract and editorial review.
 
+#### Media release acceptance deferred
+
+**Owner decision — September 6, 2026:** defer the real upload-through-publication acceptance test and revisit the pipeline if an actual media upload or publication fails. This is an accepted validation gap, not an active repair or release blocker.
+
+At the review, the historical workflow expression error had been corrected and current automated checks passed, but no successful end-to-end media release had been recorded. Deferral does not establish that the full pipeline has been verified. Keep the existing uploader, processor, and release gates in place; no production test upload or speculative pipeline change is required for this deferred item. For a future media release, use the existing procedure above and the [media release troubleshooting steps](#media-release-fails) if a problem occurs.
+
 ### Change design tokens or responsive behavior
 
 Start in `assets/css/_theme70s.scss`; reuse `%page-gutters`, `%utility-label`, and `%cover-media`. Update [Brand guide](BRAND_GUIDE.md) if a role changes, then run the full responsive suite. Do not patch the same exception into several components.

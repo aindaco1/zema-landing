@@ -18,6 +18,8 @@ Scroll reliability comes from all-intra H.264 derivatives, controlled hydration,
 
 The preferred replacement path is the Access-protected ZEMA media uploader. An editor supplies the exact final cut for a declared slot; the pipeline does not choose editorial in/out points.
 
+The owner has [deferred the end-to-end media release acceptance test](OPERATIONS.md#media-release-acceptance-deferred); the operations runbook owns that decision and its revisit conditions.
+
 1. The browser validates the selected file against `_admin/media-slots.json`, then uploads it in 20 MiB parts with three concurrent requests, byte progress, cancellation, and up to three per-part attempts.
 2. The Cloudflare Worker repeats slot, extension, size, focal-point, key, and multipart validation and stores the object privately below `incoming/<slot>/<job>/` in R2.
 3. After R2 completion, the admin Worker dispatches `media-release.yml` using a repository-scoped GitHub App. The raw object is streamed to runner-temporary storage through the source-only Worker using a separate bearer secret; it is never committed or published.
