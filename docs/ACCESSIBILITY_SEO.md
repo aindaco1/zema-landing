@@ -57,6 +57,8 @@ The only indexable route is the public landing page. Its crawl contract includes
 - LocalBusiness address, telephone, social profile, containing hotel, imagery, and opening hours derived from `_data/frames.yml`;
 - `robots.txt`, canonical XML sitemap, and a diagnostic text sitemap.
 
+The XML sitemap's image URL and caption use `seo.social_image` and `seo.social_image_alt` from `_data/frames.yml`, matching the page's social metadata. The SEO regression parses the generated XML and verifies that the image entry matches those shared values.
+
 Run the focused gate with:
 
 ```sh
